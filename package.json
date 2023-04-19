@@ -31,18 +31,23 @@
   },
   "devDependencies": {
     "@changesets/cli": "^2.26.1",
-    "tsx": "^3.12.6",
-    "turbo": "^1.9.3",
-    "typescript": "^5.0.4",
-    "@types/node": "18.*",
-    "@vercel/ncc": "^0.36.1",
     "@moia-oss/eslint-prettier-typescript-config": "^0.11.56",
+    "@types/node": "18.*",
     "@typescript-eslint/eslint-plugin": "^5.59.0",
     "@typescript-eslint/parser": "^5.59.0",
+    "@vercel/ncc": "^0.36.1",
     "eslint": "^8.38.0",
+    "eslint-plugin-jest": "^27.2.1",
+    "jest": "^29.5.0",
+    "jest-mock-extended": "^3.0.4",
+    "ts-jest": "^29.1.0",
+    "@types/jest": "^29.5.1",
     "husky": "^8.0.3",
     "lint-staged": "^13",
     "npm-check-updates": "^16.10.8",
-    "prettier": "^2.8.7"
+    "prettier": "^2.8.7",
+    "tsx": "^3.12.6",
+    "turbo": "^1.9.3",
+    "typescript": "^5.0.4"
   }
 }
