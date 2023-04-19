@@ -1,0 +1,48 @@
+{
+  "name": "zeitraum",
+  "version": "1.0.0",
+  "description": "Time tracking with tags integrated in your workflow",
+  "private": true,
+  "keywords": [
+    "time tracking",
+    "tags",
+    "api"
+  ],
+  "author": "Kenneth Wußmann",
+  "license": "MIT",
+  "scripts": {
+    "test": "jest --passWithNoTests",
+    "ci": "tsx scripts/index.ts ci",
+    "build": "turbo run build",
+    "lint": "eslint \"**/*.{ts,tsx}\" --ext .ts",
+    "lint:fix": "npm run lint -- --fix",
+    "format": "prettier . --write",
+    "format:check": "prettier . --check",
+    "dependency-update": "npm-check-updates -u --filterVersion \"/^[~^<>]| - |\\.x$/\" --deep && npm install",
+    "prepare": "husky install"
+  },
+  "lint-staged": {
+    "src/*.ts": "eslint --cache --fix",
+    "*.{ts,json,yml,yaml,html,md}": "prettier --write"
+  },
+  "engines": {
+    "node": "18",
+    "npm": "9"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.26.1",
+    "tsx": "^3.12.6",
+    "turbo": "^1.9.3",
+    "typescript": "^5.0.4",
+    "@types/node": "18.*",
+    "@vercel/ncc": "^0.36.1",
+    "@moia-oss/eslint-prettier-typescript-config": "^0.11.56",
+    "@typescript-eslint/eslint-plugin": "^5.59.0",
+    "@typescript-eslint/parser": "^5.59.0",
+    "eslint": "^8.38.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^13",
+    "npm-check-updates": "^16.10.8",
+    "prettier": "^2.8.7"
+  }
+}
