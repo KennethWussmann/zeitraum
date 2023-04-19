@@ -13,11 +13,10 @@
     "forceConsistentCasingInFileNames": true,
     "types": ["node", "jest"],
     "lib": ["ES2022"],
-    "outDir": "./tscBuild",
+    "outDir": "./build",
     "esModuleInterop": true,
     "skipLibCheck": true,
     "declaration": true
   },
-  "include": ["src", "test"],
   "exclude": ["node_modules"]
 }

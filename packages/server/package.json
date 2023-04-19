@@ -1,0 +1,12 @@
+{
+  "name": "@zeitraum/server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc"
+  },
+  "keywords": [],
+  "author": "Kenneth Wußmann",
+  "license": "MIT"
+}

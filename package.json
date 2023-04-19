@@ -10,6 +10,9 @@
   ],
   "author": "Kenneth Wußmann",
   "license": "MIT",
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
     "test": "jest --passWithNoTests",
     "ci": "tsx scripts/index.ts ci",

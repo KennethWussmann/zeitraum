@@ -16,6 +16,5 @@
   },
   "[prisma]": {
     "editor.defaultFormatter": "Prisma.prisma"
-  },
-  "markiscodecoverage.searchCriteria": "**/coverage/lcov*.info"
+  }
 }
