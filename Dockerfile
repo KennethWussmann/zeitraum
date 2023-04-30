@@ -7,11 +7,10 @@ WORKDIR /app
 
 COPY . .
 
-RUN npm install
-RUN npm run codegen
+RUN npm ci
 RUN npm run build
 
-FROM gcr.io/distroless/nodejs:${NODE_VERSION}
+FROM node:${NODE_VERSION}-slim 
 
 WORKDIR /app
 
@@ -23,7 +22,9 @@ ENV NODE_ENV=${NODE_ENV}
 ARG VERSION=develop
 ENV VERSION=${VERSION}
 
+COPY --from=builder /app/node_modules /app/node_modules
+COPY --from=builder /app/package.json /app/package.json 
 COPY --from=builder /app/packages/server /app/packages/server
 COPY --from=builder /app/packages/commons /app/packages/commons
 
-ENTRYPOINT [ "sh", "packages/server/docker-start.sh" ]
+CMD [ "packages/server/docker-start.mjs" ]
