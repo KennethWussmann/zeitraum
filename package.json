@@ -21,6 +21,7 @@
     "lint:fix": "npm run lint -- --fix",
     "format": "prettier . --write",
     "format:check": "prettier . --check",
+    "publish": "npm run build && npx tsx scripts/replace-wildcard-versions.ts && npx changeset publish",
     "dependency-update": "npm-check-updates -u --filterVersion \"/^[~^<>]| - |\\.x$/\" --deep && npm install",
     "prepare": "husky install"
   },
@@ -52,6 +53,7 @@
     "ts-jest": "^29.1.0",
     "tsx": "^3.12.6",
     "turbo": "^1.9.3",
-    "typescript": "^5.0.4"
+    "typescript": "^5.0.4",
+    "zx": "^7.2.1"
   }
 }
