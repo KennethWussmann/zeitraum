@@ -1,0 +1,12 @@
+#import "../tag/tag.fragment.graphql"
+fragment TimeSpanFragment on TimeSpan {
+  id
+  createdAt
+  updatedAt
+  start
+  end
+  note
+  tags {
+    ...TagFragment
+  }
+}

@@ -1,0 +1,17 @@
+schema: ../server/src/api/schema.graphql
+documents: ./operations/**/*.graphql
+generates:
+  src/sdk.ts:
+    config:
+      rawRequest: true
+    plugins:
+      - add:
+          content: /* eslint-disable */
+      - typescript
+      - typescript-operations
+      - typescript-generic-sdk:
+          documentMode: 'string'
+
+hooks:
+  afterAllFileWrite:
+    - prettier --write
