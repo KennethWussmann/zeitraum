@@ -10,3 +10,13 @@ services:
       POSTGRES_PASSWORD: zeitraum
       POSTGRES_USER: zeitraum
       POSTGRES_DB: zeitraum
+  server:
+    build: .
+    ports:
+      - 3000:3000
+    depends_on:
+      - database
+    env_file:
+      - packages/server/.env
+    environment:
+      DATABASE_URL: postgresql://zeitraum:zeitraum@database:5432/zeitraum
