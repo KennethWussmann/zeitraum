@@ -8,4 +8,5 @@ export class UserService {
   constructor(private readonly prisma: PrismaClient) {}
 
   public findById = async (id: string) => this.prisma.user.findUnique({ where: { id } });
+  public getRoot = async () => this.findById(rootUserId);
 }

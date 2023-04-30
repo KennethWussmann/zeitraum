@@ -46,11 +46,16 @@ export type Query = {
   __typename?: 'Query';
   me: User;
   tags: TagList;
+  timeSpan: TimeSpan;
   timeSpans: TimeSpanList;
 };
 
 export type QueryTagsArgs = {
   input?: InputMaybe<TagSearch>;
+};
+
+export type QueryTimeSpanArgs = {
+  id: Scalars['ID'];
 };
 
 export type QueryTimeSpansArgs = {
@@ -140,6 +145,7 @@ export type CreateTimeSpanMutation = {
     start: any;
     end?: any | null;
     note?: string | null;
+    running: boolean;
     tags: Array<{ __typename?: 'Tag'; id: string; createdAt: any; updatedAt: any; name: string }>;
   };
 };
@@ -158,7 +164,27 @@ export type TimeSpanFragmentFragment = {
   start: any;
   end?: any | null;
   note?: string | null;
+  running: boolean;
   tags: Array<{ __typename?: 'Tag'; id: string; createdAt: any; updatedAt: any; name: string }>;
+};
+
+export type TimeSpanQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+export type TimeSpanQuery = {
+  __typename?: 'Query';
+  timeSpan: {
+    __typename?: 'TimeSpan';
+    id: string;
+    createdAt: any;
+    updatedAt: any;
+    start: any;
+    end?: any | null;
+    note?: string | null;
+    running: boolean;
+    tags: Array<{ __typename?: 'Tag'; id: string; createdAt: any; updatedAt: any; name: string }>;
+  };
 };
 
 export type TimeSpansQueryVariables = Exact<{
@@ -178,6 +204,7 @@ export type TimeSpansQuery = {
       start: any;
       end?: any | null;
       note?: string | null;
+      running: boolean;
       tags: Array<{ __typename?: 'Tag'; id: string; createdAt: any; updatedAt: any; name: string }>;
     }>;
   };
@@ -198,6 +225,7 @@ export type UpdateTimeSpanMutation = {
     start: any;
     end?: any | null;
     note?: string | null;
+    running: boolean;
     tags: Array<{ __typename?: 'Tag'; id: string; createdAt: any; updatedAt: any; name: string }>;
   };
 };
@@ -222,6 +250,7 @@ export const TimeSpanFragmentFragmentDoc = `
   start
   end
   note
+  running
   tags {
     ...TagFragment
   }
@@ -249,6 +278,13 @@ export const DeleteTimeSpanDocument = `
   deleteTimeSpan(id: $id)
 }
     `;
+export const TimeSpanDocument = `
+    query timeSpan($id: ID!) {
+  timeSpan(id: $id) {
+    ...TimeSpanFragment
+  }
+}
+    ${TimeSpanFragmentFragmentDoc}`;
 export const TimeSpansDocument = `
     query timeSpans($input: TimeSpanSearch) {
   timeSpans(input: $input) {
@@ -306,6 +342,11 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
         variables,
         options,
       ) as Promise<ExecutionResult<DeleteTimeSpanMutation, E>>;
+    },
+    timeSpan(variables: TimeSpanQueryVariables, options?: C): Promise<ExecutionResult<TimeSpanQuery, E>> {
+      return requester<TimeSpanQuery, TimeSpanQueryVariables>(TimeSpanDocument, variables, options) as Promise<
+        ExecutionResult<TimeSpanQuery, E>
+      >;
     },
     timeSpans(variables?: TimeSpansQueryVariables, options?: C): Promise<ExecutionResult<TimeSpansQuery, E>> {
       return requester<TimeSpansQuery, TimeSpansQueryVariables>(TimeSpansDocument, variables, options) as Promise<

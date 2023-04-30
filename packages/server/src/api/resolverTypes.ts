@@ -52,12 +52,18 @@ export type Query = {
   __typename?: 'Query';
   me: User;
   tags: TagList;
+  timeSpan: TimeSpan;
   timeSpans: TimeSpanList;
 };
 
 
 export type QueryTagsArgs = {
   input?: InputMaybe<TagSearch>;
+};
+
+
+export type QueryTimeSpanArgs = {
+  id: Scalars['ID'];
 };
 
 
@@ -240,6 +246,7 @@ export type MutationResolvers<ContextType = GraphQLContext, ParentType extends R
 export type QueryResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
   me?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   tags?: Resolver<ResolversTypes['TagList'], ParentType, ContextType, Partial<QueryTagsArgs>>;
+  timeSpan?: Resolver<ResolversTypes['TimeSpan'], ParentType, ContextType, RequireFields<QueryTimeSpanArgs, 'id'>>;
   timeSpans?: Resolver<ResolversTypes['TimeSpanList'], ParentType, ContextType, Partial<QueryTimeSpansArgs>>;
 }>;
 

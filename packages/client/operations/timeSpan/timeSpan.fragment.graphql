@@ -6,6 +6,7 @@ fragment TimeSpanFragment on TimeSpan {
   start
   end
   note
+  running
   tags {
     ...TagFragment
   }

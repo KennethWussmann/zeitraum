@@ -5,8 +5,7 @@ import { GraphQLFileLoader } from '@graphql-tools/graphql-file-loader';
 import { Logger } from '@zeitraum/commons';
 import { ApplicationContext } from '../applicationContext';
 import { Resolvers } from './resolverTypes';
-import { GraphQLContext, defaultUserContext } from './graphqlContext';
-import { GraphQLError } from 'graphql';
+import { GraphQLContext, UserContext } from './graphqlContext';
 import { meQuery } from './resolvers/user/me.query';
 import { createTimeSpanMutation } from './resolvers/timeSpan/createTimeSpan.mutation';
 import { timeSpanResolver } from './resolvers/timeSpan/timeSpan.resolver';
@@ -17,10 +16,13 @@ import { deleteTimeSpanMutation } from './resolvers/timeSpan/deleteTimeSpan.muta
 import { mergeResolvers } from '@graphql-tools/merge';
 import { tagsQuery } from './resolvers/tag/tags.query';
 import { timeSpansQuery } from './resolvers/timeSpan/timeSpans.query';
+import { UnauthenticatedError } from './graphqlErrors';
+import { timeSpanQuery } from './resolvers/timeSpan/timeSpan.query';
 
 export class GraphQLServer {
   private readonly resolverBuilders: Resolvers = [
     timeSpanResolver,
+    timeSpanQuery,
     timeSpansQuery,
     createTimeSpanMutation,
     deleteTimeSpanMutation,
@@ -55,13 +57,18 @@ export class GraphQLServer {
     const token = this.getHeaderValue(headers, 'authorization')?.replace('Bearer ', '');
     const authenticated = token && this.validApiTokens.includes(token);
     if (!authenticated) {
-      throw new GraphQLError('Access to GraphQL denied', { extensions: { code: 'FORBIDDEN' } });
+      throw new UnauthenticatedError();
+    }
+    const user = await this.applicationContext.userService.getRoot();
+    if (!user) {
+      throw new UnauthenticatedError();
     }
     this.logger.debug('Access to GraphQL granted');
+    const userContext = new UserContext(user);
     return {
       applicationContext: this.applicationContext,
-      userContext: defaultUserContext,
-      logger: this.logger.child({ userId: defaultUserContext.id }),
+      userContext: userContext,
+      logger: this.logger.child({ userId: userContext.id }),
     };
   };
 

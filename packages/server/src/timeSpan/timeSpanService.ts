@@ -3,14 +3,17 @@ import { CreateUpdateTimeSpan, TimeSpanSearch } from '../api/resolverTypes';
 import { TagService } from '../api/tag/tagService';
 import { randomUUID } from 'crypto';
 import { TimeSpan } from './timeSpan';
-import { UserInputError } from '../api/graphqlErrors';
+import { NotFoundError, UserInputError } from '../api/graphqlErrors';
 
 export class TimeSpanService {
   constructor(private prisma: PrismaClient, private tagService: TagService) {}
 
-  public findById = async (id: string): Promise<TimeSpan | null> =>
-    this.prisma.timeSpan.findUnique({
-      where: { id },
+  public findById = async (userId: string, id: string): Promise<TimeSpan | null> =>
+    this.prisma.timeSpan.findFirst({
+      where: {
+        id,
+        userId,
+      },
       include: {
         user: true,
         TagsOnTimeSpans: {
@@ -66,10 +69,9 @@ export class TimeSpanService {
   };
 
   public update = async (userId: string, timeSpanId: string, data: CreateUpdateTimeSpan): Promise<TimeSpan> => {
-    const oldTimeSpan = await this.findById(timeSpanId);
-
-    if (!oldTimeSpan || oldTimeSpan.userId !== userId) {
-      throw new UserInputError(`TimeSpan with id ${timeSpanId} not found.`);
+    const oldTimeSpan = await this.findById(userId, timeSpanId);
+    if (!oldTimeSpan) {
+      throw new NotFoundError(`TimeSpan with id ${timeSpanId} not found.`);
     }
 
     const timeSpan = await this.prisma.timeSpan.update({
@@ -105,10 +107,11 @@ export class TimeSpanService {
   };
 
   public delete = async (userId: string, timeSpanId: string): Promise<void> => {
-    const oldTimeSpan = await this.findById(timeSpanId);
-    if (!oldTimeSpan || oldTimeSpan.userId !== userId) {
-      throw new UserInputError(`TimeSpan with id ${timeSpanId} not found.`);
+    const oldTimeSpan = await this.findById(userId, timeSpanId);
+    if (!oldTimeSpan) {
+      throw new NotFoundError(`TimeSpan with id ${timeSpanId} not found.`);
     }
+
     await this.prisma.$transaction([
       this.prisma.tagsOnTimeSpans.deleteMany({
         where: {

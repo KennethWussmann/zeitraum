@@ -1,10 +1,6 @@
 import { Logger } from '@zeitraum/commons';
 import { ApplicationContext } from '../applicationContext';
-import { rootUserId } from '../user/userService';
-
-export type UserContext = {
-  id: string;
-};
+import { User } from '../timeSpan/timeSpan';
 
 export type GraphQLContext = {
   applicationContext: ApplicationContext;
@@ -12,4 +8,9 @@ export type GraphQLContext = {
   logger: Logger;
 };
 
-export const defaultUserContext: UserContext = { id: rootUserId };
+export class UserContext {
+  id: string;
+  constructor(public user: User) {
+    this.id = user.id;
+  }
+}

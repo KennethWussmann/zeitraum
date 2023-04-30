@@ -1,0 +1,6 @@
+# import "./timeSpan.fragment.graphql"
+query timeSpan($id: ID!) {
+  timeSpan(id: $id) {
+    ...TimeSpanFragment
+  }
+}

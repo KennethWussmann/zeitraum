@@ -4,6 +4,7 @@ type Query {
   me: User!
   tags(input: TagSearch): TagList!
   timeSpans(input: TimeSpanSearch): TimeSpanList!
+  timeSpan(id: ID!): TimeSpan!
 }
 
 type Mutation {
