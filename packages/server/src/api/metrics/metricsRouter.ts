@@ -3,6 +3,7 @@ import { Request, Response, Router } from 'express';
 import { Gauge, Registry, collectDefaultMetrics } from 'prom-client';
 import { tokenBasedAuthMiddleware } from '../tokenBasedAuthMiddleware';
 import { TimeSpanMetricService } from '../../timeSpan/timeSpanMetricService';
+import { PrismaClient } from '@prisma/client';
 
 const prefix = 'zeitraum_';
 
@@ -32,6 +33,7 @@ export class MetricsRouter {
 
   constructor(
     private logger: Logger,
+    private prisma: PrismaClient,
     private timeSpanMetricService: TimeSpanMetricService,
     private apiTokens: string[],
   ) {
@@ -46,7 +48,12 @@ export class MetricsRouter {
       res.setHeader('Content-Type', this.register.contentType);
       try {
         await this.updateMetrics();
-        res.send(await this.register.metrics());
+        res.send(
+          [
+            await this.register.metrics(),
+            await this.prisma.$metrics.prometheus({ globalLabels: { service: 'zeitraum' } }),
+          ].join('\n'),
+        );
       } catch (error: any) {
         logger.error(`Error while collecting metrics: ${error.message}`, { error });
         res.status(500).send('Error while collecting metrics');

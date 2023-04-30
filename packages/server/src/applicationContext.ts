@@ -24,6 +24,7 @@ export class ApplicationContext {
   );
   public readonly metricsRouter = new MetricsRouter(
     this.rootLogger.child({ name: 'metricsRouter' }),
+    this.prismaClient,
     this.timeSpanMetricService,
     this.configuration.API_TOKENS,
   );
