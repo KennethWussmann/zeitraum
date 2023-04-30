@@ -21,4 +21,4 @@ jobs:
       - uses: ./.github/actions/docker-publish
         with:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
-          tags: develop
+          tags: ghcr.io/kennethwussmann/zeitraum/server:develop

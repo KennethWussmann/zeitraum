@@ -24,5 +24,5 @@ jobs:
       - uses: ./.github/actions/docker-publish
         with:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
-          tags: ghcr.io/kennethwussmann/zeitraum:${{ steps.vars.outputs.tag }},ghcr.io/kennethwussmann/zeitraum:latest
+          tags: ghcr.io/kennethwussmann/zeitraum/server:${{ steps.vars.outputs.tag }},ghcr.io/kennethwussmann/zeitraum/server:latest
           build-args: VERSION=${{ steps.vars.outputs.tag }}
