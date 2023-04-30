@@ -49,6 +49,7 @@ type User {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
+  username: String!
 }
 
 type Tag {

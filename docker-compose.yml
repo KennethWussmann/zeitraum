@@ -1,0 +1,12 @@
+version: '3.8'
+services:
+  database:
+    image: postgres:15
+    tmpfs:
+      - /var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: zeitraum
+      POSTGRES_USER: zeitraum
+      POSTGRES_DB: zeitraum

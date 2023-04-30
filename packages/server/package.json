@@ -15,6 +15,9 @@
     "migrate:dev": "prisma migrate dev",
     "migrate:prd": "prisma migrate deploy"
   },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  },
   "devDependencies": {
     "@graphql-codegen/add": "^4.0.1",
     "@graphql-codegen/cli": "^3.3.1",

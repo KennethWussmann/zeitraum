@@ -7,6 +7,7 @@ import { UserService } from './user/userService';
 import { TimeSpanService } from './timeSpan/timeSpanService';
 import { TagService } from './tag/tagService';
 import { MetricsRouter } from './api/metrics/metricsRouter';
+import { TimeSpanMetricService } from './timeSpan/timeSpanMetricService';
 
 export class ApplicationContext {
   public readonly configuration = loadConfiguration();
@@ -15,6 +16,7 @@ export class ApplicationContext {
   public readonly userService = new UserService(this.prismaClient);
   public readonly tagService = new TagService(this.prismaClient);
   public readonly timeSpanService = new TimeSpanService(this.prismaClient, this.tagService);
+  public readonly timeSpanMetricService = new TimeSpanMetricService(this.prismaClient);
   public readonly graphqlServer = new GraphQLServer(
     this.rootLogger.child({ name: 'graphqlServer' }),
     this,
@@ -22,7 +24,7 @@ export class ApplicationContext {
   );
   public readonly metricsRouter = new MetricsRouter(
     this.rootLogger.child({ name: 'metricsRouter' }),
-    this.timeSpanService,
+    this.timeSpanMetricService,
     this.configuration.API_TOKENS,
   );
   public readonly apiServer = new ApiServer(
