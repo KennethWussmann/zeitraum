@@ -1,5 +1,5 @@
-import { PrismaClient } from '@prisma/client';
-import { CreateUpdateTimeSpan } from '../api/resolverTypes';
+import { Prisma, PrismaClient } from '@prisma/client';
+import { CreateUpdateTimeSpan, TimeSpanSearch } from '../api/resolverTypes';
 import { TagService } from '../api/tag/tagService';
 import { randomUUID } from 'crypto';
 import { TimeSpan } from './timeSpan';
@@ -122,5 +122,47 @@ export class TimeSpanService {
         },
       }),
     ]);
+  };
+
+  public search = async (
+    userId: string,
+    { tags, fromInclusive, toInclusive, running, limit = 100, offset = 0 }: TimeSpanSearch = {},
+  ): Promise<{ items: TimeSpan[]; total: number }> => {
+    const tagsFound = tags && tags.length > 0 ? await this.tagService.findByNames(userId, ...tags) : [];
+    const where: Prisma.TimeSpanWhereInput = {
+      userId,
+      start: fromInclusive ? { gte: fromInclusive, lte: toInclusive ? toInclusive : undefined } : undefined,
+      TagsOnTimeSpans: tagsFound.length > 0 ? { some: { tagId: { in: tagsFound.map((tag) => tag.id) } } } : undefined,
+      end: running !== undefined ? (running ? { equals: null } : { not: null }) : undefined,
+    };
+    const [total, items] = await this.prisma.$transaction([
+      this.prisma.timeSpan.count({
+        where,
+      }),
+      this.prisma.timeSpan.findMany({
+        where,
+        take: limit ?? undefined,
+        skip: offset ?? undefined,
+        orderBy: {
+          createdAt: 'desc',
+        },
+        include: {
+          user: true,
+          TagsOnTimeSpans: {
+            include: {
+              tag: {
+                include: {
+                  user: true,
+                },
+              },
+            },
+          },
+        },
+      }),
+    ]);
+    return {
+      items,
+      total,
+    };
   };
 }

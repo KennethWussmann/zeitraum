@@ -16,10 +16,12 @@ import { updateTimeSpanMutation } from './resolvers/timeSpan/updateTimeSpan.muta
 import { deleteTimeSpanMutation } from './resolvers/timeSpan/deleteTimeSpan.mutation';
 import { mergeResolvers } from '@graphql-tools/merge';
 import { tagsQuery } from './resolvers/tag/tags.query';
+import { timeSpansQuery } from './resolvers/timeSpan/timeSpans.query';
 
 export class GraphQLServer {
   private readonly resolverBuilders: Resolvers = [
     timeSpanResolver,
+    timeSpansQuery,
     createTimeSpanMutation,
     deleteTimeSpanMutation,
     updateTimeSpanMutation,

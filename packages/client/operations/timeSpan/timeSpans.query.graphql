@@ -1,0 +1,9 @@
+# import "./timeSpan.fragment.graphql"
+query timeSpans($input: TimeSpanSearch) {
+  timeSpans(input: $input) {
+    total
+    items {
+      ...TimeSpanFragment
+    }
+  }
+}

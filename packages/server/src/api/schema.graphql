@@ -15,6 +15,7 @@ type Mutation {
 input TimeSpanSearch {
   fromInclusive: DateTime
   toInclusive: DateTime
+  running: Boolean
   tags: [String!]
   limit: Int = 100
   offset: Int = 0
@@ -63,5 +64,6 @@ type TimeSpan {
   start: DateTime!
   end: DateTime
   note: String
+  running: Boolean!
   tags: [Tag!]!
 }

@@ -83,6 +83,7 @@ export type TimeSpan = {
   end?: Maybe<Scalars['DateTime']>;
   id: Scalars['ID'];
   note?: Maybe<Scalars['String']>;
+  running: Scalars['Boolean'];
   start: Scalars['DateTime'];
   tags: Array<Tag>;
   updatedAt: Scalars['DateTime'];
@@ -98,6 +99,7 @@ export type TimeSpanSearch = {
   fromInclusive?: InputMaybe<Scalars['DateTime']>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
+  running?: InputMaybe<Scalars['Boolean']>;
   tags?: InputMaybe<Array<Scalars['String']>>;
   toInclusive?: InputMaybe<Scalars['DateTime']>;
 };
@@ -157,6 +159,28 @@ export type TimeSpanFragmentFragment = {
   end?: any | null;
   note?: string | null;
   tags: Array<{ __typename?: 'Tag'; id: string; createdAt: any; updatedAt: any; name: string }>;
+};
+
+export type TimeSpansQueryVariables = Exact<{
+  input?: InputMaybe<TimeSpanSearch>;
+}>;
+
+export type TimeSpansQuery = {
+  __typename?: 'Query';
+  timeSpans: {
+    __typename?: 'TimeSpanList';
+    total: number;
+    items: Array<{
+      __typename?: 'TimeSpan';
+      id: string;
+      createdAt: any;
+      updatedAt: any;
+      start: any;
+      end?: any | null;
+      note?: string | null;
+      tags: Array<{ __typename?: 'Tag'; id: string; createdAt: any; updatedAt: any; name: string }>;
+    }>;
+  };
 };
 
 export type UpdateTimeSpanMutationVariables = Exact<{
@@ -225,6 +249,16 @@ export const DeleteTimeSpanDocument = `
   deleteTimeSpan(id: $id)
 }
     `;
+export const TimeSpansDocument = `
+    query timeSpans($input: TimeSpanSearch) {
+  timeSpans(input: $input) {
+    total
+    items {
+      ...TimeSpanFragment
+    }
+  }
+}
+    ${TimeSpanFragmentFragmentDoc}`;
 export const UpdateTimeSpanDocument = `
     mutation updateTimeSpan($id: ID!, $data: CreateUpdateTimeSpan!) {
   updateTimeSpan(id: $id, input: $data) {
@@ -272,6 +306,11 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
         variables,
         options,
       ) as Promise<ExecutionResult<DeleteTimeSpanMutation, E>>;
+    },
+    timeSpans(variables?: TimeSpansQueryVariables, options?: C): Promise<ExecutionResult<TimeSpansQuery, E>> {
+      return requester<TimeSpansQuery, TimeSpansQueryVariables>(TimeSpansDocument, variables, options) as Promise<
+        ExecutionResult<TimeSpansQuery, E>
+      >;
     },
     updateTimeSpan(
       variables: UpdateTimeSpanMutationVariables,

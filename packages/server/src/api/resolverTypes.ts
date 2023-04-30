@@ -91,6 +91,7 @@ export type TimeSpan = {
   end?: Maybe<Scalars['DateTime']>;
   id: Scalars['ID'];
   note?: Maybe<Scalars['String']>;
+  running: Scalars['Boolean'];
   start: Scalars['DateTime'];
   tags: Array<Tag>;
   updatedAt: Scalars['DateTime'];
@@ -106,6 +107,7 @@ export type TimeSpanSearch = {
   fromInclusive?: InputMaybe<Scalars['DateTime']>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
+  running?: InputMaybe<Scalars['Boolean']>;
   tags?: InputMaybe<Array<Scalars['String']>>;
   toInclusive?: InputMaybe<Scalars['DateTime']>;
 };
@@ -260,6 +262,7 @@ export type TimeSpanResolvers<ContextType = GraphQLContext, ParentType extends R
   end?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   note?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  running?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   start?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   tags?: Resolver<Array<ResolversTypes['Tag']>, ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
