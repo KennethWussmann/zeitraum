@@ -3,7 +3,7 @@ import { CreateUpdateTimeSpan, TimeSpanSearch } from '../api/resolverTypes';
 import { TagService } from '../api/tag/tagService';
 import { randomUUID } from 'crypto';
 import { TimeSpan } from './timeSpan';
-import { NotFoundError, UserInputError } from '../api/graphqlErrors';
+import { NotFoundError } from '../api/graphqlErrors';
 
 export class TimeSpanService {
   constructor(private prisma: PrismaClient, private tagService: TagService) {}
