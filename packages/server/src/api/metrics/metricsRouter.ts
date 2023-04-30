@@ -24,6 +24,11 @@ export class MetricsRouter {
     help: 'Amount time spans per tag',
     labelNames: ['username', 'tag'],
   });
+  private timeSpansOpenCount = new Gauge({
+    name: `${prefix}time_spans_open_count`,
+    help: 'Amount time spans without an end time',
+    labelNames: ['username'],
+  });
 
   constructor(
     private logger: Logger,
@@ -31,7 +36,7 @@ export class MetricsRouter {
     private apiTokens: string[],
   ) {
     collectDefaultMetrics({ register: this.register, prefix });
-    [this.timeSpansCountTotal, this.timeSpentPerTag, this.tagUsageCount].map((metric) =>
+    [this.timeSpansCountTotal, this.timeSpentPerTag, this.tagUsageCount, this.timeSpansOpenCount].map((metric) =>
       this.register.registerMetric(metric),
     );
 
@@ -58,6 +63,9 @@ export class MetricsRouter {
     );
     (await this.timeSpanMetricService.getTagUsageCount()).forEach(({ username, tag_name: tag, usage_count }) =>
       this.tagUsageCount.set({ username, tag }, usage_count),
+    );
+    (await this.timeSpanMetricService.getOpenCountPerUser()).forEach(({ username, amount }) =>
+      this.timeSpansOpenCount.set({ username }, amount),
     );
   };
 }

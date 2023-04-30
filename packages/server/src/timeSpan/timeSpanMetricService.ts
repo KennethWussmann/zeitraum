@@ -62,4 +62,22 @@ export class TimeSpanMetricService {
           GROUP BY U.username, T.id;
         `,
       );
+
+  public getOpenCountPerUser = async () =>
+    z
+      .array(
+        z.object({
+          username: z.string(),
+          amount: z.bigint().transform(Number),
+        }),
+      )
+      .parse(
+        await this.prisma.$queryRaw`
+          SELECT U."username", count(*) as amount
+          FROM "TimeSpan" ts
+            JOIN "User" U on U.id = ts."userId"
+          WHERE ts."end" IS NULL
+          GROUP BY U."username";
+        `,
+      );
 }
