@@ -106,6 +106,31 @@ export class TimeSpanService {
     };
   };
 
+  public close = async (userId: string, timeSpanId: string, end: Date = new Date()): Promise<TimeSpan> => {
+    const oldTimeSpan = await this.findById(userId, timeSpanId);
+    if (!oldTimeSpan) {
+      throw new NotFoundError(`TimeSpan with id ${timeSpanId} not found.`);
+    }
+    return await this.prisma.timeSpan.update({
+      data: {
+        end,
+      },
+      where: { id: timeSpanId },
+      include: {
+        user: true,
+        TagsOnTimeSpans: {
+          include: {
+            tag: {
+              include: {
+                user: true,
+              },
+            },
+          },
+        },
+      },
+    });
+  };
+
   public delete = async (userId: string, timeSpanId: string): Promise<void> => {
     const oldTimeSpan = await this.findById(userId, timeSpanId);
     if (!oldTimeSpan) {

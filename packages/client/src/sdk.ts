@@ -24,9 +24,15 @@ export type CreateUpdateTimeSpan = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  closeTimeSpan: TimeSpan;
   createTimeSpan: TimeSpan;
   deleteTimeSpan: Scalars['Boolean'];
   updateTimeSpan: TimeSpan;
+};
+
+export type MutationCloseTimeSpanArgs = {
+  end?: InputMaybe<Scalars['DateTime']>;
+  id: Scalars['ID'];
 };
 
 export type MutationCreateTimeSpanArgs = {
@@ -129,6 +135,26 @@ export type TagsQuery = {
     __typename?: 'TagList';
     total: number;
     items: Array<{ __typename?: 'Tag'; id: string; createdAt: any; updatedAt: any; name: string }>;
+  };
+};
+
+export type CloseTimeSpanMutationVariables = Exact<{
+  id: Scalars['ID'];
+  end?: InputMaybe<Scalars['DateTime']>;
+}>;
+
+export type CloseTimeSpanMutation = {
+  __typename?: 'Mutation';
+  closeTimeSpan: {
+    __typename?: 'TimeSpan';
+    id: string;
+    createdAt: any;
+    updatedAt: any;
+    start: any;
+    end?: any | null;
+    note?: string | null;
+    running: boolean;
+    tags: Array<{ __typename?: 'Tag'; id: string; createdAt: any; updatedAt: any; name: string }>;
   };
 };
 
@@ -267,6 +293,13 @@ export const TagsDocument = `
   }
 }
     ${TagFragmentFragmentDoc}`;
+export const CloseTimeSpanDocument = `
+    mutation closeTimeSpan($id: ID!, $end: DateTime) {
+  closeTimeSpan(id: $id, end: $end) {
+    ...TimeSpanFragment
+  }
+}
+    ${TimeSpanFragmentFragmentDoc}`;
 export const CreateTimeSpanDocument = `
     mutation createTimeSpan($data: CreateUpdateTimeSpan!) {
   createTimeSpan(input: $data) {
@@ -323,6 +356,16 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
       return requester<TagsQuery, TagsQueryVariables>(TagsDocument, variables, options) as Promise<
         ExecutionResult<TagsQuery, E>
       >;
+    },
+    closeTimeSpan(
+      variables: CloseTimeSpanMutationVariables,
+      options?: C,
+    ): Promise<ExecutionResult<CloseTimeSpanMutation, E>> {
+      return requester<CloseTimeSpanMutation, CloseTimeSpanMutationVariables>(
+        CloseTimeSpanDocument,
+        variables,
+        options,
+      ) as Promise<ExecutionResult<CloseTimeSpanMutation, E>>;
     },
     createTimeSpan(
       variables: CreateTimeSpanMutationVariables,

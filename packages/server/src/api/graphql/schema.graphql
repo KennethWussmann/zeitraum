@@ -11,6 +11,7 @@ type Mutation {
   createTimeSpan(input: CreateUpdateTimeSpan!): TimeSpan!
   updateTimeSpan(id: ID!, input: CreateUpdateTimeSpan!): TimeSpan!
   deleteTimeSpan(id: ID!): Boolean!
+  closeTimeSpan(id: ID!, end: DateTime): TimeSpan!
 }
 
 input TimeSpanSearch {

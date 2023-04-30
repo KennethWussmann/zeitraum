@@ -1,0 +1,6 @@
+# import "./timeSpan.fragment.graphql"
+mutation closeTimeSpan($id: ID!, $end: DateTime) {
+  closeTimeSpan(id: $id, end: $end) {
+    ...TimeSpanFragment
+  }
+}
