@@ -1,4 +1,4 @@
-import { TimeSpan, Tag, User } from '../timeSpan/timeSpan';
+import { TimeSpan, Tag, User } from '../../timeSpan/timeSpan';
 
 export type TimeSpanModel = TimeSpan;
 export type TagModel = Tag;

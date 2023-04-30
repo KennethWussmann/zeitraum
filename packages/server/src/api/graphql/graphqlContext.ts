@@ -1,6 +1,6 @@
 import { Logger } from '@zeitraum/commons';
-import { ApplicationContext } from '../applicationContext';
-import { User } from '../timeSpan/timeSpan';
+import { ApplicationContext } from '../../applicationContext';
+import { User } from '../../timeSpan/timeSpan';
 
 export type GraphQLContext = {
   applicationContext: ApplicationContext;

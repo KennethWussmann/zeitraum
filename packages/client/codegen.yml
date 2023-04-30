@@ -1,4 +1,4 @@
-schema: ../server/src/api/schema.graphql
+schema: ../server/src/api/graphql/schema.graphql
 documents: ./operations/**/*.graphql
 generates:
   src/sdk.ts:

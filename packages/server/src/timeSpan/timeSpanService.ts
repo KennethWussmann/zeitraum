@@ -1,9 +1,9 @@
 import { Prisma, PrismaClient } from '@prisma/client';
-import { CreateUpdateTimeSpan, TimeSpanSearch } from '../api/resolverTypes';
-import { TagService } from '../api/tag/tagService';
+import { TagService } from '../tag/tagService';
 import { randomUUID } from 'crypto';
 import { TimeSpan } from './timeSpan';
-import { NotFoundError } from '../api/graphqlErrors';
+import { CreateUpdateTimeSpan, TimeSpanSearch } from '../api/graphql/resolverTypes';
+import { NotFoundError } from '../api/graphql/graphqlErrors';
 
 export class TimeSpanService {
   constructor(private prisma: PrismaClient, private tagService: TagService) {}

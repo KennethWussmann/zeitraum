@@ -12,6 +12,7 @@ export class ApiServer {
   private createApp = (apolloServer: ApolloServer): Application => {
     const app = express();
     app.use(express.json());
+    app.use(this.applicationContext.metricsRouter.router);
     app.use(
       '/graphql',
       expressMiddleware(apolloServer, {

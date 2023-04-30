@@ -3,10 +3,9 @@ import { ApolloServer } from '@apollo/server';
 import { loadSchema } from '@graphql-tools/load';
 import { GraphQLFileLoader } from '@graphql-tools/graphql-file-loader';
 import { Logger } from '@zeitraum/commons';
-import { ApplicationContext } from '../applicationContext';
+import { ApplicationContext } from '../../applicationContext';
 import { Resolvers } from './resolverTypes';
 import { GraphQLContext, UserContext } from './graphqlContext';
-import { meQuery } from './resolvers/user/me.query';
 import { createTimeSpanMutation } from './resolvers/timeSpan/createTimeSpan.mutation';
 import { timeSpanResolver } from './resolvers/timeSpan/timeSpan.resolver';
 import { tagResolver } from './resolvers/tag/tag.resolver';
@@ -18,6 +17,7 @@ import { tagsQuery } from './resolvers/tag/tags.query';
 import { timeSpansQuery } from './resolvers/timeSpan/timeSpans.query';
 import { UnauthenticatedError } from './graphqlErrors';
 import { timeSpanQuery } from './resolvers/timeSpan/timeSpan.query';
+import { meQuery } from './resolvers/user/me.query';
 
 export class GraphQLServer {
   private readonly resolverBuilders: Resolvers = [

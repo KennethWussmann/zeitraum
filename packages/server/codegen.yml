@@ -1,6 +1,6 @@
-schema: ./src/api/schema.graphql
+schema: ./src/api/graphql/schema.graphql
 generates:
-  src/api/resolverTypes.ts:
+  src/api/graphql/resolverTypes.ts:
     config:
       contextType: ./graphqlContext#GraphQLContext
       useIndexSignature: true

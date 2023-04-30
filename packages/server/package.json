@@ -7,7 +7,7 @@
   "author": "Kenneth Wußmann",
   "license": "MIT",
   "scripts": {
-    "build": "npm run codegen:prisma && tsc -p tsconfig.build.json && cp ./src/api/schema.graphql ./build/api/",
+    "build": "npm run codegen:prisma && tsc -p tsconfig.build.json && cp ./src/api/graphql/schema.graphql ./build/api/graphql/",
     "dev": "tsx --watch src/index.ts",
     "codegen": "npm run codegen:graphql && npm run codegen:prisma",
     "codegen:graphql": "graphql-codegen",
@@ -33,6 +33,7 @@
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "graphql": "^16.6.0",
+    "prom-client": "^14.2.0",
     "zod": "^3.21.4"
   }
 }
