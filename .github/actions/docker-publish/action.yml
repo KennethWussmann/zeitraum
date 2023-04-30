@@ -4,9 +4,12 @@ inputs:
   githubToken:
     description: 'Token to access private GH Docker registry'
     required: true
-  tag:
-    description: 'Tag to assign for the published docker container'
+  tags:
+    description: 'Tags to assign for the published docker container'
     required: true
+  build-args:
+    description: 'Build args'
+    required: false
 runs:
   using: 'composite'
   steps:
@@ -27,4 +30,5 @@ runs:
       with:
         push: true
         platforms: linux/amd64,linux/arm64
-        tags: ghcr.io/kennethwussmann/zeitraum:${{ inputs.tag }}
+        tags: ${{ inputs.tags }}
+        build-args: ${{ inputs.build-args }}
