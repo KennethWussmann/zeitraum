@@ -1,0 +1,47 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String     @id
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  TimeSpan  TimeSpan[]
+  Tag       Tag[]
+}
+
+model TimeSpan {
+  id              String            @id
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  start           DateTime          @default(now())
+  end             DateTime?
+  note            String?
+  user            User              @relation(fields: [userId], references: [id])
+  userId          String
+  TagsOnTimeSpans TagsOnTimeSpans[]
+}
+
+model Tag {
+  id              String            @id
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  name            String            @unique
+  user            User              @relation(fields: [userId], references: [id])
+  userId          String
+  TagsOnTimeSpans TagsOnTimeSpans[]
+}
+
+model TagsOnTimeSpans {
+  timeSpan   TimeSpan @relation(fields: [timeSpanId], references: [id])
+  timeSpanId String
+  tag        Tag      @relation(fields: [tagId], references: [id])
+  tagId      String
+
+  @@id([timeSpanId, tagId])
+}

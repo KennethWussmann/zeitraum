@@ -1,0 +1,19 @@
+schema: ./src/api/schema.graphql
+generates:
+  src/api/resolverTypes.ts:
+    config:
+      contextType: ./graphqlContext#GraphQLContext
+      useIndexSignature: true
+      defaultMapper: any
+      mappers:
+        User: ./modelTypes#UserModel
+        TimeSpan: ./modelTypes#TimeSpanModel
+        Tag: ./modelTypes#TagModel
+
+      scalars:
+        DateTime: Date
+    plugins:
+      - add:
+          content: /* eslint-disable */
+      - typescript
+      - typescript-resolvers

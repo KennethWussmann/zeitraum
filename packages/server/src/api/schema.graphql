@@ -1,0 +1,55 @@
+scalar DateTime
+
+type Query {
+  me: User!
+  timeSpans(input: TimeSpanSearch): TimeSpanList!
+}
+
+type Mutation {
+  createTimeSpan(input: CreateUpdateTimeSpanInput!): TimeSpan!
+  updateTimeSpan(id: ID!, input: CreateUpdateTimeSpanInput!): TimeSpan!
+  deleteTimeSpan(id: ID!): Boolean!
+}
+
+input TimeSpanSearch {
+  fromInclusive: DateTime
+  toInclusive: DateTime
+  tags: [String!]
+  limit: Int
+  offset: Int
+}
+
+input CreateUpdateTimeSpanInput {
+  start: DateTime!
+  end: DateTime
+  note: String
+  tags: [String!]!
+}
+
+type TimeSpanList {
+  items: [TimeSpan!]!
+  total: Int!
+}
+
+type User {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Tag {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String!
+}
+
+type TimeSpan {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  start: DateTime!
+  end: DateTime
+  note: String
+  tags: [Tag!]!
+}
