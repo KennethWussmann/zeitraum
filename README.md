@@ -4,11 +4,11 @@ Zeitraum is a versatile time tracking app designed to seamlessly integrate into 
 
 ## ✨ Features
 
-- [ ] 🔗 **GraphQL API**: The backbone of all integrations, empowering you to create a personalized experience.
+- [x] 🔗 **GraphQL API**: The backbone of all integrations, empowering you to create a personalized experience.
 - [ ] 💻 **Command-line Interface**: Streamline your scripts and workflow with ease.
 - [ ] ⚡ **[Raycast](https://www.raycast.com/) Extension**: Blazingly fast time tracking at your fingertips.
-- [ ] 📈 **Prometheus Integration**: Export time spans for alerts, monitoring, and enhanced observability.
-- [ ] 🎛️ **Grafana Compatibility**: Design your own stunning dashboard to keep an eye on your time investments.
+- [x] 📈 **Prometheus Integration**: Export time spans for alerts, monitoring, and enhanced observability.
+- [x] 🎛️ **Grafana Compatibility**: Design your own stunning dashboard to keep an eye on your time investments.
 
 ## 🏷️ Harness the Power of Tags
 
