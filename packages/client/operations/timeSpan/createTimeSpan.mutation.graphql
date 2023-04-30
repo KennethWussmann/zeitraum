@@ -1,5 +1,5 @@
 # import "./timeSpan.fragment.graphql"
-mutation createTimeSpan($data: CreateUpdateTimeSpanInput!) {
+mutation createTimeSpan($data: CreateUpdateTimeSpan!) {
   createTimeSpan(input: $data) {
     ...TimeSpanFragment
   }

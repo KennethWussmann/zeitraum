@@ -15,7 +15,7 @@ export type Scalars = {
   DateTime: any;
 };
 
-export type CreateUpdateTimeSpanInput = {
+export type CreateUpdateTimeSpan = {
   end?: InputMaybe<Scalars['DateTime']>;
   note?: InputMaybe<Scalars['String']>;
   start: Scalars['DateTime'];
@@ -30,7 +30,7 @@ export type Mutation = {
 };
 
 export type MutationCreateTimeSpanArgs = {
-  input: CreateUpdateTimeSpanInput;
+  input: CreateUpdateTimeSpan;
 };
 
 export type MutationDeleteTimeSpanArgs = {
@@ -39,13 +39,18 @@ export type MutationDeleteTimeSpanArgs = {
 
 export type MutationUpdateTimeSpanArgs = {
   id: Scalars['ID'];
-  input: CreateUpdateTimeSpanInput;
+  input: CreateUpdateTimeSpan;
 };
 
 export type Query = {
   __typename?: 'Query';
   me: User;
+  tags: TagList;
   timeSpans: TimeSpanList;
+};
+
+export type QueryTagsArgs = {
+  input?: InputMaybe<TagSearch>;
 };
 
 export type QueryTimeSpansArgs = {
@@ -58,6 +63,18 @@ export type Tag = {
   id: Scalars['ID'];
   name: Scalars['String'];
   updatedAt: Scalars['DateTime'];
+};
+
+export type TagList = {
+  __typename?: 'TagList';
+  items: Array<Tag>;
+  total: Scalars['Int'];
+};
+
+export type TagSearch = {
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  query?: InputMaybe<Scalars['String']>;
 };
 
 export type TimeSpan = {
@@ -94,8 +111,21 @@ export type User = {
 
 export type TagFragmentFragment = { __typename?: 'Tag'; id: string; createdAt: any; updatedAt: any; name: string };
 
+export type TagsQueryVariables = Exact<{
+  input?: InputMaybe<TagSearch>;
+}>;
+
+export type TagsQuery = {
+  __typename?: 'Query';
+  tags: {
+    __typename?: 'TagList';
+    total: number;
+    items: Array<{ __typename?: 'Tag'; id: string; createdAt: any; updatedAt: any; name: string }>;
+  };
+};
+
 export type CreateTimeSpanMutationVariables = Exact<{
-  data: CreateUpdateTimeSpanInput;
+  data: CreateUpdateTimeSpan;
 }>;
 
 export type CreateTimeSpanMutation = {
@@ -131,7 +161,7 @@ export type TimeSpanFragmentFragment = {
 
 export type UpdateTimeSpanMutationVariables = Exact<{
   id: Scalars['ID'];
-  data: CreateUpdateTimeSpanInput;
+  data: CreateUpdateTimeSpan;
 }>;
 
 export type UpdateTimeSpanMutation = {
@@ -173,20 +203,30 @@ export const TimeSpanFragmentFragmentDoc = `
   }
 }
     ${TagFragmentFragmentDoc}`;
+export const TagsDocument = `
+    query tags($input: TagSearch) {
+  tags(input: $input) {
+    total
+    items {
+      ...TagFragment
+    }
+  }
+}
+    ${TagFragmentFragmentDoc}`;
 export const CreateTimeSpanDocument = `
-    mutation createTimeSpan($data: CreateUpdateTimeSpanInput!) {
+    mutation createTimeSpan($data: CreateUpdateTimeSpan!) {
   createTimeSpan(input: $data) {
     ...TimeSpanFragment
   }
 }
     ${TimeSpanFragmentFragmentDoc}`;
 export const DeleteTimeSpanDocument = `
-    mutation DeleteTimeSpan($id: ID!) {
+    mutation deleteTimeSpan($id: ID!) {
   deleteTimeSpan(id: $id)
 }
     `;
 export const UpdateTimeSpanDocument = `
-    mutation UpdateTimeSpan($id: ID!, $data: CreateUpdateTimeSpanInput!) {
+    mutation updateTimeSpan($id: ID!, $data: CreateUpdateTimeSpan!) {
   updateTimeSpan(id: $id, input: $data) {
     ...TimeSpanFragment
   }
@@ -208,6 +248,11 @@ export type Requester<C = {}, E = unknown> = <R, V>(
 ) => Promise<ExecutionResult<R, E>> | AsyncIterable<ExecutionResult<R, E>>;
 export function getSdk<C, E>(requester: Requester<C, E>) {
   return {
+    tags(variables?: TagsQueryVariables, options?: C): Promise<ExecutionResult<TagsQuery, E>> {
+      return requester<TagsQuery, TagsQueryVariables>(TagsDocument, variables, options) as Promise<
+        ExecutionResult<TagsQuery, E>
+      >;
+    },
     createTimeSpan(
       variables: CreateTimeSpanMutationVariables,
       options?: C,
@@ -218,7 +263,7 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
         options,
       ) as Promise<ExecutionResult<CreateTimeSpanMutation, E>>;
     },
-    DeleteTimeSpan(
+    deleteTimeSpan(
       variables: DeleteTimeSpanMutationVariables,
       options?: C,
     ): Promise<ExecutionResult<DeleteTimeSpanMutation, E>> {
@@ -228,7 +273,7 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
         options,
       ) as Promise<ExecutionResult<DeleteTimeSpanMutation, E>>;
     },
-    UpdateTimeSpan(
+    updateTimeSpan(
       variables: UpdateTimeSpanMutationVariables,
       options?: C,
     ): Promise<ExecutionResult<UpdateTimeSpanMutation, E>> {

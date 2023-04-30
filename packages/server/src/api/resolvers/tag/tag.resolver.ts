@@ -1,4 +1,4 @@
-import { Resolvers } from '../resolverTypes';
+import { Resolvers } from '../../resolverTypes';
 
 export const tagResolver: Resolvers = {
   Tag: {},

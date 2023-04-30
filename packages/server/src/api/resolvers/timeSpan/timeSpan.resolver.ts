@@ -1,5 +1,5 @@
-import { TimeSpan } from '../../timeSpan/timeSpan';
-import { Resolvers } from '../resolverTypes';
+import { TimeSpan } from '../../../timeSpan/timeSpan';
+import { Resolvers } from '../../resolverTypes';
 
 export const timeSpanResolver: Resolvers = {
   TimeSpan: {

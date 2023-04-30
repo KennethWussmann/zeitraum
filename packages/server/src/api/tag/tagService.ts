@@ -1,6 +1,7 @@
-import { PrismaClient } from '@prisma/client';
+import { Prisma, PrismaClient } from '@prisma/client';
 import { randomUUID } from 'crypto';
 import { Tag } from '../../timeSpan/timeSpan';
+import { TagList, TagSearch } from '../resolverTypes';
 
 export class TagService {
   constructor(private prisma: PrismaClient) {}
@@ -29,5 +30,37 @@ export class TagService {
     const missingTags = names.filter((name) => !existingTags.some((tag) => tag.name === name.toLowerCase()));
     const createdTags = await this.create(userId, ...missingTags);
     return [...existingTags, ...createdTags];
+  };
+
+  public search = async (userId: string, { query, limit = 100, offset = 0 }: TagSearch = {}): Promise<TagList> => {
+    const where: Prisma.TagWhereInput = {
+      userId,
+      name:
+        query && query.length > 0
+          ? {
+              contains: query.toLowerCase(),
+            }
+          : undefined,
+    };
+    const [total, items] = await this.prisma.$transaction([
+      this.prisma.tag.count({
+        where,
+      }),
+      this.prisma.tag.findMany({
+        where,
+        take: limit ?? undefined,
+        skip: offset ?? undefined,
+        include: {
+          user: true,
+        },
+        orderBy: {
+          createdAt: 'desc',
+        },
+      }),
+    ]);
+    return {
+      items,
+      total,
+    };
   };
 }

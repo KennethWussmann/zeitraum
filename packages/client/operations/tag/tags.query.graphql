@@ -1,0 +1,9 @@
+# import "./tag.fragment.graphql"
+query tags($input: TagSearch) {
+  tags(input: $input) {
+    total
+    items {
+      ...TagFragment
+    }
+  }
+}

@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { CreateUpdateTimeSpanInput } from '../api/resolverTypes';
+import { CreateUpdateTimeSpan } from '../api/resolverTypes';
 import { TagService } from '../api/tag/tagService';
 import { randomUUID } from 'crypto';
 import { TimeSpan } from './timeSpan';
@@ -25,7 +25,7 @@ export class TimeSpanService {
       },
     });
 
-  public create = async (userId: string, data: CreateUpdateTimeSpanInput): Promise<TimeSpan> => {
+  public create = async (userId: string, data: CreateUpdateTimeSpan): Promise<TimeSpan> => {
     const timeSpan = await this.prisma.timeSpan.create({
       data: {
         id: randomUUID(),
@@ -65,7 +65,7 @@ export class TimeSpanService {
     );
   };
 
-  public update = async (userId: string, timeSpanId: string, data: CreateUpdateTimeSpanInput): Promise<TimeSpan> => {
+  public update = async (userId: string, timeSpanId: string, data: CreateUpdateTimeSpan): Promise<TimeSpan> => {
     const oldTimeSpan = await this.findById(timeSpanId);
 
     if (!oldTimeSpan || oldTimeSpan.userId !== userId) {

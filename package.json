@@ -17,6 +17,7 @@
     "test": "jest --passWithNoTests",
     "ci": "tsx scripts/index.ts ci",
     "build": "turbo run build",
+    "codegen": "turbo run codegen",
     "lint": "eslint \"**/*.{ts,tsx}\" --ext .ts",
     "lint:fix": "npm run lint -- --fix",
     "format": "prettier . --write",

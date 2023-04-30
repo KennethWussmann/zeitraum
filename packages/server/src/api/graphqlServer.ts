@@ -7,24 +7,28 @@ import { ApplicationContext } from '../applicationContext';
 import { Resolvers } from './resolverTypes';
 import { GraphQLContext, defaultUserContext } from './graphqlContext';
 import { GraphQLError } from 'graphql';
-import { meQuery } from './resolvers/query/me.query';
-import { createTimeSpanMutation } from './resolvers/mutation/createTimeSpan.mutation';
-import { timeSpanResolver } from './resolvers/timeSpan.resolver';
-import { tagResolver } from './resolvers/tag.resolver';
-import { userResolver } from './resolvers/user.resolver';
-import { updateTimeSpanMutation } from './resolvers/mutation/updateTimeSpan.mutation';
-import { deleteTimeSpanMutation } from './resolvers/mutation/deleteTimeSpan.mutation';
+import { meQuery } from './resolvers/user/me.query';
+import { createTimeSpanMutation } from './resolvers/timeSpan/createTimeSpan.mutation';
+import { timeSpanResolver } from './resolvers/timeSpan/timeSpan.resolver';
+import { tagResolver } from './resolvers/tag/tag.resolver';
+import { userResolver } from './resolvers/user/user.resolver';
+import { updateTimeSpanMutation } from './resolvers/timeSpan/updateTimeSpan.mutation';
+import { deleteTimeSpanMutation } from './resolvers/timeSpan/deleteTimeSpan.mutation';
 import { mergeResolvers } from '@graphql-tools/merge';
+import { tagsQuery } from './resolvers/tag/tags.query';
 
 export class GraphQLServer {
   private readonly resolverBuilders: Resolvers = [
     timeSpanResolver,
-    tagResolver,
-    userResolver,
-    meQuery,
     createTimeSpanMutation,
     deleteTimeSpanMutation,
     updateTimeSpanMutation,
+
+    tagResolver,
+    tagsQuery,
+
+    userResolver,
+    meQuery,
   ];
   private readonly resolvers: Resolvers = mergeResolvers(this.resolverBuilders);
 

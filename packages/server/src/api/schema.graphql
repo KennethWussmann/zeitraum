@@ -2,12 +2,13 @@ scalar DateTime
 
 type Query {
   me: User!
+  tags(input: TagSearch): TagList!
   timeSpans(input: TimeSpanSearch): TimeSpanList!
 }
 
 type Mutation {
-  createTimeSpan(input: CreateUpdateTimeSpanInput!): TimeSpan!
-  updateTimeSpan(id: ID!, input: CreateUpdateTimeSpanInput!): TimeSpan!
+  createTimeSpan(input: CreateUpdateTimeSpan!): TimeSpan!
+  updateTimeSpan(id: ID!, input: CreateUpdateTimeSpan!): TimeSpan!
   deleteTimeSpan(id: ID!): Boolean!
 }
 
@@ -15,11 +16,17 @@ input TimeSpanSearch {
   fromInclusive: DateTime
   toInclusive: DateTime
   tags: [String!]
-  limit: Int
-  offset: Int
+  limit: Int = 100
+  offset: Int = 0
 }
 
-input CreateUpdateTimeSpanInput {
+input TagSearch {
+  query: String
+  limit: Int = 100
+  offset: Int = 0
+}
+
+input CreateUpdateTimeSpan {
   start: DateTime!
   end: DateTime
   note: String
@@ -28,6 +35,11 @@ input CreateUpdateTimeSpanInput {
 
 type TimeSpanList {
   items: [TimeSpan!]!
+  total: Int!
+}
+
+type TagList {
+  items: [Tag!]!
   total: Int!
 }
 
