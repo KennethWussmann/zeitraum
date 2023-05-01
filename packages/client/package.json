@@ -8,7 +8,7 @@
   "author": "Kenneth Wußmann",
   "license": "MIT",
   "scripts": {
-    "build": "npm run codegen && tsc -p tsconfig.build.json",
+    "build": "tsc -p tsconfig.build.json",
     "codegen": "npm run codegen:graphql",
     "codegen:graphql": "graphql-codegen"
   },
