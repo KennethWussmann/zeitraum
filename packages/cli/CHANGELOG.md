@@ -1,5 +1,11 @@
 # @zeitraum/cli
 
+## 0.2.1
+
+### Patch Changes
+
+- 5283b03: Add remove command and extended lists
+
 ## 0.2.0
 
 ### Minor Changes
