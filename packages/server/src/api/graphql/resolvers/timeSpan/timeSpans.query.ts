@@ -7,7 +7,15 @@ export const timeSpansQuery: Resolvers = {
       if (!userContext?.id) {
         throw new UnauthenticatedError();
       }
-      return applicationContext.timeSpanService.search(userContext.id, input ?? undefined);
+      console.log(input);
+      return applicationContext.timeSpanService.search(userContext.id, {
+        fromInclusive: input?.fromInclusive ?? undefined,
+        toInclusive: input?.toInclusive ?? undefined,
+        limit: input?.limit ?? undefined,
+        offset: input?.offset ?? undefined,
+        running: input?.running ?? undefined,
+        tags: input?.tags ?? undefined,
+      });
     },
   },
 };

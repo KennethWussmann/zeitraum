@@ -1,0 +1,11 @@
+# https://github.com/Khan/genqlient/blob/main/docs/genqlient.yaml
+package: cmd
+schema: ../server/src/api/graphql/schema.graphql
+operations:
+  - ../client/operations/**/*.graphql
+generated: cmd/generated.go
+bindings:
+  DateTime:
+    type: time.Time
+optional: pointer
+use_struct_references: true

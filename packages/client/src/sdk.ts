@@ -164,7 +164,7 @@ export type CloseTimeSpanMutation = {
 };
 
 export type CreateTimeSpanMutationVariables = Exact<{
-  data: CreateUpdateTimeSpan;
+  input: CreateUpdateTimeSpan;
 }>;
 
 export type CreateTimeSpanMutation = {
@@ -244,7 +244,7 @@ export type TimeSpansQuery = {
 
 export type UpdateTimeSpanMutationVariables = Exact<{
   id: Scalars['ID'];
-  data: CreateUpdateTimeSpan;
+  input: CreateUpdateTimeSpan;
 }>;
 
 export type UpdateTimeSpanMutation = {
@@ -264,7 +264,10 @@ export type UpdateTimeSpanMutation = {
 
 export type MeQueryVariables = Exact<{ [key: string]: never }>;
 
-export type MeQuery = { __typename?: 'Query'; me: { __typename?: 'User'; id: string; createdAt: any; updatedAt: any } };
+export type MeQuery = {
+  __typename?: 'Query';
+  me: { __typename?: 'User'; id: string; createdAt: any; updatedAt: any; username: string };
+};
 
 export const TagFragmentFragmentDoc = `
     fragment TagFragment on Tag {
@@ -306,8 +309,8 @@ export const CloseTimeSpanDocument = `
 }
     ${TimeSpanFragmentFragmentDoc}`;
 export const CreateTimeSpanDocument = `
-    mutation createTimeSpan($data: CreateUpdateTimeSpan!) {
-  createTimeSpan(input: $data) {
+    mutation createTimeSpan($input: CreateUpdateTimeSpan!) {
+  createTimeSpan(input: $input) {
     ...TimeSpanFragment
   }
 }
@@ -335,8 +338,8 @@ export const TimeSpansDocument = `
 }
     ${TimeSpanFragmentFragmentDoc}`;
 export const UpdateTimeSpanDocument = `
-    mutation updateTimeSpan($id: ID!, $data: CreateUpdateTimeSpan!) {
-  updateTimeSpan(id: $id, input: $data) {
+    mutation updateTimeSpan($id: ID!, $input: CreateUpdateTimeSpan!) {
+  updateTimeSpan(id: $id, input: $input) {
     ...TimeSpanFragment
   }
 }
@@ -347,6 +350,7 @@ export const MeDocument = `
     id
     createdAt
     updatedAt
+    username
   }
 }
     `;
