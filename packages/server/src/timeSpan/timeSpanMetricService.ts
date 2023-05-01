@@ -27,7 +27,7 @@ export class TimeSpanMetricService {
         z.object({
           username: z.string(),
           tag_name: z.string(),
-          time_spent_seconds: z.bigint().transform(Number),
+          time_spent_seconds: z.number(),
         }),
       )
       .parse(
@@ -43,11 +43,28 @@ export class TimeSpanMetricService {
           )
           SELECT U."username",
                 T.name as tag_name,
-                COALESCE(SUM(TS.time_spent_seconds), 0)::bigint as time_spent_seconds
+                COALESCE(SUM(TS.time_spent_seconds), 0)::float as time_spent_seconds
           FROM "User" U
             CROSS JOIN "Tag" T
             LEFT JOIN TimeSpent TS ON TS.user_id = U.id AND TS.tag_id = T.id
           GROUP BY U."username", T.name;
+        `,
+      );
+
+  public getTimeSpentPerUser = async () =>
+    z
+      .array(
+        z.object({
+          username: z.string(),
+          time_spent_seconds: z.number(),
+        }),
+      )
+      .parse(
+        await this.prisma.$queryRaw`
+          SELECT U."username", COALESCE(SUM(EXTRACT(EPOCH FROM (COALESCE(ts."end", NOW()) - ts.start))), 0)::float AS time_spent_seconds
+          FROM public."User" U
+            LEFT JOIN public."TimeSpan" ts ON U.id = ts."userId"
+          GROUP BY U."username";
         `,
       );
 
