@@ -4,7 +4,7 @@ import { NextFunction, Request, Response } from 'express';
 export const tokenBasedAuthMiddleware =
   (logger: Logger, ...validTokens: (string | undefined)[]) =>
   (req: Request, res: Response, next: NextFunction) => {
-    const token = req.headers['authorization']?.replace('Bearer ', '');
+    const token = req.headers['authorization']?.replace('Bearer ', '') ?? req.query.token;
     if (!token || typeof token !== 'string') {
       logger.warn('Received request without token');
       res.status(401);

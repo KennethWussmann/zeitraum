@@ -6,7 +6,7 @@ import { loadConfiguration } from './configuration';
 import { UserService } from './user/userService';
 import { TimeSpanService } from './timeSpan/timeSpanService';
 import { TagService } from './tag/tagService';
-import { MetricsRouter } from './api/metrics/metricsRouter';
+import { MetricsRouter } from './api/rest/metricsRouter';
 import { TimeSpanMetricService } from './timeSpan/timeSpanMetricService';
 
 export class ApplicationContext {

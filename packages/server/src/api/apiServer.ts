@@ -4,27 +4,38 @@ import { ApolloServer } from '@apollo/server';
 import { Logger } from '@zeitraum/commons';
 import { ApplicationContext } from '../applicationContext';
 import { Server } from 'http';
+import { GraphQLSchema } from 'graphql';
+import { findTokenFromExpressRequest } from './utils';
+import { SofaRouter } from './rest/sofaRouter';
 
 export class ApiServer {
   private httpServer: Server | undefined = undefined;
   constructor(private logger: Logger, private applicationContext: ApplicationContext, private serverPort: number) {}
 
-  private createApp = (apolloServer: ApolloServer): Application => {
+  private createApp = (apolloServer: ApolloServer, schema: GraphQLSchema): Application => {
     const app = express();
     app.use(express.json());
     app.use(this.applicationContext.metricsRouter.router);
     app.use(
+      new SofaRouter(
+        this.logger,
+        schema,
+        this.applicationContext.graphqlServer,
+        this.applicationContext.configuration.API_TOKENS,
+      ).router,
+    );
+    app.use(
       '/graphql',
       expressMiddleware(apolloServer, {
-        context: ({ req }) => this.applicationContext.graphqlServer.buildContext(req.headers),
+        context: ({ req }) => this.applicationContext.graphqlServer.buildContext(findTokenFromExpressRequest(req)),
       }),
     );
     return app;
   };
 
   startServer = async () => {
-    const apolloServer = await this.applicationContext.graphqlServer.start();
-    const app = this.createApp(apolloServer);
+    const { server, schema } = await this.applicationContext.graphqlServer.start();
+    const app = this.createApp(server, schema);
     this.httpServer = app.listen(this.serverPort, () => {
       this.logger.info(`API server started on port ${this.serverPort}`);
     });

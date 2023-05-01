@@ -1,5 +1,6 @@
 import { makeExecutableSchema } from '@graphql-tools/schema';
 import { ApolloServer } from '@apollo/server';
+import { typeDefs as scalarTypeDefs } from 'graphql-scalars';
 import { loadSchema } from '@graphql-tools/load';
 import { GraphQLFileLoader } from '@graphql-tools/graphql-file-loader';
 import { Logger } from '@zeitraum/commons';
@@ -46,17 +47,8 @@ export class GraphQLServer {
     this.logger.debug('Valid API tokens', { validApiTokens });
   }
 
-  private getHeaderValue = (headers: Record<string, string | string[] | undefined>, key: string) => {
-    const value = headers[key];
-    if (Array.isArray(value)) {
-      return value[0];
-    }
-    return value;
-  };
-
-  buildContext = async (headers: Record<string, string | string[] | undefined>): Promise<GraphQLContext> => {
+  buildContext = async (token: string | undefined): Promise<GraphQLContext> => {
     this.logger.debug('Authorizing GraphQL request');
-    const token = this.getHeaderValue(headers, 'authorization')?.replace('Bearer ', '');
     const authenticated = token && this.validApiTokens.includes(token);
     if (!authenticated) {
       throw new UnauthenticatedError();
@@ -77,9 +69,12 @@ export class GraphQLServer {
   start = async () => {
     const schema = makeExecutableSchema({
       resolvers: this.resolvers,
-      typeDefs: await loadSchema('**/schema.graphql', {
-        loaders: [new GraphQLFileLoader()],
-      }),
+      typeDefs: [
+        await loadSchema('**/schema.graphql', {
+          loaders: [new GraphQLFileLoader()],
+        }),
+        scalarTypeDefs,
+      ],
     });
     const server = new ApolloServer({
       schema,
@@ -87,6 +82,6 @@ export class GraphQLServer {
       logger: this.logger,
     });
     await server.start();
-    return server;
+    return { server, schema };
   };
 }
