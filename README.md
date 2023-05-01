@@ -1,11 +1,13 @@
 <div align="center">
   <h1><code>Zeitraum</code></h1>
   <p>
-    <strong>Zeitraum is a versatile time tracking app for developers, designed to seamlessly integrate into your existing workflow. As a backend server, it focuses on persisting time spans labeled with custom tags, offering a powerful API for effortless integration with the tools you already use. Perfect for automation enthusiasts, self-hosting lovers, and anyone looking to track time efficiently and effectively.</strong>
+    <strong>Zeitraum is a versatile time tracking service for developers, designed to seamlessly integrate into your existing workflow.</strong>
   </p>
 </div>
 
 ## ✨ Features
+
+Zeitraum focuses on persisting time spans labeled with custom tags and offering a powerful API for effortless integration with the tools you already use. Perfect for automation enthusiasts, self-hosting lovers, and anyone looking to track time efficiently and effectively.
 
 - [x] 💻 **Command-line Interface**: Streamline your scripts and workflow with ease by tracking time right from the terminal.
 - [x] 🔗 **GraphQL API**: The backbone of all integrations, empowering you to create a personalized experience.
