@@ -46,7 +46,6 @@ export const zeitraum = (options: ZeitraumClientOptions) => {
         variables,
       }),
     });
-    const body = await response.json();
-    return body.data;
+    return await response.json();
   });
 };
