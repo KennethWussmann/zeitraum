@@ -12,6 +12,13 @@
     "codegen": "npm run codegen:graphql",
     "codegen:graphql": "graphql-codegen"
   },
+  "files": [
+    "build",
+    "CHANGELOG.md",
+    "README.md",
+    "LICENSE",
+    "package.json"
+  ],
   "devDependencies": {
     "@graphql-codegen/add": "^4.0.1",
     "@graphql-codegen/cli": "^3.3.1",
