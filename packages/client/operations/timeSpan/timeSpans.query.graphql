@@ -1,6 +1,6 @@
 # import "./timeSpan.fragment.graphql"
-query timeSpans($input: TimeSpanSearch) {
-  timeSpans(input: $input) {
+query timeSpans($search: TimeSpanSearch) {
+  timeSpans(input: $search) {
     total
     items {
       ...TimeSpanFragment

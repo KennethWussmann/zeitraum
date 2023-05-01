@@ -11,7 +11,12 @@ type Mutation {
   createTimeSpan(input: CreateUpdateTimeSpan!): TimeSpan!
   updateTimeSpan(id: ID!, input: CreateUpdateTimeSpan!): TimeSpan!
   deleteTimeSpan(id: ID!): Boolean!
-  closeTimeSpan(id: ID!, end: DateTime): TimeSpan!
+  """
+  Close a time span that does not have an end time yet.
+  When invoked without id it will close the time span that is running longest.
+  Optionally you can provide an end time to close the time span at a specific time.
+  """
+  closeTimeSpan(id: ID, end: DateTime): TimeSpan!
 }
 
 input TimeSpanSearch {

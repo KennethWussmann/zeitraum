@@ -28,6 +28,25 @@ export class TimeSpanService {
       },
     });
 
+  public findLongestRunningTimeSpan = async (userId: string): Promise<TimeSpan | null> =>
+    this.prisma.timeSpan.findFirst({
+      where: { userId },
+      orderBy: { start: 'asc' },
+      take: 1,
+      include: {
+        user: true,
+        TagsOnTimeSpans: {
+          include: {
+            tag: {
+              include: {
+                user: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
   public create = async (userId: string, data: CreateUpdateTimeSpan): Promise<TimeSpan> => {
     const timeSpan = await this.prisma.timeSpan.create({
       data: {
@@ -106,8 +125,10 @@ export class TimeSpanService {
     };
   };
 
-  public close = async (userId: string, timeSpanId: string, end: Date = new Date()): Promise<TimeSpan> => {
-    const oldTimeSpan = await this.findById(userId, timeSpanId);
+  public close = async (userId: string, timeSpanId: string | undefined, end: Date = new Date()): Promise<TimeSpan> => {
+    const oldTimeSpan = timeSpanId
+      ? await this.findById(userId, timeSpanId)
+      : await this.findLongestRunningTimeSpan(userId);
     if (!oldTimeSpan) {
       throw new NotFoundError(`TimeSpan with id ${timeSpanId} not found.`);
     }

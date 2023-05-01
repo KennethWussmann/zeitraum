@@ -24,6 +24,11 @@ export type CreateUpdateTimeSpan = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  /**
+   * Close a time span that does not have an end time yet.
+   * When invoked without id it will close the time span that is running longest.
+   * Optionally you can provide an end time to close the time span at a specific time.
+   */
   closeTimeSpan: TimeSpan;
   createTimeSpan: TimeSpan;
   deleteTimeSpan: Scalars['Boolean'];
@@ -32,7 +37,7 @@ export type Mutation = {
 
 export type MutationCloseTimeSpanArgs = {
   end?: InputMaybe<Scalars['DateTime']>;
-  id: Scalars['ID'];
+  id?: InputMaybe<Scalars['ID']>;
 };
 
 export type MutationCreateTimeSpanArgs = {
@@ -126,7 +131,7 @@ export type User = {
 export type TagFragmentFragment = { __typename?: 'Tag'; id: string; createdAt: any; updatedAt: any; name: string };
 
 export type TagsQueryVariables = Exact<{
-  input?: InputMaybe<TagSearch>;
+  search?: InputMaybe<TagSearch>;
 }>;
 
 export type TagsQuery = {
@@ -139,7 +144,7 @@ export type TagsQuery = {
 };
 
 export type CloseTimeSpanMutationVariables = Exact<{
-  id: Scalars['ID'];
+  id?: InputMaybe<Scalars['ID']>;
   end?: InputMaybe<Scalars['DateTime']>;
 }>;
 
@@ -215,7 +220,7 @@ export type TimeSpanQuery = {
 };
 
 export type TimeSpansQueryVariables = Exact<{
-  input?: InputMaybe<TimeSpanSearch>;
+  search?: InputMaybe<TimeSpanSearch>;
 }>;
 
 export type TimeSpansQuery = {
@@ -284,8 +289,8 @@ export const TimeSpanFragmentFragmentDoc = `
 }
     ${TagFragmentFragmentDoc}`;
 export const TagsDocument = `
-    query tags($input: TagSearch) {
-  tags(input: $input) {
+    query tags($search: TagSearch) {
+  tags(input: $search) {
     total
     items {
       ...TagFragment
@@ -294,7 +299,7 @@ export const TagsDocument = `
 }
     ${TagFragmentFragmentDoc}`;
 export const CloseTimeSpanDocument = `
-    mutation closeTimeSpan($id: ID!, $end: DateTime) {
+    mutation closeTimeSpan($id: ID, $end: DateTime) {
   closeTimeSpan(id: $id, end: $end) {
     ...TimeSpanFragment
   }
@@ -320,8 +325,8 @@ export const TimeSpanDocument = `
 }
     ${TimeSpanFragmentFragmentDoc}`;
 export const TimeSpansDocument = `
-    query timeSpans($input: TimeSpanSearch) {
-  timeSpans(input: $input) {
+    query timeSpans($search: TimeSpanSearch) {
+  timeSpans(input: $search) {
     total
     items {
       ...TimeSpanFragment
@@ -358,7 +363,7 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
       >;
     },
     closeTimeSpan(
-      variables: CloseTimeSpanMutationVariables,
+      variables?: CloseTimeSpanMutationVariables,
       options?: C,
     ): Promise<ExecutionResult<CloseTimeSpanMutation, E>> {
       return requester<CloseTimeSpanMutation, CloseTimeSpanMutationVariables>(
