@@ -59,26 +59,9 @@ There are multiple ways to integrate Zeitraum into your workflow. Take a look at
 
 ### 📦 `@zeitraum/client`
 
-The NPM package [`@zeitraum/client`](https://www.npmjs.com/package/@zeitraum/client) allows to start building JavaScript and TypeScript based integrations without dealing with GraphQL or REST. The client abstracts the GraphQL API in an easy to use client:
+The NPM package [`@zeitraum/client`](https://www.npmjs.com/package/@zeitraum/client) allows to start building JavaScript and TypeScript based integrations without dealing with GraphQL or REST.
 
-```shell
-npm install @zeitraum/client
-```
-
-```TypeScript
-// initialize a client instance
-const client = zeitraum({
-  baseUrl: "https://your-zeitraum.com",
-  apiToken: "fdHww82okrvB..."
-})
-
-// use everywhere
-await client.createTimeSpan({
-  start: new Date().toISOString(),
-  tags: ["work", "zeitraum"]
-  note: "Writing a usage example for the Zeitraum client"
-})
-```
+Get started using the client here: [Read more](./packages/client)
 
 ### 🔗 GraphQL
 
