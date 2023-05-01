@@ -1,5 +1,13 @@
 # @zeitraum/server
 
+## 0.1.2
+
+### Patch Changes
+
+- 6121ae4: Link version to other packages
+- Updated dependencies [6121ae4]
+  - @zeitraum/commons@0.1.2
+
 ## 0.1.1
 
 ### Patch Changes
