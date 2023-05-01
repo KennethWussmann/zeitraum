@@ -62,6 +62,8 @@ export type Query = {
   tags: TagList;
   timeSpan: TimeSpan;
   timeSpans: TimeSpanList;
+  /** Software version of the server. */
+  version: Scalars['String'];
 };
 
 export type QueryTagsArgs = {
@@ -279,6 +281,7 @@ export type QueryResolvers<
   tags?: Resolver<ResolversTypes['TagList'], ParentType, ContextType, Partial<QueryTagsArgs>>;
   timeSpan?: Resolver<ResolversTypes['TimeSpan'], ParentType, ContextType, RequireFields<QueryTimeSpanArgs, 'id'>>;
   timeSpans?: Resolver<ResolversTypes['TimeSpanList'], ParentType, ContextType, Partial<QueryTimeSpansArgs>>;
+  version?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
 }>;
 
 export type TagResolvers<

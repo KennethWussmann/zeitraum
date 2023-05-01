@@ -20,9 +20,12 @@ import { UnauthenticatedError } from './graphqlErrors';
 import { timeSpanQuery } from './resolvers/timeSpan/timeSpan.query';
 import { meQuery } from './resolvers/user/me.query';
 import { closeTimeSpanMutation } from './resolvers/timeSpan/closeTimeSpan.mutation';
+import { versionQuery } from './resolvers/misc/version.query';
 
 export class GraphQLServer {
   private readonly resolverBuilders: Resolvers = [
+    versionQuery,
+
     timeSpanResolver,
     timeSpanQuery,
     timeSpansQuery,
