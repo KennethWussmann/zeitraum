@@ -1,6 +1,9 @@
-# Zeitraum
-
-Zeitraum is a versatile time tracking app for developers, designed to seamlessly integrate into your existing workflow. As a backend server, it focuses on persisting time spans labeled with custom tags, offering a powerful API for effortless integration with the tools you already use. Perfect for automation enthusiasts, self-hosting lovers, and anyone looking to track time efficiently and effectively.
+<div align="center">
+  <h1><code>Zeitraum</code></h1>
+  <p>
+    <strong>Zeitraum is a versatile time tracking app for developers, designed to seamlessly integrate into your existing workflow. As a backend server, it focuses on persisting time spans labeled with custom tags, offering a powerful API for effortless integration with the tools you already use. Perfect for automation enthusiasts, self-hosting lovers, and anyone looking to track time efficiently and effectively.</strong>
+  </p>
+</div>
 
 ## ✨ Features
 
