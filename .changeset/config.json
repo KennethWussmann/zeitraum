@@ -3,6 +3,7 @@
   "changelog": "@changesets/cli/changelog",
   "commit": false,
   "fixed": [],
+  "linked": [["@zeitraum/*"]],
   "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch"
