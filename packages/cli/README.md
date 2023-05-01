@@ -67,38 +67,6 @@ Flags:
 
 </details>
 
-### Stop active time span
-
-When starting to track a timer will start running until you stop it. This way you can track time actively.
-
-This is how you stop the timer that is running the longest:
-
-```shell
-$ zeitraum stop
-```
-
-You can also stop other time spans, check the usage.
-
-<details>
-  <summary>Usage</summary>
-
-```shell
-$ zeitraum stop --help
-The time span that is running longest will be stopped first. Supply the number of the list command (without any filters applied) to stop a specific time span.
-
-Usage:
-  zeitraum stop [flags]
-
-Aliases:
-  stop, close, end
-
-Flags:
-  -e, --end string   Set custom end time
-  -h, --help         help for stop
-```
-
-</details>
-
 ### List time spans
 
 ```shell
@@ -127,6 +95,7 @@ Aliases:
   list, ls
 
 Flags:
+  -e, --extended      Show extended time span information
   -f, --from string   From date
   -h, --help          help for list
   -l, --limit int     Amount of time spans to fetch (default 1000)
@@ -135,6 +104,69 @@ Flags:
       --running       Only show running time spans
   -t, --to string     To date
       --today         Short hand for -f "today, 00:00"
+```
+
+</details>
+
+### Stop active time span
+
+When starting to track a timer will start running until you stop it. This way you can track time actively.
+
+This is how you stop the timer that is running the longest:
+
+```shell
+$ zeitraum stop
+```
+
+You can also stop other time spans, check the usage.
+
+<details>
+  <summary>Usage</summary>
+
+```shell
+$ zeitraum stop --help
+The time span that is running longest will be stopped first. Supply the number of the list command (without any filters applied) to stop a specific time span.
+
+Usage:
+  zeitraum stop [flags]
+
+Aliases:
+  stop, close, end
+
+Flags:
+  -e, --end string   Set custom end time
+  -h, --help         help for stop
+  -i, --id string    Stop time span by id
+```
+
+</details>
+
+### Remove time span
+
+Remove any time span:
+
+```shell
+$ zeitraum rm 0
+```
+
+> `0` refers to the number in the list command. You can also use `zeitraum rm -i 347a4f5c-8d90-43...` to remove a specific span by its UUID.
+
+<details>
+  <summary>Usage</summary>
+
+```shell
+$ zeitraum rm --help
+Supply the number of the list command (without any filters applied) to remove a specific time span.
+
+Usage:
+  zeitraum remove [flags]
+
+Aliases:
+  remove, rm
+
+Flags:
+  -h, --help        help for remove
+  -i, --id string   Remove time span by id
 ```
 
 </details>
