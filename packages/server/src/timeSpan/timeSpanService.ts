@@ -30,7 +30,7 @@ export class TimeSpanService {
 
   public findLongestRunningTimeSpan = async (userId: string): Promise<TimeSpan | null> =>
     this.prisma.timeSpan.findFirst({
-      where: { userId },
+      where: { userId, end: null },
       orderBy: { start: 'asc' },
       take: 1,
       include: {
@@ -129,6 +129,8 @@ export class TimeSpanService {
     const oldTimeSpan = timeSpanId
       ? await this.findById(userId, timeSpanId)
       : await this.findLongestRunningTimeSpan(userId);
+
+    console.log(oldTimeSpan);
     if (!oldTimeSpan) {
       throw new NotFoundError(`TimeSpan with id ${timeSpanId} not found.`);
     }
@@ -136,7 +138,7 @@ export class TimeSpanService {
       data: {
         end,
       },
-      where: { id: timeSpanId },
+      where: { id: oldTimeSpan.id },
       include: {
         user: true,
         TagsOnTimeSpans: {
@@ -178,9 +180,11 @@ export class TimeSpanService {
     { tags, fromInclusive, toInclusive, running, limit = 100, offset = 0 }: TimeSpanSearch = {},
   ): Promise<{ items: TimeSpan[]; total: number }> => {
     const tagsFound = tags && tags.length > 0 ? await this.tagService.findByNames(userId, ...tags) : [];
+    const fromFilter = fromInclusive ? { gte: fromInclusive } : undefined;
+    const toFilter = toInclusive ? { lte: toInclusive } : undefined;
     const where: Prisma.TimeSpanWhereInput = {
       userId,
-      start: fromInclusive ? { gte: fromInclusive, lte: toInclusive ? toInclusive : undefined } : undefined,
+      start: { ...fromFilter, ...toFilter },
       TagsOnTimeSpans: tagsFound.length > 0 ? { some: { tagId: { in: tagsFound.map((tag) => tag.id) } } } : undefined,
       end: running !== undefined ? (running ? { equals: null } : { not: null }) : undefined,
     };

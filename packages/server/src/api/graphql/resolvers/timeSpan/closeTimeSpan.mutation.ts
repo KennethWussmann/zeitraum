@@ -7,7 +7,8 @@ export const closeTimeSpanMutation: Resolvers = {
       if (!userContext) {
         throw new UnauthenticatedError();
       }
-      return applicationContext.timeSpanService.close(userContext.id, id ?? undefined, end ?? undefined);
+      console.log('closeTimeSpanMutation', id, end);
+      return applicationContext.timeSpanService.close(userContext.id, id ?? undefined, end ?? new Date());
     },
   },
 };

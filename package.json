@@ -1,6 +1,6 @@
 {
   "name": "zeitraum",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Time tracking with tags integrated in your workflow",
   "private": true,
   "keywords": [

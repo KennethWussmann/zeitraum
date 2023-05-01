@@ -1,0 +1,14 @@
+{
+  "name": "@zeitraum/cli",
+  "version": "0.1.0",
+  "private": true,
+  "description": "",
+  "keywords": [],
+  "author": "Kenneth Wußmann",
+  "license": "MIT",
+  "scripts": {
+    "build": "go build -ldflags=\"-s -w\" -o build/zeitraum",
+    "dev": "go run .",
+    "codegen": "go run github.com/Khan/genqlient"
+  }
+}

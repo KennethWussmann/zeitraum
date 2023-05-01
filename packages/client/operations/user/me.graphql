@@ -3,5 +3,6 @@ query me {
     id
     createdAt
     updatedAt
+    username
   }
 }
