@@ -1,4 +1,4 @@
-name: publish-cli
+name: release-cli
 
 on:
   release:
@@ -7,10 +7,10 @@ on:
 env:
   FORCE_COLOR: 1
 
-concurrency: release-docker-develop
+concurrency: release-cli
 
 jobs:
-  publish-cli:
+  release-cli:
     runs-on: ubuntu-latest
     strategy:
       matrix:
