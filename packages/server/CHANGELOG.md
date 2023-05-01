@@ -1,5 +1,12 @@
 # @zeitraum/server
 
+## 0.2.2
+
+### Patch Changes
+
+- 54a725c: Add new metric time_spent_per_user_seconds
+- 54a725c: Fix metric recovery
+
 ## 0.2.0
 
 ### Minor Changes
