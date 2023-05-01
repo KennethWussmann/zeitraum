@@ -7,9 +7,9 @@
 
 ## ✨ Features
 
+- [x] 💻 **Command-line Interface**: Streamline your scripts and workflow with ease by tracking time right from the terminal.
 - [x] 🔗 **GraphQL API**: The backbone of all integrations, empowering you to create a personalized experience.
 - [x] 🌐 **REST API**: For simple integrations, everywhere where HTTP works.
-- [ ] 💻 **Command-line Interface** (WIP): Streamline your scripts and workflow with ease.
 - [x] ⚡ **[Raycast](https://www.raycast.com/) Extension**: Blazingly fast time tracking at your fingertips.
 - [x] 📈 **[Prometheus](https://prometheus.io/) Integration**: Export time spans for alerts, monitoring, and enhanced observability.
 - [x] 🎛️ **[Grafana](https://grafana.com/) Compatibility**: Design your own stunning dashboard to keep an eye on your time investments.
@@ -40,7 +40,7 @@ services:
       API_TOKENS: fdHww82okrvB...
 ```
 
-Zeitraum works great with reverse proxies. Actually that's the preferred setup. Use it together with Traefik for example and secure it with SSL.
+Learn more about the server deployment and configuration: [Read more](./packages/server/)
 
 ## 📱 Apps
 
@@ -56,6 +56,19 @@ Tags offer an intuitive and flexible way to categorize and organize your time tr
 ## 🔄 Integrate Yourself
 
 There are multiple ways to integrate Zeitraum into your workflow. Take a look at which one suits you best.
+
+### 💻 Command-line Interface
+
+The CLI allows to write scripts, track and manage your time directly from your terminal.
+It's available for all systems and architectures:
+
+- macOS
+- Linux
+- Windows
+
+Download here: [Latest release](https://github.com/KennethWussmann/zeitraum/releases)
+
+Learn more: [Getting started](./packages/cli/)
 
 ### 📦 `@zeitraum/client`
 
