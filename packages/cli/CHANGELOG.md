@@ -1,5 +1,11 @@
 # @zeitraum/cli
 
+## 0.2.0
+
+### Minor Changes
+
+- 68d5402: Add query to get server version
+
 ## 0.1.2
 
 ### Patch Changes
