@@ -8,7 +8,7 @@ WORKDIR /app
 COPY . .
 
 RUN npm ci
-RUN npm run build
+RUN npx turbo run build --filter=@zeitraum/commons --filter=@zeitraum/server
 
 FROM node:${NODE_VERSION}-slim 
 
