@@ -13,7 +13,7 @@ import (
 )
 
 var fromArg, toArg string
-var todayArg, runningArg, noRunningArg bool
+var todayArg, runningArg, noRunningArg, extendedArg bool
 var limitArg, offsetArg int
 
 var listCmd = &cobra.Command{
@@ -32,6 +32,11 @@ var listCmd = &cobra.Command{
 		if cmd.Flag("no-running").Changed {
 			falsePointer := false
 			running = &falsePointer
+		}
+
+		var extended bool = false
+		if cmd.Flag("extended").Changed {
+			extended = true
 		}
 
 		if (todayArg && fromArg != "") {
@@ -71,7 +76,11 @@ var listCmd = &cobra.Command{
     t := table.NewWriter()
     t.SetOutputMirror(os.Stdout)
 		t.SetStyle(table.StyleRounded)
-    t.AppendHeader(table.Row{"#", "Duration", "Tags", "Note", "Running"})
+		if extended {
+			t.AppendHeader(table.Row{"#", "ID", "Duration", "Tags", "Note", "Running", "Start", "End"})
+		} else {
+			t.AppendHeader(table.Row{"#", "Duration", "Tags", "Note", "Running"})
+		}
 		for i, timeSpan := range response.TimeSpans.Items {
 			var tags []string
 			for _, tag := range timeSpan.Tags {
@@ -94,15 +103,30 @@ var listCmd = &cobra.Command{
 				note = *timeSpan.Note
 			}
 
-			t.AppendRow(
-				table.Row{
-					i, 
-					FormatTimerRuntime(timeSpan.Start, end), 
-					strings.Join(tags, ", "), 
-					note, 
-					runningFormatted,
-				},
-			)
+			if extended {
+				t.AppendRow(
+					table.Row{
+						i, 
+						timeSpan.Id,
+						FormatTimerRuntime(timeSpan.Start, end), 
+						strings.Join(tags, ", "), 
+						note, 
+						runningFormatted,
+						timeSpan.Start,
+						end,
+					},
+				)
+			} else {
+				t.AppendRow(
+					table.Row{
+						i, 
+						FormatTimerRuntime(timeSpan.Start, end), 
+						strings.Join(tags, ", "), 
+						note, 
+						runningFormatted,
+					},
+				)
+			}
 		}
     t.Render()
 	},
@@ -118,4 +142,5 @@ func init() {
 	listCmd.Flags().BoolVar(&todayArg, "today", false, "Short hand for -f \"today, 00:00\"")
 	listCmd.Flags().BoolVar(&runningArg, "running", false, "Only show running time spans")
 	listCmd.Flags().BoolVar(&noRunningArg, "no-running", false, "Only show closed time spans")
+	listCmd.Flags().BoolVarP(&extendedArg, "extended", "e", false, "Show extended time span information")
 }
