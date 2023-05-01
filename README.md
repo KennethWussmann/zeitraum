@@ -51,8 +51,8 @@ Learn more about the server deployment and configuration: [Read more](./packages
 
 In Zeitraum you track time by starting time spans and assigning tags to them. Tags offer an intuitive and flexible way to categorize and organize your time tracking data. They embody Zeitraum's core principle of adapting to your workflow by allowing you to customize your tag structure. The possibilities are endless, whether you want to differentiate work and personal time tracking, track projects, or categorize by clients.
 
-The API-first design of Zeitraum ensures that your workflow is always highest priority. I figured time tracking is a very time intense process, therefore it needs to be easy, quick and always at your fingertips to actually be usefull.
-I also don't like to sign up for complicated UIs that may be buggy or strip away important features. Therefore I want Zeitraum to adapt to the user which is only possible by providing a wide variety interfaces.
+The API-first design of Zeitraum ensures that your workflow is always highest priority. I figured time tracking is a very time intense process, therefore it needs to be easy, quick and always at your fingertips to actually be useful. That's also why Zeitraum is a server-based application, so one can track time from every device no matter where you are.
+I also don't like to sign up for complicated UIs that may be buggy, unresponsive or strip away important features. Therefore I want Zeitraum to adapt to the user which is only possible by providing a wide variety interfaces.
 
 Zeitraum is inspired by [traggo](https://traggo.net/) and [watson](http://tailordev.github.io/Watson/). Check them out too.
 
