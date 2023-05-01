@@ -129,8 +129,6 @@ export class TimeSpanService {
     const oldTimeSpan = timeSpanId
       ? await this.findById(userId, timeSpanId)
       : await this.findLongestRunningTimeSpan(userId);
-
-    console.log(oldTimeSpan);
     if (!oldTimeSpan) {
       throw new NotFoundError(`TimeSpan with id ${timeSpanId} not found.`);
     }

@@ -7,7 +7,6 @@ export const timeSpansQuery: Resolvers = {
       if (!userContext?.id) {
         throw new UnauthenticatedError();
       }
-      console.log(input);
       return applicationContext.timeSpanService.search(userContext.id, {
         fromInclusive: input?.fromInclusive ?? undefined,
         toInclusive: input?.toInclusive ?? undefined,
