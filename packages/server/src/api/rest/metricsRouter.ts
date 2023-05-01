@@ -30,6 +30,7 @@ export class MetricsRouter {
     help: 'Amount time spans without an end time',
     labelNames: ['username'],
   });
+  private customMetrics = [this.timeSpansCountTotal, this.timeSpentPerTag, this.tagUsageCount, this.timeSpansOpenCount];
 
   constructor(
     private logger: Logger,
@@ -38,9 +39,7 @@ export class MetricsRouter {
     private apiTokens: string[],
   ) {
     collectDefaultMetrics({ register: this.register, prefix });
-    [this.timeSpansCountTotal, this.timeSpentPerTag, this.tagUsageCount, this.timeSpansOpenCount].map((metric) =>
-      this.register.registerMetric(metric),
-    );
+    this.customMetrics.map((metric) => this.register.registerMetric(metric));
 
     this.router = Router();
     this.router.use(tokenBasedAuthMiddleware(this.logger, ...this.apiTokens));
@@ -62,6 +61,7 @@ export class MetricsRouter {
   }
 
   private updateMetrics = async () => {
+    this.customMetrics.map((metric) => metric.reset());
     (await this.timeSpanMetricService.getCountPerUser()).forEach(({ username, amount }) =>
       this.timeSpansCountTotal.set({ username }, amount),
     );
