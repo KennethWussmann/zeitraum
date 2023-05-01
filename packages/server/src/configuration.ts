@@ -2,12 +2,15 @@ import { randomUUID } from 'crypto';
 import { z } from 'zod';
 
 const configurationSchema = z.object({
+  VERSION: z.string().optional().default('unknown'),
   PORT: z
     .string()
+    .optional()
     .default('3000')
     .transform((value) => parseInt(value, 10)),
   API_TOKENS: z
     .string()
+    .optional()
     .default(randomUUID())
     .transform((value) => value.split(',')),
 });

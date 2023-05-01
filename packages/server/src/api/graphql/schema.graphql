@@ -1,6 +1,10 @@
 scalar DateTime
 
 type Query {
+  """
+  Software version of the server.
+  """
+  version: String!
   me: User!
   tags(input: TagSearch): TagList!
   timeSpans(input: TimeSpanSearch): TimeSpanList!

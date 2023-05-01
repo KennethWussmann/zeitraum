@@ -59,6 +59,8 @@ export type Query = {
   tags: TagList;
   timeSpan: TimeSpan;
   timeSpans: TimeSpanList;
+  /** Software version of the server. */
+  version: Scalars['String'];
 };
 
 export type QueryTagsArgs = {
@@ -127,6 +129,10 @@ export type User = {
   updatedAt: Scalars['DateTime'];
   username: Scalars['String'];
 };
+
+export type VersionQueryVariables = Exact<{ [key: string]: never }>;
+
+export type VersionQuery = { __typename?: 'Query'; version: string };
 
 export type TagFragmentFragment = { __typename?: 'Tag'; id: string; createdAt: any; updatedAt: any; name: string };
 
@@ -291,6 +297,11 @@ export const TimeSpanFragmentFragmentDoc = `
   }
 }
     ${TagFragmentFragmentDoc}`;
+export const VersionDocument = `
+    query version {
+  version
+}
+    `;
 export const TagsDocument = `
     query tags($search: TagSearch) {
   tags(input: $search) {
@@ -361,6 +372,11 @@ export type Requester<C = {}, E = unknown> = <R, V>(
 ) => Promise<ExecutionResult<R, E>> | AsyncIterable<ExecutionResult<R, E>>;
 export function getSdk<C, E>(requester: Requester<C, E>) {
   return {
+    version(variables?: VersionQueryVariables, options?: C): Promise<ExecutionResult<VersionQuery, E>> {
+      return requester<VersionQuery, VersionQueryVariables>(VersionDocument, variables, options) as Promise<
+        ExecutionResult<VersionQuery, E>
+      >;
+    },
     tags(variables?: TagsQueryVariables, options?: C): Promise<ExecutionResult<TagsQuery, E>> {
       return requester<TagsQuery, TagsQueryVariables>(TagsDocument, variables, options) as Promise<
         ExecutionResult<TagsQuery, E>

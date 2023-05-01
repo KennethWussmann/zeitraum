@@ -940,6 +940,15 @@ func (v *updateTimeSpanUpdateTimeSpan) __premarshalJSON() (*__premarshalupdateTi
 	return &retval, nil
 }
 
+// versionResponse is returned by version on success.
+type versionResponse struct {
+	// Software version of the server.
+	Version string `json:"version"`
+}
+
+// GetVersion returns versionResponse.Version, and is useful for accessing the field via an interface.
+func (v *versionResponse) GetVersion() string { return v.Version }
+
 // import "./timeSpan.fragment.graphql"
 func closeTimeSpan(
 	ctx context.Context,
@@ -1294,6 +1303,32 @@ fragment TagFragment on Tag {
 	var err error
 
 	var data updateTimeSpanResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
+	)
+
+	return &data, err
+}
+
+func version(
+	ctx context.Context,
+	client graphql.Client,
+) (*versionResponse, error) {
+	req := &graphql.Request{
+		OpName: "version",
+		Query: `
+query version {
+	version
+}
+`,
+	}
+	var err error
+
+	var data versionResponse
 	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(

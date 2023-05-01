@@ -91,6 +91,11 @@ export class SofaRouter {
             path: '/me',
             tags: ['User'],
           },
+          'Query.version': {
+            method: 'GET',
+            path: '/version',
+            tags: ['Misc'],
+          },
         },
         context: async ({ request }) => await this.graphqlServer.buildContext(findTokenFromGlobalRequest(request)),
         onRoute: (info) => {
