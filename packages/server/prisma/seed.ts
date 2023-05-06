@@ -1,17 +1,7 @@
 import { config } from 'dotenv';
 config();
 import { ApplicationContext } from '../src/applicationContext';
-import {
-  addDays,
-  addHours,
-  addMinutes,
-  isAfter,
-  setHours,
-  setMilliseconds,
-  setMinutes,
-  setSeconds,
-  subDays,
-} from 'date-fns';
+import { addDays, addMinutes, setHours, setMilliseconds, setMinutes, setSeconds, subDays } from 'date-fns';
 import seedrandom from 'seedrandom';
 
 const applicationContext = new ApplicationContext();
