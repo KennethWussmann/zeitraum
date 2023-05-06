@@ -191,7 +191,7 @@ const seed = async () => {
 
   const days = 14;
   const now = new Date();
-  let currentTime = subDays(now, 27);
+  let currentTime = subDays(now, days);
 
   for (let day = 0; day < days; day++) {
     let dailyMinutes = 0;
