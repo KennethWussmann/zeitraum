@@ -1,5 +1,11 @@
 # @zeitraum/server
 
+## 0.3.0
+
+### Patch Changes
+
+- b8808ef: Add Grafana and Prometheus example and restrict metric data to past
+
 ## 0.2.2
 
 ### Patch Changes

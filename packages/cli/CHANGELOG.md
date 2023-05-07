@@ -1,5 +1,11 @@
 # @zeitraum/cli
 
+## 0.3.0
+
+### Minor Changes
+
+- 7ad3bc4: Add CSV export
+
 ## 0.2.1
 
 ### Patch Changes
