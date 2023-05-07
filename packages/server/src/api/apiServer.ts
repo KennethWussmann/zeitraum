@@ -19,6 +19,7 @@ export class ApiServer {
     app.use(
       new SofaRouter(
         this.logger,
+        this.applicationContext.configuration.VERSION,
         schema,
         this.applicationContext.graphqlServer,
         this.applicationContext.configuration.API_TOKENS,

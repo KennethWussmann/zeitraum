@@ -195,3 +195,4 @@ build/
 *.map
 .env
 .turbo
+dist/

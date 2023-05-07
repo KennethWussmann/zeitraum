@@ -12,6 +12,7 @@ export class SofaRouter {
 
   constructor(
     private logger: Logger,
+    version: string,
     schema: GraphQLSchema,
     private graphqlServer: GraphQLServer,
     private apiTokens: string[],
@@ -20,7 +21,7 @@ export class SofaRouter {
       schema,
       info: {
         title: 'Zeitraum',
-        version: '1.0.0',
+        version,
       },
       components: {
         securitySchemes: {

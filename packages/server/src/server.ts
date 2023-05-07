@@ -36,5 +36,7 @@ export class Server {
 
     process.on('SIGTERM', shutDown);
     process.on('SIGINT', shutDown);
+
+    return shutDown;
   };
 }

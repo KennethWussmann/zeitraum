@@ -1,0 +1,571 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Zeitraum",
+    "version": "0.3.0"
+  },
+  "tags": [],
+  "paths": {
+    "/api/version": {
+      "get": {
+        "tags": [
+          "Misc"
+        ],
+        "description": "Software version of the server.",
+        "summary": "Software version of the server.",
+        "operationId": "version_query",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Software version of the server.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/me": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "description": "",
+        "summary": "",
+        "operationId": "me_query",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/tags": {
+      "get": {
+        "tags": [
+          "Tag"
+        ],
+        "description": "",
+        "summary": "",
+        "operationId": "tags_query",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "input",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/TagSearch"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TagList"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/time-spans": {
+      "get": {
+        "tags": [
+          "TimeSpan"
+        ],
+        "description": "",
+        "summary": "",
+        "operationId": "timeSpans_query",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "input",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/TimeSpanSearch"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TimeSpanList"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "TimeSpan"
+        ],
+        "description": "",
+        "summary": "",
+        "operationId": "createTimeSpan_mutation",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "input": {
+                    "$ref": "#/components/schemas/CreateUpdateTimeSpan"
+                  }
+                },
+                "required": [
+                  "input"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TimeSpan"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/time-spans/{id}": {
+      "get": {
+        "tags": [
+          "TimeSpan"
+        ],
+        "description": "",
+        "summary": "",
+        "operationId": "timeSpan_query",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TimeSpan"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "TimeSpan"
+        ],
+        "description": "",
+        "summary": "",
+        "operationId": "updateTimeSpan_mutation",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "input": {
+                    "$ref": "#/components/schemas/CreateUpdateTimeSpan"
+                  }
+                },
+                "required": [
+                  "input"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TimeSpan"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "TimeSpan"
+        ],
+        "description": "",
+        "summary": "",
+        "operationId": "deleteTimeSpan_mutation",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "TimeSpan"
+        ],
+        "description": "Close a time span that does not have an end time yet.\nWhen invoked without id it will close the time span that is running longest.\nOptionally you can provide an end time to close the time span at a specific time.",
+        "summary": "Close a time span that does not have an end time yet.\nWhen invoked without id it will close the time span that is running longest.\nOptionally you can provide an end time to close the time span at a specific time.",
+        "operationId": "closeTimeSpan_mutation",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "end": {
+                    "$ref": "#/components/schemas/DateTime"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Close a time span that does not have an end time yet.\nWhen invoked without id it will close the time span that is running longest.\nOptionally you can provide an end time to close the time span at a specific time.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TimeSpan"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "Query": {
+        "type": "object",
+        "required": [
+          "version",
+          "me",
+          "tags",
+          "timeSpans",
+          "timeSpan"
+        ],
+        "properties": {
+          "version": {
+            "type": "string",
+            "description": "Software version of the server."
+          },
+          "me": {
+            "$ref": "#/components/schemas/User"
+          },
+          "tags": {
+            "$ref": "#/components/schemas/TagList"
+          },
+          "timeSpans": {
+            "$ref": "#/components/schemas/TimeSpanList"
+          },
+          "timeSpan": {
+            "$ref": "#/components/schemas/TimeSpan"
+          }
+        }
+      },
+      "Mutation": {
+        "type": "object",
+        "required": [
+          "createTimeSpan",
+          "updateTimeSpan",
+          "deleteTimeSpan",
+          "closeTimeSpan"
+        ],
+        "properties": {
+          "createTimeSpan": {
+            "$ref": "#/components/schemas/TimeSpan"
+          },
+          "updateTimeSpan": {
+            "$ref": "#/components/schemas/TimeSpan"
+          },
+          "deleteTimeSpan": {
+            "type": "boolean"
+          },
+          "closeTimeSpan": {
+            "$ref": "#/components/schemas/TimeSpan",
+            "description": "Close a time span that does not have an end time yet.\nWhen invoked without id it will close the time span that is running longest.\nOptionally you can provide an end time to close the time span at a specific time."
+          }
+        }
+      },
+      "TimeSpanSearch": {
+        "type": "object",
+        "properties": {
+          "fromInclusive": {
+            "type": "object"
+          },
+          "toInclusive": {
+            "type": "object"
+          },
+          "running": {
+            "type": "boolean"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "limit": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "offset": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "TagSearch": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string"
+          },
+          "limit": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "offset": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "CreateUpdateTimeSpan": {
+        "type": "object",
+        "required": [
+          "start",
+          "tags"
+        ],
+        "properties": {
+          "start": {
+            "type": "object"
+          },
+          "end": {
+            "type": "object"
+          },
+          "note": {
+            "type": "string"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "TimeSpanList": {
+        "type": "object",
+        "required": [
+          "items",
+          "total"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TimeSpan"
+            }
+          },
+          "total": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "TagList": {
+        "type": "object",
+        "required": [
+          "items",
+          "total"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Tag"
+            }
+          },
+          "total": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "required": [
+          "id",
+          "createdAt",
+          "updatedAt",
+          "username"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "object"
+          },
+          "updatedAt": {
+            "type": "object"
+          },
+          "username": {
+            "type": "string"
+          }
+        }
+      },
+      "Tag": {
+        "type": "object",
+        "required": [
+          "id",
+          "createdAt",
+          "updatedAt",
+          "name"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "object"
+          },
+          "updatedAt": {
+            "type": "object"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "TimeSpan": {
+        "type": "object",
+        "required": [
+          "id",
+          "createdAt",
+          "updatedAt",
+          "start",
+          "running",
+          "tags"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "object"
+          },
+          "updatedAt": {
+            "type": "object"
+          },
+          "start": {
+            "type": "object"
+          },
+          "end": {
+            "type": "object"
+          },
+          "note": {
+            "type": "string"
+          },
+          "running": {
+            "type": "boolean"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Tag"
+            }
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ]
+}

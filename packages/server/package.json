@@ -13,6 +13,7 @@
     "codegen": "npm run codegen:graphql && npm run codegen:prisma",
     "codegen:graphql": "graphql-codegen",
     "codegen:prisma": "prisma generate",
+    "codegen:docs": "tsx scripts/export-openapi.ts --out dist",
     "migrate:dev": "prisma migrate dev",
     "migrate:prd": "prisma migrate deploy"
   },
