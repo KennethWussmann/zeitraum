@@ -53,6 +53,30 @@ export class TimeSpanMetricService {
         `,
       );
 
+  public getStartTimePerTag = async () =>
+    z
+      .array(
+        z.object({
+          username: z.string(),
+          tag_name: z.string(),
+          start_time_seconds: z.number(),
+        }),
+      )
+      .parse(
+        await this.prisma.$queryRaw`
+          SELECT "User".username,
+                "Tag".name AS tag_name,
+                COALESCE(extract(epoch from MAX("TimeSpan".start)), 0)::float AS start_time_seconds
+          FROM "User"
+            CROSS JOIN "Tag"
+            LEFT JOIN "TagsOnTimeSpans" ON "TagsOnTimeSpans"."tagId" = "Tag".id
+            LEFT JOIN "TimeSpan" ON "TimeSpan".id = "TagsOnTimeSpans"."timeSpanId" AND "TimeSpan"."end" IS NULL
+          WHERE "User".id = "Tag"."userId" AND ("TimeSpan"."start" <= NOW() OR "TimeSpan"."start" IS NULL)
+          GROUP BY "User".username, "Tag".name
+          ORDER BY "User".username, "Tag".name;
+        `,
+      );
+
   public getTimeSpentPerUser = async () =>
     z
       .array(
