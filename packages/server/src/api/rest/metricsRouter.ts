@@ -20,6 +20,11 @@ export class MetricsRouter {
     help: 'Amount of time spent per tag in seconds',
     labelNames: ['username', 'tag'],
   });
+  private startTimePerTag = new Gauge({
+    name: `${prefix}start_time_per_tag_seconds`,
+    help: 'Unix timestamp of start time per tag',
+    labelNames: ['username', 'tag'],
+  });
   private timeSpentPerUser = new Gauge({
     name: `${prefix}time_spent_per_user_seconds`,
     help: 'Amount of time spent per user in seconds',
@@ -37,6 +42,7 @@ export class MetricsRouter {
   });
   private customMetrics = [
     this.timeSpansCountTotal,
+    this.startTimePerTag,
     this.timeSpentPerTag,
     this.tagUsageCount,
     this.timeSpansOpenCount,
@@ -75,6 +81,9 @@ export class MetricsRouter {
     this.customMetrics.map((metric) => metric.reset());
     (await this.timeSpanMetricService.getCountPerUser()).forEach(({ username, amount }) =>
       this.timeSpansCountTotal.set({ username }, amount),
+    );
+    (await this.timeSpanMetricService.getStartTimePerTag()).forEach(({ username, tag_name: tag, start_time_seconds }) =>
+      this.startTimePerTag.set({ username, tag }, start_time_seconds),
     );
     (await this.timeSpanMetricService.getTimeSpentPerTag()).forEach(({ username, tag_name: tag, time_spent_seconds }) =>
       this.timeSpentPerTag.set({ username, tag }, time_spent_seconds),
