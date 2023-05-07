@@ -1,5 +1,6 @@
 <div align="center">
-  <h1><code>Zeitraum</code></h1>
+  <img alt="Logo with text Zeitraum and tagline time tracking with tags" src="./docs/assets/logo-tagline-white.png#gh-dark-mode-only">
+  <img alt="Logo with text Zeitraum and tagline time tracking with tags" src="./docs/assets/logo-tagline-black.png#gh-light-mode-only">
   <p>
     <strong>Zeitraum is a versatile time tracking service for developers, designed to seamlessly integrate into your existing workflow.</strong>
   </p>
