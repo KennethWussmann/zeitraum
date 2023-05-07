@@ -1,0 +1,5 @@
+groups:
+- name: zeitraum
+  rules:
+  - record: zeitraum_tag_usage_count_sum
+    expr: sum(zeitraum_tag_usage_count{username="admin"}) by (tag)

@@ -17,6 +17,7 @@ export class TimeSpanMetricService {
           SELECT U."username", COALESCE(COUNT(ts."userId"), 0) as amount
           FROM "User" U
             LEFT JOIN "TimeSpan" ts ON U.id = ts."userId"
+          WHERE ts."start" <= NOW()
           GROUP BY U."username";
         `,
       );
@@ -40,6 +41,7 @@ export class TimeSpanMetricService {
             JOIN "TagsOnTimeSpans" TOT ON TS.id = TOT."timeSpanId"
             JOIN "Tag" T ON TOT."tagId" = T.id
             JOIN "User" U on U.id = TS."userId"
+            WHERE TS."start" <= NOW()
           )
           SELECT U."username",
                 T.name as tag_name,
@@ -64,6 +66,7 @@ export class TimeSpanMetricService {
           SELECT U."username", COALESCE(SUM(EXTRACT(EPOCH FROM (COALESCE(ts."end", NOW()) - ts.start))), 0)::float AS time_spent_seconds
           FROM public."User" U
             LEFT JOIN public."TimeSpan" ts ON U.id = ts."userId"
+          WHERE ts."start" <= NOW()
           GROUP BY U."username";
         `,
       );
@@ -84,6 +87,7 @@ export class TimeSpanMetricService {
             CROSS JOIN "Tag" T
             LEFT JOIN "TimeSpan" TS on TS."userId" = U.id
             LEFT JOIN "TagsOnTimeSpans" TOT ON TOT."timeSpanId" = TS.id AND TOT."tagId" = T.id
+          WHERE TS."start" <= NOW()
           GROUP BY U.username, T.name;
         `,
       );
@@ -101,6 +105,7 @@ export class TimeSpanMetricService {
           SELECT U."username", COALESCE(count(ts."userId"), 0)::bigint as amount
           FROM "User" U
             LEFT JOIN "TimeSpan" ts ON U.id = ts."userId" AND ts."end" IS NULL
+          WHERE ts."start" <= NOW()
           GROUP BY U."username";
         `,
       );
