@@ -17,6 +17,7 @@ var trackCmd = &cobra.Command{
 	Aliases: []string{"start", "open"},
 	Short:   "Track a time span",
 	Run: func(cmd *cobra.Command, args []string) {
+		VerifyConfiguration()
 		format := GetOutputFormat(cmd)
 		client := CreateClient(ClientOptions{})
 

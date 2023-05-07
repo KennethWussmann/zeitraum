@@ -18,6 +18,7 @@ var removeCmd = &cobra.Command{
 	Long:    `Supply the number of the list command (without any filters applied) to remove a specific time span.`,
 	Args:    cobra.MaximumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
+		VerifyConfiguration()
 		format := GetOutputFormat(cmd)
 		client := CreateClient(ClientOptions{})
 

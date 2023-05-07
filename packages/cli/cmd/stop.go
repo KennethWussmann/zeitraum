@@ -55,6 +55,7 @@ var stopCmd = &cobra.Command{
 	Short:   "Stop a running time span",
 	Long:    `The time span that is running longest will be stopped first. Supply the number of the list command (without any filters applied) to stop a specific time span.`,
 	Run: func(cmd *cobra.Command, args []string) {
+		VerifyConfiguration()
 		format := GetOutputFormat(cmd)
 		client := CreateClient(ClientOptions{})
 
