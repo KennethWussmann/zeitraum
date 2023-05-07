@@ -13,9 +13,9 @@ import (
 var startArg, endArg, noteArg string
 
 var trackCmd = &cobra.Command{
-	Use:   "track",
+	Use:     "track",
 	Aliases: []string{"start", "open"},
-	Short: "Track a time span",
+	Short:   "Track a time span",
 	Run: func(cmd *cobra.Command, args []string) {
 		format := GetOutputFormat(cmd)
 		client := CreateClient(ClientOptions{})
@@ -32,16 +32,16 @@ var trackCmd = &cobra.Command{
 		if startParsed != nil {
 			start = *startParsed
 		}
-	
+
 		response, err := createTimeSpan(context.Background(), client, &CreateUpdateTimeSpan{
 			Start: start,
-			End: endParsed,
-			Tags: args,
-			Note: note,
+			End:   endParsed,
+			Tags:  args,
+			Note:  note,
 		})
 
-		if (err != nil) {
-			if (format == "json") {
+		if err != nil {
+			if format == "json" {
 				json, _ := json.MarshalIndent(err, "", "  ")
 				fmt.Println(string(json))
 				os.Exit(1)
@@ -50,7 +50,7 @@ var trackCmd = &cobra.Command{
 			panic(err)
 		}
 
-		if (format == "json") {
+		if format == "json" {
 			json, _ := json.MarshalIndent(response, "", "  ")
 			fmt.Println(string(json))
 			return

@@ -26,7 +26,7 @@ func ParseDateTimeInput(input string) (*time.Time, error) {
 
 func FormatTimerRuntime(from time.Time, to time.Time) string {
 	if to.IsZero() {
-			to = time.Now()
+		to = time.Now()
 	}
 
 	secondsDiff := int(to.Sub(from).Seconds())
@@ -37,13 +37,13 @@ func FormatTimerRuntime(from time.Time, to time.Time) string {
 
 	result := []string{}
 	if days > 0 {
-			result = append(result, fmt.Sprintf("%dd", days))
+		result = append(result, fmt.Sprintf("%dd", days))
 	}
 	if hours > 0 {
-			result = append(result, fmt.Sprintf("%dh", hours))
+		result = append(result, fmt.Sprintf("%dh", hours))
 	}
 	if minutes > 0 {
-			result = append(result, fmt.Sprintf("%dm", minutes))
+		result = append(result, fmt.Sprintf("%dm", minutes))
 	}
 	result = append(result, fmt.Sprintf("%02ds", seconds))
 

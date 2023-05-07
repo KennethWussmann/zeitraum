@@ -15,31 +15,31 @@ import (
 func GetIdByIndex(client graphql.Client, index string) (string, error) {
 	response, err := timeSpans(context.Background(), client, &TimeSpanSearch{
 		FromInclusive: nil,
-		ToInclusive: nil,
-		Running: nil,
-		Limit: nil,
-		Offset: nil,
+		ToInclusive:   nil,
+		Running:       nil,
+		Limit:         nil,
+		Offset:        nil,
 	})
 
-	if (err != nil) {
+	if err != nil {
 		return "", err
 	}
 
-	if (len(response.TimeSpans.Items) == 0) {
+	if len(response.TimeSpans.Items) == 0 {
 		return "", fmt.Errorf("no time spans found")
 	}
-	if (index == "") {
+	if index == "" {
 		return response.TimeSpans.Items[0].Id, nil
 	}
 
 	var parsedIndex int
 	parsedIndex, err = strconv.Atoi(index)
-	if (err != nil) {
+	if err != nil {
 		return "", err
 	}
 
 	item := response.TimeSpans.Items[parsedIndex]
-	if (err != nil) {
+	if err != nil {
 		return "", fmt.Errorf("no time span found with index %s", index)
 	}
 
@@ -49,11 +49,11 @@ func GetIdByIndex(client graphql.Client, index string) (string, error) {
 var stopEndArg, idArg string
 
 var stopCmd = &cobra.Command{
-	Use:   "stop",
+	Use:     "stop",
 	Aliases: []string{"close", "end"},
-	Args: cobra.MaximumNArgs(1),
-	Short: "Stop a running time span",
-	Long: `The time span that is running longest will be stopped first. Supply the number of the list command (without any filters applied) to stop a specific time span.`,
+	Args:    cobra.MaximumNArgs(1),
+	Short:   "Stop a running time span",
+	Long:    `The time span that is running longest will be stopped first. Supply the number of the list command (without any filters applied) to stop a specific time span.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		format := GetOutputFormat(cmd)
 		client := CreateClient(ClientOptions{})
@@ -65,11 +65,11 @@ var stopCmd = &cobra.Command{
 		if idArg != "" {
 			id = &idArg
 		} else {
-			if (len(args) > 0) {
+			if len(args) > 0 {
 				var idFound string
 				idFound, err = GetIdByIndex(client, args[0])
-				if (err != nil) {
-					if (format == "json") {
+				if err != nil {
+					if format == "json" {
 						json, _ := json.MarshalIndent(err, "", "  ")
 						fmt.Println(string(json))
 						os.Exit(1)
@@ -85,8 +85,8 @@ var stopCmd = &cobra.Command{
 
 		response, err := closeTimeSpan(context.Background(), client, id, endParsed)
 
-		if (err != nil) {
-			if (format == "json") {
+		if err != nil {
+			if format == "json" {
 				json, _ := json.MarshalIndent(err, "", "  ")
 				fmt.Println(string(json))
 				os.Exit(1)
@@ -97,7 +97,7 @@ var stopCmd = &cobra.Command{
 			return
 		}
 
-		if (format == "json") {
+		if format == "json" {
 			json, _ := json.MarshalIndent(response, "", "  ")
 			fmt.Println(string(json))
 			return

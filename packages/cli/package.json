@@ -9,6 +9,7 @@
   "scripts": {
     "build": "go build -ldflags=\"-s -w\" -o build/zeitraum",
     "dev": "go run .",
+    "format": "go fmt . && go fmt ./cmd",
     "codegen": "go run github.com/Khan/genqlient"
   }
 }

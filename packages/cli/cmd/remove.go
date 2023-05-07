@@ -9,29 +9,28 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var removeIdArg string 
+var removeIdArg string
 
 var removeCmd = &cobra.Command{
-	Use:   "remove",
+	Use:     "remove",
 	Aliases: []string{"rm"},
-	Short: "Remove a time span",
-	Long: `Supply the number of the list command (without any filters applied) to remove a specific time span.`,
-	Args: cobra.MaximumNArgs(1),
+	Short:   "Remove a time span",
+	Long:    `Supply the number of the list command (without any filters applied) to remove a specific time span.`,
+	Args:    cobra.MaximumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		format := GetOutputFormat(cmd)
 		client := CreateClient(ClientOptions{})
-
 
 		var err error
 		var id string
 		if removeIdArg != "" {
 			id = removeIdArg
 		} else {
-			if (len(args) > 0) {
+			if len(args) > 0 {
 				var idFound string
 				idFound, err = GetIdByIndex(client, args[0])
-				if (err != nil) {
-					if (format == "json") {
+				if err != nil {
+					if format == "json" {
 						json, _ := json.MarshalIndent(err, "", "  ")
 						fmt.Println(string(json))
 						os.Exit(1)
@@ -45,14 +44,14 @@ var removeCmd = &cobra.Command{
 			}
 		}
 
-		if (id == "") {
+		if id == "" {
 			panic("no time span specified")
 		}
 
 		response, err := deleteTimeSpan(context.Background(), client, id)
 
-		if (err != nil) {
-			if (format == "json") {
+		if err != nil {
+			if format == "json" {
 				json, _ := json.MarshalIndent(err, "", "  ")
 				fmt.Println(string(json))
 				os.Exit(1)
@@ -63,7 +62,7 @@ var removeCmd = &cobra.Command{
 			return
 		}
 
-		if (format == "json") {
+		if format == "json" {
 			json, _ := json.MarshalIndent(response, "", "  ")
 			fmt.Println(string(json))
 			return

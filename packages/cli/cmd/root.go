@@ -12,7 +12,7 @@ var cfgFile string
 var rootCmd = &cobra.Command{
 	Use:   "zeitraum",
 	Short: "Track time using tags",
-	Long: `Zeitraum is a time tracking server. This CLI allows to use the server from the command line to track time from the terminal and in scripts`,
+	Long:  `Zeitraum is a time tracking server. This CLI allows to use the server from the command line to track time from the terminal and in scripts`,
 }
 
 func Execute() {

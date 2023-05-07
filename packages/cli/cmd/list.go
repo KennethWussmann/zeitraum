@@ -12,14 +12,24 @@ import (
 	"github.com/spf13/cobra"
 )
 
+func formatDateTime(outputFormat string, dateTime *time.Time) string {
+	if dateTime == nil {
+		return ""
+	}
+	if outputFormat == "csv" {
+		return dateTime.Format(time.RFC3339)
+	}
+	return dateTime.String()
+}
+
 var fromArg, toArg string
 var todayArg, runningArg, noRunningArg, extendedArg bool
 var limitArg, offsetArg int
 
 var listCmd = &cobra.Command{
-	Use:   "list",
+	Use:     "list",
 	Aliases: []string{"ls"},
-	Short: "List time spans",
+	Short:   "List time spans",
 	Run: func(cmd *cobra.Command, args []string) {
 		format := GetOutputFormat(cmd)
 		client := CreateClient(ClientOptions{})
@@ -39,10 +49,10 @@ var listCmd = &cobra.Command{
 			extended = true
 		}
 
-		if (todayArg && fromArg != "") {
+		if todayArg && fromArg != "" {
 			panic("cannot use --today together with --from")
 		}
-		if (todayArg) {
+		if todayArg {
 			fromArg = "today, 00:00"
 		}
 		fromParsed, _ := ParseDateTimeInput(fromArg)
@@ -50,14 +60,14 @@ var listCmd = &cobra.Command{
 
 		response, err := timeSpans(context.Background(), client, &TimeSpanSearch{
 			FromInclusive: fromParsed,
-			ToInclusive: toParsed,
-			Running: running,
-			Limit: &limitArg,
-			Offset: &offsetArg,
+			ToInclusive:   toParsed,
+			Running:       running,
+			Limit:         &limitArg,
+			Offset:        &offsetArg,
 		})
 
-		if (err != nil) {
-			if (format == "json") {
+		if err != nil {
+			if format == "json" {
 				json, _ := json.MarshalIndent(err, "", "  ")
 				fmt.Println(string(json))
 				os.Exit(1)
@@ -66,20 +76,19 @@ var listCmd = &cobra.Command{
 			panic(err)
 		}
 
-		if (format == "json") {
+		if format == "json" {
 			json, _ := json.MarshalIndent(response, "", "  ")
 			fmt.Println(string(json))
 			return
 		}
 
-
-    t := table.NewWriter()
-    t.SetOutputMirror(os.Stdout)
+		t := table.NewWriter()
+		t.SetOutputMirror(os.Stdout)
 		t.SetStyle(table.StyleRounded)
 		if extended {
-			t.AppendHeader(table.Row{"#", "ID", "Duration", "Tags", "Note", "Running", "Start", "End"})
+			t.AppendHeader(table.Row{"#", "id", "duration", "tags", "note", "running", "start", "end"})
 		} else {
-			t.AppendHeader(table.Row{"#", "Duration", "Tags", "Note", "Running"})
+			t.AppendHeader(table.Row{"#", "duration", "tags", "note", "running"})
 		}
 		for i, timeSpan := range response.TimeSpans.Items {
 			var tags []string
@@ -96,7 +105,7 @@ var listCmd = &cobra.Command{
 			var end time.Time = time.Now()
 			if timeSpan.End != nil {
 				end = *timeSpan.End
-			} 
+			}
 
 			var note string = ""
 			if timeSpan.Note != nil {
@@ -106,29 +115,33 @@ var listCmd = &cobra.Command{
 			if extended {
 				t.AppendRow(
 					table.Row{
-						i, 
+						i,
 						timeSpan.Id,
-						FormatTimerRuntime(timeSpan.Start, end), 
-						strings.Join(tags, ", "), 
-						note, 
+						FormatTimerRuntime(timeSpan.Start, end),
+						strings.Join(tags, ", "),
+						note,
 						runningFormatted,
-						timeSpan.Start,
-						end,
+						formatDateTime(format, &timeSpan.Start),
+						formatDateTime(format, &end),
 					},
 				)
 			} else {
 				t.AppendRow(
 					table.Row{
-						i, 
-						FormatTimerRuntime(timeSpan.Start, end), 
-						strings.Join(tags, ", "), 
-						note, 
+						i,
+						FormatTimerRuntime(timeSpan.Start, end),
+						strings.Join(tags, ", "),
+						note,
 						runningFormatted,
 					},
 				)
 			}
 		}
-    t.Render()
+		if format == "csv" {
+			t.RenderCSV()
+		} else {
+			t.Render()
+		}
 	},
 }
 
