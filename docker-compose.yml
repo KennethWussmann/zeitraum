@@ -20,3 +20,37 @@ services:
       - packages/server/.env
     environment:
       DATABASE_URL: postgresql://zeitraum:zeitraum@database:5432/zeitraum
+
+  # Optional monitoring stack
+  prometheus:
+    image: prom/prometheus:v2.43.0
+    volumes:
+      - ./packages/monitoring/prometheus/:/etc/prometheus/
+      - prometheus_data:/prometheus
+    depends_on:
+      - server
+    ports:
+      - 4001:9090
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+  grafana:
+    image: grafana/grafana
+    user: '472'
+    ports:
+      - 4000:3000
+    depends_on:
+      - prometheus
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./packages/monitoring/grafana/provisioning/:/etc/grafana/provisioning/
+      - ./packages/monitoring/grafana/grafana.ini:/etc/grafana/grafana.ini
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+
+volumes:
+  prometheus_data: {}
+  grafana_data: {}

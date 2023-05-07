@@ -1,7 +1,7 @@
 import { config } from 'dotenv';
 config();
 import { ApplicationContext } from '../src/applicationContext';
-import { addDays, addMinutes, setHours, setMilliseconds, setMinutes, setSeconds, subDays } from 'date-fns';
+import { addMinutes, subDays } from 'date-fns';
 import seedrandom from 'seedrandom';
 
 const applicationContext = new ApplicationContext();
@@ -178,7 +178,7 @@ const activities = [
 
 const getRandomActivity = () => activities[Math.floor(rng() * activities.length)];
 
-const getRandomDuration = () => 1 + Math.floor(rng() * 3 * 60);
+const getRandomDuration = () => 1 + Math.floor(rng() * 10);
 
 const getRandomNote = (activity: any) => activity.notes[Math.floor(rng() * activity.notes.length)];
 
@@ -189,9 +189,9 @@ const seed = async () => {
     throw new Error('Root user not found');
   }
 
-  const days = 14;
+  const days = 7;
   const now = new Date();
-  let currentTime = subDays(now, days);
+  let start = subDays(now, days);
 
   for (let day = 0; day < days; day++) {
     let dailyMinutes = 0;
@@ -199,8 +199,7 @@ const seed = async () => {
     while (dailyMinutes < 1440) {
       const activity = getRandomActivity();
       const duration = getRandomDuration();
-      const start = currentTime;
-      const end = addMinutes(currentTime, duration);
+      const end = addMinutes(start, duration);
 
       await applicationContext.timeSpanService.create(rootUser.id, {
         start,
@@ -209,10 +208,11 @@ const seed = async () => {
         note: getRandomNote(activity),
       });
 
-      currentTime = end;
+      start = end;
       dailyMinutes += duration;
+
+      console.log(`Day ${day + 1}, Daily minutes: ${dailyMinutes}`);
     }
-    currentTime = setHours(setMinutes(setSeconds(setMilliseconds(addDays(currentTime, 1), 0), 0), 0), 0);
   }
 };
 
