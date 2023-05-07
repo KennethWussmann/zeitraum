@@ -61,6 +61,8 @@ Zeitraum is inspired by [traggo](https://traggo.net/) and [watson](http://tailor
 
 There are multiple ways to integrate Zeitraum into your workflow. Take a look at which one suits you best.
 
+![](./docs/assets/integration-overview.png)
+
 ### 📱 Apps
 
 Zeitraum is only a server to store your time tracking data. It doesn't ship with an interface directly.
