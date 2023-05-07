@@ -12,6 +12,16 @@ import (
 	"github.com/spf13/cobra"
 )
 
+func formatDateTime(outputFormat string, dateTime *time.Time) string {
+	if (dateTime == nil) {
+		return ""
+	}
+	if (outputFormat == "csv") {
+		return dateTime.Format(time.RFC3339)
+	}
+	return dateTime.String()
+}
+
 var fromArg, toArg string
 var todayArg, runningArg, noRunningArg, extendedArg bool
 var limitArg, offsetArg int
@@ -77,9 +87,9 @@ var listCmd = &cobra.Command{
     t.SetOutputMirror(os.Stdout)
 		t.SetStyle(table.StyleRounded)
 		if extended {
-			t.AppendHeader(table.Row{"#", "ID", "Duration", "Tags", "Note", "Running", "Start", "End"})
+			t.AppendHeader(table.Row{"#", "id", "duration", "tags", "note", "running", "start", "end"})
 		} else {
-			t.AppendHeader(table.Row{"#", "Duration", "Tags", "Note", "Running"})
+			t.AppendHeader(table.Row{"#", "duration", "tags", "note", "running"})
 		}
 		for i, timeSpan := range response.TimeSpans.Items {
 			var tags []string
@@ -112,8 +122,8 @@ var listCmd = &cobra.Command{
 						strings.Join(tags, ", "), 
 						note, 
 						runningFormatted,
-						timeSpan.Start,
-						end,
+						formatDateTime(format, &timeSpan.Start),
+						formatDateTime(format, &end),
 					},
 				)
 			} else {
@@ -128,7 +138,11 @@ var listCmd = &cobra.Command{
 				)
 			}
 		}
-    t.Render()
+    if (format == "csv") {
+			t.RenderCSV()
+		} else {
+			t.Render()
+		}
 	},
 }
 
