@@ -61,6 +61,8 @@ Zeitraum is inspired by [traggo](https://traggo.net/) and [watson](http://tailor
 
 There are multiple ways to integrate Zeitraum into your workflow. Take a look at which one suits you best.
 
+[Learn how I use Zeitraum in my workflow](./docs/my-workflow.md)
+
 ![](./docs/assets/integration-overview.png)
 
 ### 📱 Apps
