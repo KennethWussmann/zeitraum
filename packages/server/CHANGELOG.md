@@ -1,5 +1,11 @@
 # @zeitraum/server
 
+## 0.5.0
+
+### Minor Changes
+
+- 4164852: Add metric for start time per tag
+
 ## 0.3.0
 
 ### Patch Changes
