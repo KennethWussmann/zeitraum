@@ -2,7 +2,9 @@ package cmd
 
 import (
 	"context"
+	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/Khan/genqlient/graphql"
 	"github.com/spf13/viper"
@@ -51,4 +53,20 @@ func IsAuthenticated(options ClientOptions) (*string, error) {
 		return nil, err
 	}
 	return &response.Me.Username, nil
+}
+
+func VerifyConfiguration() {
+	var baseUrl = viper.GetString("url")
+	var token = viper.GetString("token")
+	var configured = baseUrl != "" && token != ""
+	if !configured {
+		fmt.Println("You need to configure Zeitraum first. Run 'zeitraum login' to login")
+		os.Exit(1)
+	}
+
+	var _, err = IsAuthenticated(ClientOptions{baseUrl: &baseUrl, token: &token})
+	if err != nil {
+		fmt.Println("Your token is invalid or the server is unreachable. Run 'zeitraum login' to login")
+		os.Exit(1)
+	}
 }

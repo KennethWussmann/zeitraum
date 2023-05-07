@@ -9,7 +9,7 @@ Download here: [Latest release](https://github.com/KennethWussmann/zeitraum/rele
 After download start with the login. This is required in order to save time tracking data to the server.
 
 ```shell
-$ zeitraum login --url https://your-zeitraum.com --token
+$ zeitraum login --url https://your-zeitraum.com --token YOUR_TOKEN_HERE
 ```
 
 This will save your credentials to `$HOME/.zeitraum.yaml`.

@@ -31,6 +31,7 @@ var listCmd = &cobra.Command{
 	Aliases: []string{"ls"},
 	Short:   "List time spans",
 	Run: func(cmd *cobra.Command, args []string) {
+		VerifyConfiguration()
 		format := GetOutputFormat(cmd)
 		client := CreateClient(ClientOptions{})
 
