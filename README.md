@@ -1,12 +1,6 @@
 <div align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="./docs/assets/logo-tagline-white.png">
-    <img alt="Logo with text Zeitraum and tagline time tracking with tags" src="./docs/assets/logo-tagline-white.png">
-  </picture>
-  <picture>
-    <source media="(prefers-color-scheme: light)" srcset="./docs/assets/logo-tagline-black.png">
-    <img alt="Logo with text Zeitraum and tagline time tracking with tags" src="./docs/assets/logo-tagline-black.png">
-  </picture>
+  <img alt="Logo with text Zeitraum and tagline time tracking with tags" src="./docs/assets/logo-tagline-white.png#gh-dark-mode-only">
+  <img alt="Logo with text Zeitraum and tagline time tracking with tags" src="./docs/assets/logo-tagline-black.png#gh-light-mode-only">
   <p>
     <strong>Zeitraum is a versatile time tracking service for developers, designed to seamlessly integrate into your existing workflow.</strong>
   </p>
