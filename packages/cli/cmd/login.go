@@ -11,7 +11,6 @@ import (
 	"github.com/spf13/viper"
 )
 
-
 var url string
 var token string
 
@@ -19,10 +18,10 @@ var token string
 var loginCmd = &cobra.Command{
 	Use:   "login",
 	Short: "Login to your Zeitraum server",
-	Long: `Given the URL of your server and an API token, a config file is created that will hold the credentials for future requests. It's required to run login at least once before using the CLI.`,
+	Long:  `Given the URL of your server and an API token, a config file is created that will hold the credentials for future requests. It's required to run login at least once before using the CLI.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		username, err := IsAuthenticated(ClientOptions{&url, &token})
-		if (err != nil) {
+		if err != nil {
 			fmt.Println("Server not reachable or credentials ivaild.")
 			os.Exit(1)
 			return

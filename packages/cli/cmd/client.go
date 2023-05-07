@@ -9,7 +9,7 @@ import (
 )
 
 type authedTransport struct {
-	token     string
+	token   string
 	wrapped http.RoundTripper
 }
 
@@ -20,7 +20,7 @@ func (t *authedTransport) RoundTrip(req *http.Request) (*http.Response, error) {
 }
 
 type ClientOptions struct {
-  baseUrl, token *string
+	baseUrl, token *string
 }
 
 func CreateClient(options ClientOptions) graphql.Client {
@@ -37,17 +37,17 @@ func CreateClient(options ClientOptions) graphql.Client {
 	}
 	httpClient := http.Client{
 		Transport: &authedTransport{
-			token:     token,
+			token:   token,
 			wrapped: http.DefaultTransport,
 		},
 	}
-	return graphql.NewClient(baseUrl + "/graphql", &httpClient)
+	return graphql.NewClient(baseUrl+"/graphql", &httpClient)
 }
 
 func IsAuthenticated(options ClientOptions) (*string, error) {
 	client := CreateClient(options)
 	response, err := me(context.Background(), client)
-	if (err != nil) {
+	if err != nil {
 		return nil, err
 	}
 	return &response.Me.Username, nil
