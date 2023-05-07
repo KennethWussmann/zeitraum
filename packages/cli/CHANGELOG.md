@@ -1,5 +1,11 @@
 # @zeitraum/cli
 
+## 0.4.0
+
+### Minor Changes
+
+- 9a3fc1c: Verify login state when running sub-commands
+
 ## 0.3.0
 
 ### Minor Changes
