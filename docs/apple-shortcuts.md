@@ -2,9 +2,11 @@
 
 **Download:**
 
-- [Start time span with tags](https://www.icloud.com/shortcuts/383391567d4c4cbfa0b0ff610d252c88)
+- [Start time span with tags](https://www.icloud.com/shortcuts/383391567d4c4cbfa0b0ff610d252c88) - Asks for the tags to assign to a new time span
 
 - [Stop currently running time span](https://www.icloud.com/shortcuts/b79517313dc842578e20729a656dca66)
+
+- [Track sleep](https://www.icloud.com/shortcuts/b7d62967d3244917b1e867e9f1bc352d) - Starts a time span with predefined tag `sleep`
 
 The Apple Shortcuts app allows to track time everywhere on your Apple devices without requiring an app.
 Shortcuts are also great to automate your time tracking. For example:
@@ -13,7 +15,7 @@ Shortcuts are also great to automate your time tracking. For example:
 - Start time span for travel time, when you leave your home
 - Start time span for work, when you enter the office building
 
-Zeitraum provides two shortcuts. They can also give you an idea how to integrate Zeitraum further into your workflows.
+Zeitraum provides three shortcuts. They can also give you an idea how to integrate Zeitraum further into your workflows.
 
 When added, you need to enter the server URL and API token of your Zeitraum server.
 It's important to enter the URL with the `/graphql` path, for example:
@@ -22,6 +24,6 @@ It's important to enter the URL with the `/graphql` path, for example:
 https://your-zeitraum.com/graphql
 ```
 
-> **Tip:** You can chain these two shortcuts to first stop the running time span and then start a new one. Just edit the `Start time span` shortcut and prepend a `Run Shortcut` action that invokes the stop shortcut
+> **Tip:** You can chain shortcuts to first stop the running time span and then start a new one. Just edit the `Start time span` shortcut and prepend a `Run Shortcut` action that invokes the stop shortcut
 
 ![](./assets/ios-shortcuts-screenshot.jpeg)
