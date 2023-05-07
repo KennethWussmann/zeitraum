@@ -69,7 +69,8 @@ Zeitraum is only a server to store your time tracking data. It doesn't ship with
 
 Apps are integrations of the Zeitraum API that offer an easy to use user interface.
 
-- Raycast Extension - Track time using Raycast launcher.
+- [iOS, macOS, watchOS Shortcuts](./docs/apple-shortcuts.md) - Track time with these Apple Shortcuts
+- Raycast Extension - Track time using Raycast launcher. (awaiting approval)
 
 ### 💻 Command-line Interface
 
