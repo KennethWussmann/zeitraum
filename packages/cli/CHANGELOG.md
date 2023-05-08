@@ -1,5 +1,12 @@
 # @zeitraum/cli
 
+## 0.5.1
+
+### Patch Changes
+
+- a8caf3a: Allow list arguments with tags to search for
+- 59906f7: Add total duration to list command
+
 ## 0.4.0
 
 ### Minor Changes
