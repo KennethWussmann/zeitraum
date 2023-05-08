@@ -13,9 +13,10 @@ import (
 var startArg, endArg, noteArg string
 
 var trackCmd = &cobra.Command{
-	Use:     "track",
+	Use:     "track [tags]...",
 	Aliases: []string{"start", "open"},
 	Short:   "Track a time span",
+	Args:    cobra.ArbitraryArgs,
 	Run: func(cmd *cobra.Command, args []string) {
 		VerifyConfiguration()
 		format := GetOutputFormat(cmd)
@@ -59,7 +60,6 @@ var trackCmd = &cobra.Command{
 
 		fmt.Println("Created time span")
 	},
-	Args: cobra.ArbitraryArgs,
 }
 
 func init() {
