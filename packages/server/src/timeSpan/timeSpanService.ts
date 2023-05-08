@@ -4,6 +4,7 @@ import { randomUUID } from 'crypto';
 import { TimeSpan } from './timeSpan';
 import { CreateUpdateTimeSpan, TimeSpanSearch } from '../api/graphql/resolverTypes';
 import { NotFoundError } from '../api/graphql/graphqlErrors';
+import ical from 'ical-generator';
 
 export class TimeSpanService {
   constructor(private prisma: PrismaClient, private tagService: TagService) {}
@@ -215,5 +216,52 @@ export class TimeSpanService {
       items,
       total,
     };
+  };
+
+  public createICal = async (userId: string) => {
+    const calendar = ical({
+      name: 'Zeitraum',
+    });
+
+    const timeSpans = await this.prisma.timeSpan.findMany({
+      where: {
+        userId,
+        end: { not: null },
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+      include: {
+        user: true,
+        TagsOnTimeSpans: {
+          include: {
+            tag: {
+              include: {
+                user: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    timeSpans.forEach((timeSpan) => {
+      const summary =
+        timeSpan.note ?? timeSpan.TagsOnTimeSpans.map((tagOnTimeSpan) => tagOnTimeSpan.tag.name).join(', ');
+      const description = timeSpan.note
+        ? timeSpan.TagsOnTimeSpans.map((tagOnTimeSpan) => tagOnTimeSpan.tag.name).join(', ')
+        : undefined;
+      calendar.createEvent({
+        id: timeSpan.id,
+        summary,
+        description,
+        start: timeSpan.start,
+        end: timeSpan.end,
+        created: timeSpan.createdAt,
+        lastModified: timeSpan.updatedAt,
+      });
+    });
+
+    return calendar.toString();
   };
 }

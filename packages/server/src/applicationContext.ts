@@ -1,4 +1,4 @@
-import { createLogger } from '@zeitraum/commons';
+import { Logger, createLogger } from '@zeitraum/commons';
 import { PrismaClient } from '@prisma/client';
 import { GraphQLServer } from './api/graphql/graphqlServer';
 import { ApiServer } from './api/apiServer';
@@ -8,10 +8,11 @@ import { TimeSpanService } from './timeSpan/timeSpanService';
 import { TagService } from './tag/tagService';
 import { MetricsRouter } from './api/rest/metricsRouter';
 import { TimeSpanMetricService } from './timeSpan/timeSpanMetricService';
+import { ICalRouter } from './api/rest/icalRouter';
 
 export class ApplicationContext {
   public readonly configuration = loadConfiguration();
-  public readonly rootLogger = createLogger();
+  public readonly rootLogger: Logger = createLogger();
   public readonly prismaClient = new PrismaClient();
   public readonly userService = new UserService(this.prismaClient);
   public readonly tagService = new TagService(this.prismaClient);
@@ -26,6 +27,11 @@ export class ApplicationContext {
     this.rootLogger.child({ name: 'metricsRouter' }),
     this.prismaClient,
     this.timeSpanMetricService,
+    this.configuration.API_TOKENS,
+  );
+  public readonly icalRouter = new ICalRouter(
+    this.rootLogger.child({ name: 'metricsRouter' }),
+    this.timeSpanService,
     this.configuration.API_TOKENS,
   );
   public readonly apiServer = new ApiServer(

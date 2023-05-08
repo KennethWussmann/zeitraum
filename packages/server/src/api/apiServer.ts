@@ -16,6 +16,7 @@ export class ApiServer {
     const app = express();
     app.use(express.json());
     app.use(this.applicationContext.metricsRouter.router);
+    app.use(this.applicationContext.icalRouter.router);
     app.use(
       new SofaRouter(
         this.logger,
