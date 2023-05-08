@@ -101,3 +101,15 @@ scrape_configs:
 ```
 
 > **Notice**: Prometheus is another service that you need to deploy and configure in order to leverage more capabilities. Check this project for an [example deployment](https://github.com/vegasbrianc/prometheus/).
+
+## iCal Export
+
+The server can export all completed time spans as iCal calendar. This allows to keep track of where time has been spent in the past and can be synchronized with many calendar clients.
+
+The iCal can be downloaded from this URL. Replace the server url and API token:
+
+```
+https://your-zeitraum.com/calendar/admin.ical?token=<API-TOKEN>
+```
+
+> Hint: You don't need to adjust `admin.ical`. Currently only one internal user exists, which is admin. You only change the server and set the API token.
