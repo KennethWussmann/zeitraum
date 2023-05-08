@@ -8,6 +8,11 @@ const configurationSchema = z.object({
     .optional()
     .default('3000')
     .transform((value) => parseInt(value, 10)),
+  HEALTH_PORT: z
+    .string()
+    .optional()
+    .default('9000')
+    .transform((value) => (value ? parseInt(value, 10) : undefined)),
   API_TOKENS: z
     .string()
     .optional()

@@ -20,6 +20,11 @@ services:
       - packages/server/.env
     environment:
       DATABASE_URL: postgresql://zeitraum:zeitraum@database:5432/zeitraum
+    healthcheck:
+      test: node health-check.mjs
+      interval: 30s
+      retries: 1
+      timeout: 10s
 
   # Optional monitoring stack
   prometheus:

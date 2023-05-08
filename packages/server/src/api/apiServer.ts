@@ -7,6 +7,7 @@ import { Server } from 'http';
 import { GraphQLSchema } from 'graphql';
 import { findTokenFromExpressRequest } from './utils';
 import { SofaRouter } from './rest/sofaRouter';
+import { Lightship } from 'lightship';
 
 export class ApiServer {
   private httpServer: Server | undefined = undefined;
@@ -34,15 +35,24 @@ export class ApiServer {
     return app;
   };
 
-  startServer = async () => {
+  startServer = async (lightship: Lightship | undefined = undefined) => {
     const { server, schema } = await this.applicationContext.graphqlServer.start();
     const app = this.createApp(server, schema);
-    this.httpServer = app.listen(this.serverPort, () => {
-      this.logger.info(`API server started on port ${this.serverPort}`);
+    this.httpServer = app
+      .listen(this.serverPort, () => {
+        this.logger.info(`API server started on port ${this.serverPort}`);
+        lightship?.signalReady();
+      })
+      .on('error', () => {
+        void lightship?.shutdown();
+      });
+
+    lightship?.registerShutdownHandler(async () => {
+      await this.stopServer();
     });
   };
 
-  stopServer = async () => {
+  private stopServer = async () => {
     if (!this.httpServer) {
       return Promise.resolve();
     }
