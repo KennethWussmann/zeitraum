@@ -44,7 +44,7 @@ export class ApiServer {
         lightship?.signalReady();
       })
       .on('error', () => {
-        lightship?.shutdown();
+        void lightship?.shutdown();
       });
 
     lightship?.registerShutdownHandler(async () => {
