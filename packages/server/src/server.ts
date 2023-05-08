@@ -1,5 +1,6 @@
 import { Logger } from '@zeitraum/commons';
 import { ApplicationContext } from './applicationContext';
+import { createLightship, Lightship } from 'lightship';
 
 export class Server {
   private readonly logger: Logger;
@@ -22,19 +23,29 @@ export class Server {
     });
   };
 
+  private monitorConnection = (lightship: Lightship) => {
+    this.applicationContext.prismaClient.$on('beforeExit', () => {
+      lightship.signalNotReady();
+    });
+
+    setInterval(async () => {
+      try {
+        await this.applicationContext.prismaClient.$executeRaw`SELECT 1;`;
+        lightship.signalReady();
+      } catch (error) {
+        this.logger.error('Database connection failed. Retrying...', { error });
+        lightship.signalNotReady();
+      }
+    }, 10000);
+  };
+
   start = async () => {
+    const lightship = await createLightship({
+      detectKubernetes: false,
+      port: this.applicationContext.configuration.HEALTH_PORT,
+    });
     await this.connect();
-    await this.applicationContext.apiServer.startServer();
-
-    const shutDown = () => {
-      void this.applicationContext.apiServer.stopServer().then(() => process.exit(0));
-      setTimeout(() => {
-        this.logger.error('Could not close connections in time, forcefully shutting down');
-        process.exit(1);
-      }, 10000);
-    };
-
-    process.on('SIGTERM', shutDown);
-    process.on('SIGINT', shutDown);
+    await this.applicationContext.apiServer.startServer(lightship);
+    this.monitorConnection(lightship);
   };
 }

@@ -27,4 +27,7 @@ COPY --from=builder /app/package.json /app/package.json
 COPY --from=builder /app/packages/server /app/packages/server
 COPY --from=builder /app/packages/commons /app/packages/commons
 
-CMD [ "packages/server/docker-start.mjs" ]
+COPY packages/server/scripts/docker-start.mjs /app/start.mjs
+COPY packages/server/scripts/docker-health-check.mjs /app/health-check.mjs
+
+CMD [ "start.mjs" ]

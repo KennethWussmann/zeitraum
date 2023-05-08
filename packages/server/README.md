@@ -30,10 +30,19 @@ services:
       # Check the enviroment variables guide below for more infos about available settings
       DATABASE_URL: postgresql://zeitraum:zeitraum@database:5432/zeitraum
       API_TOKENS: fdHww82okrvB,XOEDNXE5MHiB
+    # optional health check
+    healthcheck:
+      test: node health-check.mjs
+      interval: 30s
+      retries: 1
+      start_period: 60s
+      timeout: 10s
 
 volumes:
   database:
 ```
+
+Read more about the [health check](#health-check).
 
 ## Configuration
 
@@ -57,6 +66,16 @@ volumes:
     <td><code>LOG_LEVEL</code></td>
     <td>No</td>
     <td>Show more detailed logs. One of debug, info, warn, error</td>
+  </tr>
+  <tr>
+    <td><code>PORT</code></td>
+    <td>No (default: 3000)</td>
+    <td>Main webserver port</td>
+  </tr>
+  <tr>
+    <td><code>HEALTH_PORT</code></td>
+    <td>No (default: 9000)</td>
+    <td>Health check webserver port</td>
   </tr>
 </table>
 
@@ -113,3 +132,9 @@ https://your-zeitraum.com/calendar/admin.ical?token=<API-TOKEN>
 ```
 
 > Hint: You don't need to adjust `admin.ical`. Currently only one internal user exists, which is admin. You only change the server and set the API token.
+
+## Health Check
+
+The server exposes an additional webserver. By default on port `9000` that allows scraping by health checks. It's a different server port, because it does not require authentication. A health check ensures that traffic is only routed to the container when it's ready to serve it. The Zeitraum container will be marked as unready/unhealthy when the database connection is not established or disconnects.
+
+It has three endpoints `/health`, `/live`, `/ready`. Read more about their behaviour in the [Lightship docs](https://github.com/gajus/lightship#health).
