@@ -27,9 +27,10 @@ var todayArg, runningArg, noRunningArg, extendedArg bool
 var limitArg, offsetArg int
 
 var listCmd = &cobra.Command{
-	Use:     "list",
+	Use:     "list [tags]...",
 	Aliases: []string{"ls"},
 	Short:   "List time spans",
+	Args:    cobra.ArbitraryArgs,
 	Run: func(cmd *cobra.Command, args []string) {
 		VerifyConfiguration()
 		format := GetOutputFormat(cmd)
@@ -65,6 +66,7 @@ var listCmd = &cobra.Command{
 			Running:       running,
 			Limit:         &limitArg,
 			Offset:        &offsetArg,
+			Tags:          args,
 		})
 
 		if err != nil {
