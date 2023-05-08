@@ -93,6 +93,8 @@ var listCmd = &cobra.Command{
 		} else {
 			t.AppendHeader(table.Row{"#", "duration", "tags", "note", "running"})
 		}
+
+		var totalDuration = 0
 		for i, timeSpan := range response.TimeSpans.Items {
 			var tags []string
 			for _, tag := range timeSpan.Tags {
@@ -114,6 +116,8 @@ var listCmd = &cobra.Command{
 			if timeSpan.Note != nil {
 				note = *timeSpan.Note
 			}
+
+			totalDuration += int(end.Sub(timeSpan.Start).Seconds())
 
 			if extended {
 				t.AppendRow(
@@ -140,9 +144,11 @@ var listCmd = &cobra.Command{
 				)
 			}
 		}
+
 		if format == "csv" {
 			t.RenderCSV()
 		} else {
+			t.AppendFooter(table.Row{"Total", FormatSeconds(totalDuration)})
 			t.Render()
 		}
 	},

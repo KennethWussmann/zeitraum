@@ -28,8 +28,10 @@ func FormatTimerRuntime(from time.Time, to time.Time) string {
 	if to.IsZero() {
 		to = time.Now()
 	}
+	return FormatSeconds(int(to.Sub(from).Seconds()))
+}
 
-	secondsDiff := int(to.Sub(from).Seconds())
+func FormatSeconds(secondsDiff int) string {
 	days := secondsDiff / (3600 * 24)
 	hours := (secondsDiff % (3600 * 24)) / 3600
 	minutes := (secondsDiff % 3600) / 60
