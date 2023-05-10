@@ -18,7 +18,7 @@ export type Scalars = {
   DateTime: Date;
 };
 
-export type CreateUpdateTimeSpan = {
+export type CreateTimeSpan = {
   end?: InputMaybe<Scalars['DateTime']>;
   note?: InputMaybe<Scalars['String']>;
   start: Scalars['DateTime'];
@@ -44,7 +44,7 @@ export type MutationCloseTimeSpanArgs = {
 };
 
 export type MutationCreateTimeSpanArgs = {
-  input: CreateUpdateTimeSpan;
+  input: CreateTimeSpan;
 };
 
 export type MutationDeleteTimeSpanArgs = {
@@ -53,7 +53,7 @@ export type MutationDeleteTimeSpanArgs = {
 
 export type MutationUpdateTimeSpanArgs = {
   id: Scalars['ID'];
-  input: CreateUpdateTimeSpan;
+  input: UpdateTimeSpan;
 };
 
 export type Query = {
@@ -123,6 +123,14 @@ export type TimeSpanSearch = {
   running?: InputMaybe<Scalars['Boolean']>;
   tags?: InputMaybe<Array<Scalars['String']>>;
   toInclusive?: InputMaybe<Scalars['DateTime']>;
+};
+
+/** Only non-null fields will be updated. */
+export type UpdateTimeSpan = {
+  end?: InputMaybe<Scalars['DateTime']>;
+  note?: InputMaybe<Scalars['String']>;
+  start?: InputMaybe<Scalars['DateTime']>;
+  tags?: InputMaybe<Array<Scalars['String']>>;
 };
 
 export type User = {
@@ -209,7 +217,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
   Boolean: ResolverTypeWrapper<any>;
-  CreateUpdateTimeSpan: ResolverTypeWrapper<any>;
+  CreateTimeSpan: ResolverTypeWrapper<any>;
   DateTime: ResolverTypeWrapper<any>;
   ID: ResolverTypeWrapper<any>;
   Int: ResolverTypeWrapper<any>;
@@ -222,13 +230,14 @@ export type ResolversTypes = ResolversObject<{
   TimeSpan: ResolverTypeWrapper<TimeSpanModel>;
   TimeSpanList: ResolverTypeWrapper<any>;
   TimeSpanSearch: ResolverTypeWrapper<any>;
+  UpdateTimeSpan: ResolverTypeWrapper<any>;
   User: ResolverTypeWrapper<UserModel>;
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
   Boolean: any;
-  CreateUpdateTimeSpan: any;
+  CreateTimeSpan: any;
   DateTime: any;
   ID: any;
   Int: any;
@@ -241,6 +250,7 @@ export type ResolversParentTypes = ResolversObject<{
   TimeSpan: TimeSpanModel;
   TimeSpanList: any;
   TimeSpanSearch: any;
+  UpdateTimeSpan: any;
   User: UserModel;
 }>;
 

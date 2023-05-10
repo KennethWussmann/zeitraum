@@ -10,24 +10,24 @@ import (
 	"github.com/Khan/genqlient/graphql"
 )
 
-type CreateUpdateTimeSpan struct {
+type CreateTimeSpan struct {
 	Start time.Time  `json:"start"`
 	End   *time.Time `json:"end"`
 	Note  *string    `json:"note"`
 	Tags  []string   `json:"tags"`
 }
 
-// GetStart returns CreateUpdateTimeSpan.Start, and is useful for accessing the field via an interface.
-func (v *CreateUpdateTimeSpan) GetStart() time.Time { return v.Start }
+// GetStart returns CreateTimeSpan.Start, and is useful for accessing the field via an interface.
+func (v *CreateTimeSpan) GetStart() time.Time { return v.Start }
 
-// GetEnd returns CreateUpdateTimeSpan.End, and is useful for accessing the field via an interface.
-func (v *CreateUpdateTimeSpan) GetEnd() *time.Time { return v.End }
+// GetEnd returns CreateTimeSpan.End, and is useful for accessing the field via an interface.
+func (v *CreateTimeSpan) GetEnd() *time.Time { return v.End }
 
-// GetNote returns CreateUpdateTimeSpan.Note, and is useful for accessing the field via an interface.
-func (v *CreateUpdateTimeSpan) GetNote() *string { return v.Note }
+// GetNote returns CreateTimeSpan.Note, and is useful for accessing the field via an interface.
+func (v *CreateTimeSpan) GetNote() *string { return v.Note }
 
-// GetTags returns CreateUpdateTimeSpan.Tags, and is useful for accessing the field via an interface.
-func (v *CreateUpdateTimeSpan) GetTags() []string { return v.Tags }
+// GetTags returns CreateTimeSpan.Tags, and is useful for accessing the field via an interface.
+func (v *CreateTimeSpan) GetTags() []string { return v.Tags }
 
 // TagFragment includes the GraphQL fields of Tag requested by the fragment TagFragment.
 type TagFragment struct {
@@ -197,6 +197,26 @@ func (v *TimeSpanSearch) GetLimit() *int { return v.Limit }
 // GetOffset returns TimeSpanSearch.Offset, and is useful for accessing the field via an interface.
 func (v *TimeSpanSearch) GetOffset() *int { return v.Offset }
 
+// Only non-null fields will be updated.
+type UpdateTimeSpan struct {
+	Start *time.Time `json:"start"`
+	End   *time.Time `json:"end"`
+	Note  *string    `json:"note"`
+	Tags  []string   `json:"tags"`
+}
+
+// GetStart returns UpdateTimeSpan.Start, and is useful for accessing the field via an interface.
+func (v *UpdateTimeSpan) GetStart() *time.Time { return v.Start }
+
+// GetEnd returns UpdateTimeSpan.End, and is useful for accessing the field via an interface.
+func (v *UpdateTimeSpan) GetEnd() *time.Time { return v.End }
+
+// GetNote returns UpdateTimeSpan.Note, and is useful for accessing the field via an interface.
+func (v *UpdateTimeSpan) GetNote() *string { return v.Note }
+
+// GetTags returns UpdateTimeSpan.Tags, and is useful for accessing the field via an interface.
+func (v *UpdateTimeSpan) GetTags() []string { return v.Tags }
+
 // __closeTimeSpanInput is used internally by genqlient
 type __closeTimeSpanInput struct {
 	Id  *string    `json:"id"`
@@ -211,11 +231,11 @@ func (v *__closeTimeSpanInput) GetEnd() *time.Time { return v.End }
 
 // __createTimeSpanInput is used internally by genqlient
 type __createTimeSpanInput struct {
-	Input *CreateUpdateTimeSpan `json:"input,omitempty"`
+	Input *CreateTimeSpan `json:"input,omitempty"`
 }
 
 // GetInput returns __createTimeSpanInput.Input, and is useful for accessing the field via an interface.
-func (v *__createTimeSpanInput) GetInput() *CreateUpdateTimeSpan { return v.Input }
+func (v *__createTimeSpanInput) GetInput() *CreateTimeSpan { return v.Input }
 
 // __deleteTimeSpanInput is used internally by genqlient
 type __deleteTimeSpanInput struct {
@@ -251,15 +271,15 @@ func (v *__timeSpansInput) GetSearch() *TimeSpanSearch { return v.Search }
 
 // __updateTimeSpanInput is used internally by genqlient
 type __updateTimeSpanInput struct {
-	Id    string                `json:"id"`
-	Input *CreateUpdateTimeSpan `json:"input,omitempty"`
+	Id    string          `json:"id"`
+	Input *UpdateTimeSpan `json:"input,omitempty"`
 }
 
 // GetId returns __updateTimeSpanInput.Id, and is useful for accessing the field via an interface.
 func (v *__updateTimeSpanInput) GetId() string { return v.Id }
 
 // GetInput returns __updateTimeSpanInput.Input, and is useful for accessing the field via an interface.
-func (v *__updateTimeSpanInput) GetInput() *CreateUpdateTimeSpan { return v.Input }
+func (v *__updateTimeSpanInput) GetInput() *UpdateTimeSpan { return v.Input }
 
 // closeTimeSpanCloseTimeSpan includes the requested fields of the GraphQL type TimeSpan.
 type closeTimeSpanCloseTimeSpan struct {
@@ -949,16 +969,8 @@ type versionResponse struct {
 // GetVersion returns versionResponse.Version, and is useful for accessing the field via an interface.
 func (v *versionResponse) GetVersion() string { return v.Version }
 
-// import "./timeSpan.fragment.graphql"
-func closeTimeSpan(
-	ctx context.Context,
-	client graphql.Client,
-	id *string,
-	end *time.Time,
-) (*closeTimeSpanResponse, error) {
-	req := &graphql.Request{
-		OpName: "closeTimeSpan",
-		Query: `
+// The query or mutation executed by closeTimeSpan.
+const closeTimeSpan_Operation = `
 mutation closeTimeSpan ($id: ID, $end: DateTime) {
 	closeTimeSpan(id: $id, end: $end) {
 		... TimeSpanFragment
@@ -982,7 +994,18 @@ fragment TagFragment on Tag {
 	updatedAt
 	name
 }
-`,
+`
+
+// import "./timeSpan.fragment.graphql"
+func closeTimeSpan(
+	ctx context.Context,
+	client graphql.Client,
+	id *string,
+	end *time.Time,
+) (*closeTimeSpanResponse, error) {
+	req := &graphql.Request{
+		OpName: "closeTimeSpan",
+		Query:  closeTimeSpan_Operation,
 		Variables: &__closeTimeSpanInput{
 			Id:  id,
 			End: end,
@@ -1002,16 +1025,9 @@ fragment TagFragment on Tag {
 	return &data, err
 }
 
-// import "./timeSpan.fragment.graphql"
-func createTimeSpan(
-	ctx context.Context,
-	client graphql.Client,
-	input *CreateUpdateTimeSpan,
-) (*createTimeSpanResponse, error) {
-	req := &graphql.Request{
-		OpName: "createTimeSpan",
-		Query: `
-mutation createTimeSpan ($input: CreateUpdateTimeSpan!) {
+// The query or mutation executed by createTimeSpan.
+const createTimeSpan_Operation = `
+mutation createTimeSpan ($input: CreateTimeSpan!) {
 	createTimeSpan(input: $input) {
 		... TimeSpanFragment
 	}
@@ -1034,7 +1050,17 @@ fragment TagFragment on Tag {
 	updatedAt
 	name
 }
-`,
+`
+
+// import "./timeSpan.fragment.graphql"
+func createTimeSpan(
+	ctx context.Context,
+	client graphql.Client,
+	input *CreateTimeSpan,
+) (*createTimeSpanResponse, error) {
+	req := &graphql.Request{
+		OpName: "createTimeSpan",
+		Query:  createTimeSpan_Operation,
 		Variables: &__createTimeSpanInput{
 			Input: input,
 		},
@@ -1053,6 +1079,13 @@ fragment TagFragment on Tag {
 	return &data, err
 }
 
+// The query or mutation executed by deleteTimeSpan.
+const deleteTimeSpan_Operation = `
+mutation deleteTimeSpan ($id: ID!) {
+	deleteTimeSpan(id: $id)
+}
+`
+
 func deleteTimeSpan(
 	ctx context.Context,
 	client graphql.Client,
@@ -1060,11 +1093,7 @@ func deleteTimeSpan(
 ) (*deleteTimeSpanResponse, error) {
 	req := &graphql.Request{
 		OpName: "deleteTimeSpan",
-		Query: `
-mutation deleteTimeSpan ($id: ID!) {
-	deleteTimeSpan(id: $id)
-}
-`,
+		Query:  deleteTimeSpan_Operation,
 		Variables: &__deleteTimeSpanInput{
 			Id: id,
 		},
@@ -1083,13 +1112,8 @@ mutation deleteTimeSpan ($id: ID!) {
 	return &data, err
 }
 
-func me(
-	ctx context.Context,
-	client graphql.Client,
-) (*meResponse, error) {
-	req := &graphql.Request{
-		OpName: "me",
-		Query: `
+// The query or mutation executed by me.
+const me_Operation = `
 query me {
 	me {
 		id
@@ -1098,7 +1122,15 @@ query me {
 		username
 	}
 }
-`,
+`
+
+func me(
+	ctx context.Context,
+	client graphql.Client,
+) (*meResponse, error) {
+	req := &graphql.Request{
+		OpName: "me",
+		Query:  me_Operation,
 	}
 	var err error
 
@@ -1114,15 +1146,8 @@ query me {
 	return &data, err
 }
 
-// import "./tag.fragment.graphql"
-func tags(
-	ctx context.Context,
-	client graphql.Client,
-	search *TagSearch,
-) (*tagsResponse, error) {
-	req := &graphql.Request{
-		OpName: "tags",
-		Query: `
+// The query or mutation executed by tags.
+const tags_Operation = `
 query tags ($search: TagSearch) {
 	tags(input: $search) {
 		total
@@ -1137,7 +1162,17 @@ fragment TagFragment on Tag {
 	updatedAt
 	name
 }
-`,
+`
+
+// import "./tag.fragment.graphql"
+func tags(
+	ctx context.Context,
+	client graphql.Client,
+	search *TagSearch,
+) (*tagsResponse, error) {
+	req := &graphql.Request{
+		OpName: "tags",
+		Query:  tags_Operation,
 		Variables: &__tagsInput{
 			Search: search,
 		},
@@ -1156,15 +1191,8 @@ fragment TagFragment on Tag {
 	return &data, err
 }
 
-// import "./timeSpan.fragment.graphql"
-func timeSpan(
-	ctx context.Context,
-	client graphql.Client,
-	id string,
-) (*timeSpanResponse, error) {
-	req := &graphql.Request{
-		OpName: "timeSpan",
-		Query: `
+// The query or mutation executed by timeSpan.
+const timeSpan_Operation = `
 query timeSpan ($id: ID!) {
 	timeSpan(id: $id) {
 		... TimeSpanFragment
@@ -1188,7 +1216,17 @@ fragment TagFragment on Tag {
 	updatedAt
 	name
 }
-`,
+`
+
+// import "./timeSpan.fragment.graphql"
+func timeSpan(
+	ctx context.Context,
+	client graphql.Client,
+	id string,
+) (*timeSpanResponse, error) {
+	req := &graphql.Request{
+		OpName: "timeSpan",
+		Query:  timeSpan_Operation,
 		Variables: &__timeSpanInput{
 			Id: id,
 		},
@@ -1207,15 +1245,8 @@ fragment TagFragment on Tag {
 	return &data, err
 }
 
-// import "./timeSpan.fragment.graphql"
-func timeSpans(
-	ctx context.Context,
-	client graphql.Client,
-	search *TimeSpanSearch,
-) (*timeSpansResponse, error) {
-	req := &graphql.Request{
-		OpName: "timeSpans",
-		Query: `
+// The query or mutation executed by timeSpans.
+const timeSpans_Operation = `
 query timeSpans ($search: TimeSpanSearch) {
 	timeSpans(input: $search) {
 		total
@@ -1242,7 +1273,17 @@ fragment TagFragment on Tag {
 	updatedAt
 	name
 }
-`,
+`
+
+// import "./timeSpan.fragment.graphql"
+func timeSpans(
+	ctx context.Context,
+	client graphql.Client,
+	search *TimeSpanSearch,
+) (*timeSpansResponse, error) {
+	req := &graphql.Request{
+		OpName: "timeSpans",
+		Query:  timeSpans_Operation,
 		Variables: &__timeSpansInput{
 			Search: search,
 		},
@@ -1261,17 +1302,9 @@ fragment TagFragment on Tag {
 	return &data, err
 }
 
-// import "./timeSpan.fragment.graphql"
-func updateTimeSpan(
-	ctx context.Context,
-	client graphql.Client,
-	id string,
-	input *CreateUpdateTimeSpan,
-) (*updateTimeSpanResponse, error) {
-	req := &graphql.Request{
-		OpName: "updateTimeSpan",
-		Query: `
-mutation updateTimeSpan ($id: ID!, $input: CreateUpdateTimeSpan!) {
+// The query or mutation executed by updateTimeSpan.
+const updateTimeSpan_Operation = `
+mutation updateTimeSpan ($id: ID!, $input: UpdateTimeSpan!) {
 	updateTimeSpan(id: $id, input: $input) {
 		... TimeSpanFragment
 	}
@@ -1294,7 +1327,18 @@ fragment TagFragment on Tag {
 	updatedAt
 	name
 }
-`,
+`
+
+// import "./timeSpan.fragment.graphql"
+func updateTimeSpan(
+	ctx context.Context,
+	client graphql.Client,
+	id string,
+	input *UpdateTimeSpan,
+) (*updateTimeSpanResponse, error) {
+	req := &graphql.Request{
+		OpName: "updateTimeSpan",
+		Query:  updateTimeSpan_Operation,
 		Variables: &__updateTimeSpanInput{
 			Id:    id,
 			Input: input,
@@ -1314,17 +1358,20 @@ fragment TagFragment on Tag {
 	return &data, err
 }
 
+// The query or mutation executed by version.
+const version_Operation = `
+query version {
+	version
+}
+`
+
 func version(
 	ctx context.Context,
 	client graphql.Client,
 ) (*versionResponse, error) {
 	req := &graphql.Request{
 		OpName: "version",
-		Query: `
-query version {
-	version
-}
-`,
+		Query:  version_Operation,
 	}
 	var err error
 
