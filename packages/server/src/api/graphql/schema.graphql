@@ -12,8 +12,8 @@ type Query {
 }
 
 type Mutation {
-  createTimeSpan(input: CreateUpdateTimeSpan!): TimeSpan!
-  updateTimeSpan(id: ID!, input: CreateUpdateTimeSpan!): TimeSpan!
+  createTimeSpan(input: CreateTimeSpan!): TimeSpan!
+  updateTimeSpan(id: ID!, input: UpdateTimeSpan!): TimeSpan!
   deleteTimeSpan(id: ID!): Boolean!
   """
   Close a time span that does not have an end time yet.
@@ -38,11 +38,21 @@ input TagSearch {
   offset: Int = 0
 }
 
-input CreateUpdateTimeSpan {
+input CreateTimeSpan {
   start: DateTime!
   end: DateTime
   note: String
   tags: [String!]!
+}
+
+"""
+Only non-null fields will be updated.
+"""
+input UpdateTimeSpan {
+  start: DateTime
+  end: DateTime
+  note: String
+  tags: [String!]
 }
 
 type TimeSpanList {

@@ -35,7 +35,7 @@ var trackCmd = &cobra.Command{
 			start = *startParsed
 		}
 
-		response, err := createTimeSpan(context.Background(), client, &CreateUpdateTimeSpan{
+		response, err := createTimeSpan(context.Background(), client, &CreateTimeSpan{
 			Start: start,
 			End:   endParsed,
 			Tags:  args,

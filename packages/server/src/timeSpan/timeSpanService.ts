@@ -2,7 +2,7 @@ import { Prisma, PrismaClient } from '@prisma/client';
 import { TagService } from '../tag/tagService';
 import { randomUUID } from 'crypto';
 import { TimeSpan } from './timeSpan';
-import { CreateUpdateTimeSpan, TimeSpanSearch } from '../api/graphql/resolverTypes';
+import { CreateTimeSpan, TimeSpanSearch, UpdateTimeSpan } from '../api/graphql/resolverTypes';
 import { NotFoundError } from '../api/graphql/graphqlErrors';
 import ical from 'ical-generator';
 
@@ -48,7 +48,7 @@ export class TimeSpanService {
       },
     });
 
-  public create = async (userId: string, data: CreateUpdateTimeSpan): Promise<TimeSpan> => {
+  public create = async (userId: string, data: CreateTimeSpan): Promise<TimeSpan> => {
     const timeSpan = await this.prisma.timeSpan.create({
       data: {
         id: randomUUID(),
@@ -88,7 +88,7 @@ export class TimeSpanService {
     );
   };
 
-  public update = async (userId: string, timeSpanId: string, data: CreateUpdateTimeSpan): Promise<TimeSpan> => {
+  public update = async (userId: string, timeSpanId: string, data: UpdateTimeSpan): Promise<TimeSpan> => {
     const oldTimeSpan = await this.findById(userId, timeSpanId);
     if (!oldTimeSpan) {
       throw new NotFoundError(`TimeSpan with id ${timeSpanId} not found.`);
@@ -97,9 +97,9 @@ export class TimeSpanService {
     const timeSpan = await this.prisma.timeSpan.update({
       data: {
         id: timeSpanId,
-        start: data.start,
-        end: data.end,
-        note: data.note,
+        start: data.start ?? oldTimeSpan.start,
+        end: data.end ?? oldTimeSpan.end,
+        note: data.note ?? oldTimeSpan.note,
         userId,
       },
       where: { id: timeSpanId },
@@ -107,6 +107,14 @@ export class TimeSpanService {
         user: true,
       },
     });
+
+    // user did not change tags, so we can skip the rest
+    if (!data.tags) {
+      return {
+        ...timeSpan,
+        TagsOnTimeSpans: oldTimeSpan.TagsOnTimeSpans,
+      };
+    }
 
     // delete all current assignments and create new ones.
     // not very efficient, but simple and works for now.
