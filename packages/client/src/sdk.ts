@@ -15,7 +15,7 @@ export type Scalars = {
   DateTime: any;
 };
 
-export type CreateUpdateTimeSpan = {
+export type CreateTimeSpan = {
   end?: InputMaybe<Scalars['DateTime']>;
   note?: InputMaybe<Scalars['String']>;
   start: Scalars['DateTime'];
@@ -41,7 +41,7 @@ export type MutationCloseTimeSpanArgs = {
 };
 
 export type MutationCreateTimeSpanArgs = {
-  input: CreateUpdateTimeSpan;
+  input: CreateTimeSpan;
 };
 
 export type MutationDeleteTimeSpanArgs = {
@@ -50,7 +50,7 @@ export type MutationDeleteTimeSpanArgs = {
 
 export type MutationUpdateTimeSpanArgs = {
   id: Scalars['ID'];
-  input: CreateUpdateTimeSpan;
+  input: UpdateTimeSpan;
 };
 
 export type Query = {
@@ -122,6 +122,14 @@ export type TimeSpanSearch = {
   toInclusive?: InputMaybe<Scalars['DateTime']>;
 };
 
+/** Only non-null fields will be updated. */
+export type UpdateTimeSpan = {
+  end?: InputMaybe<Scalars['DateTime']>;
+  note?: InputMaybe<Scalars['String']>;
+  start?: InputMaybe<Scalars['DateTime']>;
+  tags?: InputMaybe<Array<Scalars['String']>>;
+};
+
 export type User = {
   __typename?: 'User';
   createdAt: Scalars['DateTime'];
@@ -170,7 +178,7 @@ export type CloseTimeSpanMutation = {
 };
 
 export type CreateTimeSpanMutationVariables = Exact<{
-  input: CreateUpdateTimeSpan;
+  input: CreateTimeSpan;
 }>;
 
 export type CreateTimeSpanMutation = {
@@ -250,7 +258,7 @@ export type TimeSpansQuery = {
 
 export type UpdateTimeSpanMutationVariables = Exact<{
   id: Scalars['ID'];
-  input: CreateUpdateTimeSpan;
+  input: UpdateTimeSpan;
 }>;
 
 export type UpdateTimeSpanMutation = {
@@ -320,7 +328,7 @@ export const CloseTimeSpanDocument = `
 }
     ${TimeSpanFragmentFragmentDoc}`;
 export const CreateTimeSpanDocument = `
-    mutation createTimeSpan($input: CreateUpdateTimeSpan!) {
+    mutation createTimeSpan($input: CreateTimeSpan!) {
   createTimeSpan(input: $input) {
     ...TimeSpanFragment
   }
@@ -349,7 +357,7 @@ export const TimeSpansDocument = `
 }
     ${TimeSpanFragmentFragmentDoc}`;
 export const UpdateTimeSpanDocument = `
-    mutation updateTimeSpan($id: ID!, $input: CreateUpdateTimeSpan!) {
+    mutation updateTimeSpan($id: ID!, $input: UpdateTimeSpan!) {
   updateTimeSpan(id: $id, input: $input) {
     ...TimeSpanFragment
   }

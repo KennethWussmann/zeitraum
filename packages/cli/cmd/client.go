@@ -66,7 +66,7 @@ func VerifyConfiguration() {
 
 	var _, err = IsAuthenticated(ClientOptions{baseUrl: &baseUrl, token: &token})
 	if err != nil {
-		fmt.Println("Your token is invalid or the server is unreachable. Run 'zeitraum login' to login")
+		fmt.Println("Your token is invalid or the server is unreachable. Run 'zeitraum login' to login", err)
 		os.Exit(1)
 	}
 }
