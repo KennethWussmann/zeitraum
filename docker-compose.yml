@@ -28,7 +28,7 @@ services:
 
   # Optional monitoring stack
   prometheus:
-    image: prom/prometheus:v2.43.0
+    image: prom/prometheus:v2.43.1
     volumes:
       - ./packages/monitoring/prometheus/:/etc/prometheus/
       - prometheus_data:/prometheus
