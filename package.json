@@ -36,7 +36,7 @@
   },
   "devDependencies": {
     "@changesets/cli": "^2.26.1",
-    "@moia-oss/eslint-prettier-typescript-config": "0.11.45",
+    "@moia-oss/eslint-prettier-typescript-config": "0.11.59",
     "@types/jest": "^29.5.1",
     "@types/node": "18.*",
     "@typescript-eslint/eslint-plugin": "^5.59.1",
