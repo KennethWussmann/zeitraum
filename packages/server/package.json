@@ -44,7 +44,7 @@
     "ical-generator": "^4.1.0",
     "lightship": "^7.1.1",
     "prom-client": "^14.2.0",
-    "sofa-api": "^0.16.3",
+    "sofa-api": "^0.17.0",
     "zod": "^3.21.4"
   }
 }
