@@ -1,5 +1,13 @@
 # @zeitraum/server
 
+## 0.5.2
+
+### Patch Changes
+
+- 9fedb97: Allow editing time spans
+- d9f5ed0: Add health check endpoint and documentation
+- dc377fe: Add endpoint to export all time spans as ical
+
 ## 0.5.0
 
 ### Minor Changes

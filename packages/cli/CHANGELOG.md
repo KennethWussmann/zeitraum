@@ -1,5 +1,11 @@
 # @zeitraum/cli
 
+## 0.5.2
+
+### Patch Changes
+
+- 9fedb97: Allow editing time spans
+
 ## 0.5.1
 
 ### Patch Changes
