@@ -24,6 +24,7 @@ export class ApiServer {
         schema,
         this.applicationContext.graphqlServer,
         this.applicationContext.configuration.API_TOKENS,
+        this.applicationContext.configuration.VERSION,
       ).router,
     );
     app.use(

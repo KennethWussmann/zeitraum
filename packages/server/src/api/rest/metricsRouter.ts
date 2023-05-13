@@ -4,8 +4,9 @@ import { Gauge, Registry, collectDefaultMetrics } from 'prom-client';
 import { tokenBasedAuthMiddleware } from '../tokenBasedAuthMiddleware';
 import { TimeSpanMetricService } from '../../timeSpan/timeSpanMetricService';
 import { PrismaClient } from '@prisma/client';
+import { applicationName } from '../../configuration';
 
-const prefix = 'zeitraum_';
+const prefix = `${applicationName.toLowerCase()}_`;
 
 export class MetricsRouter {
   router: Router;

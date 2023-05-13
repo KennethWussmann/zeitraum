@@ -1,6 +1,8 @@
 import { randomUUID } from 'crypto';
 import { z } from 'zod';
 
+export const applicationName = 'Zeitraum';
+
 const configurationSchema = z.object({
   VERSION: z.string().optional().default('unknown'),
   PORT: z
