@@ -21,6 +21,25 @@ type Mutation {
   Optionally you can provide an end time to close the time span at a specific time.
   """
   closeTimeSpan(id: ID, end: DateTime): TimeSpan!
+
+  createPreset(input: CreatePreset!): Preset!
+  updatePreset(input: UpdatePreset!): Preset!
+  deletePreset(id: ID!): Boolean!
+}
+
+input CreatePreset {
+  name: String!
+  tags: [String!]!
+  note: String
+}
+
+input UpdatePreset {
+  name: String!
+  tags: [String!]!
+  """
+  Setting the note to null will remove it
+  """
+  note: String
 }
 
 input TimeSpanSearch {
@@ -88,4 +107,16 @@ type TimeSpan {
   note: String
   running: Boolean!
   tags: [Tag!]!
+}
+
+type PresetList {
+  items: [Preset!]!
+  total: Int!
+}
+
+type Preset {
+  id: ID!
+  name: String!
+  tags: [Tag!]!
+  note: String
 }

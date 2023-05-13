@@ -18,6 +18,12 @@ export type Scalars = {
   DateTime: Date;
 };
 
+export type CreatePreset = {
+  name: Scalars['String'];
+  note?: InputMaybe<Scalars['String']>;
+  tags: Array<Scalars['String']>;
+};
+
 export type CreateTimeSpan = {
   end?: InputMaybe<Scalars['DateTime']>;
   note?: InputMaybe<Scalars['String']>;
@@ -33,8 +39,11 @@ export type Mutation = {
    * Optionally you can provide an end time to close the time span at a specific time.
    */
   closeTimeSpan: TimeSpan;
+  createPreset: Preset;
   createTimeSpan: TimeSpan;
+  deletePreset: Scalars['Boolean'];
   deleteTimeSpan: Scalars['Boolean'];
+  updatePreset: Preset;
   updateTimeSpan: TimeSpan;
 };
 
@@ -43,17 +52,43 @@ export type MutationCloseTimeSpanArgs = {
   id?: InputMaybe<Scalars['ID']>;
 };
 
+export type MutationCreatePresetArgs = {
+  input: CreatePreset;
+};
+
 export type MutationCreateTimeSpanArgs = {
   input: CreateTimeSpan;
+};
+
+export type MutationDeletePresetArgs = {
+  id: Scalars['ID'];
 };
 
 export type MutationDeleteTimeSpanArgs = {
   id: Scalars['ID'];
 };
 
+export type MutationUpdatePresetArgs = {
+  input: UpdatePreset;
+};
+
 export type MutationUpdateTimeSpanArgs = {
   id: Scalars['ID'];
   input: UpdateTimeSpan;
+};
+
+export type Preset = {
+  __typename?: 'Preset';
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  note?: Maybe<Scalars['String']>;
+  tags: Array<Tag>;
+};
+
+export type PresetList = {
+  __typename?: 'PresetList';
+  items: Array<Preset>;
+  total: Scalars['Int'];
 };
 
 export type Query = {
@@ -123,6 +158,13 @@ export type TimeSpanSearch = {
   running?: InputMaybe<Scalars['Boolean']>;
   tags?: InputMaybe<Array<Scalars['String']>>;
   toInclusive?: InputMaybe<Scalars['DateTime']>;
+};
+
+export type UpdatePreset = {
+  name: Scalars['String'];
+  /** Setting the note to null will remove it */
+  note?: InputMaybe<Scalars['String']>;
+  tags: Array<Scalars['String']>;
 };
 
 /** Only non-null fields will be updated. */
@@ -217,11 +259,14 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
   Boolean: ResolverTypeWrapper<any>;
+  CreatePreset: ResolverTypeWrapper<any>;
   CreateTimeSpan: ResolverTypeWrapper<any>;
   DateTime: ResolverTypeWrapper<any>;
   ID: ResolverTypeWrapper<any>;
   Int: ResolverTypeWrapper<any>;
   Mutation: ResolverTypeWrapper<{}>;
+  Preset: ResolverTypeWrapper<any>;
+  PresetList: ResolverTypeWrapper<any>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<any>;
   Tag: ResolverTypeWrapper<TagModel>;
@@ -230,6 +275,7 @@ export type ResolversTypes = ResolversObject<{
   TimeSpan: ResolverTypeWrapper<TimeSpanModel>;
   TimeSpanList: ResolverTypeWrapper<any>;
   TimeSpanSearch: ResolverTypeWrapper<any>;
+  UpdatePreset: ResolverTypeWrapper<any>;
   UpdateTimeSpan: ResolverTypeWrapper<any>;
   User: ResolverTypeWrapper<UserModel>;
 }>;
@@ -237,11 +283,14 @@ export type ResolversTypes = ResolversObject<{
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
   Boolean: any;
+  CreatePreset: any;
   CreateTimeSpan: any;
   DateTime: any;
   ID: any;
   Int: any;
   Mutation: {};
+  Preset: any;
+  PresetList: any;
   Query: {};
   String: any;
   Tag: TagModel;
@@ -250,6 +299,7 @@ export type ResolversParentTypes = ResolversObject<{
   TimeSpan: TimeSpanModel;
   TimeSpanList: any;
   TimeSpanSearch: any;
+  UpdatePreset: any;
   UpdateTimeSpan: any;
   User: UserModel;
 }>;
@@ -263,11 +313,23 @@ export type MutationResolvers<
   ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation'],
 > = ResolversObject<{
   closeTimeSpan?: Resolver<ResolversTypes['TimeSpan'], ParentType, ContextType, Partial<MutationCloseTimeSpanArgs>>;
+  createPreset?: Resolver<
+    ResolversTypes['Preset'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationCreatePresetArgs, 'input'>
+  >;
   createTimeSpan?: Resolver<
     ResolversTypes['TimeSpan'],
     ParentType,
     ContextType,
     RequireFields<MutationCreateTimeSpanArgs, 'input'>
+  >;
+  deletePreset?: Resolver<
+    ResolversTypes['Boolean'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationDeletePresetArgs, 'id'>
   >;
   deleteTimeSpan?: Resolver<
     ResolversTypes['Boolean'],
@@ -275,12 +337,38 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationDeleteTimeSpanArgs, 'id'>
   >;
+  updatePreset?: Resolver<
+    ResolversTypes['Preset'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationUpdatePresetArgs, 'input'>
+  >;
   updateTimeSpan?: Resolver<
     ResolversTypes['TimeSpan'],
     ParentType,
     ContextType,
     RequireFields<MutationUpdateTimeSpanArgs, 'id' | 'input'>
   >;
+}>;
+
+export type PresetResolvers<
+  ContextType = GraphQLContext,
+  ParentType extends ResolversParentTypes['Preset'] = ResolversParentTypes['Preset'],
+> = ResolversObject<{
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  note?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  tags?: Resolver<Array<ResolversTypes['Tag']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type PresetListResolvers<
+  ContextType = GraphQLContext,
+  ParentType extends ResolversParentTypes['PresetList'] = ResolversParentTypes['PresetList'],
+> = ResolversObject<{
+  items?: Resolver<Array<ResolversTypes['Preset']>, ParentType, ContextType>;
+  total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type QueryResolvers<
@@ -352,6 +440,8 @@ export type UserResolvers<
 export type Resolvers<ContextType = GraphQLContext> = ResolversObject<{
   DateTime?: GraphQLScalarType;
   Mutation?: MutationResolvers<ContextType>;
+  Preset?: PresetResolvers<ContextType>;
+  PresetList?: PresetListResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Tag?: TagResolvers<ContextType>;
   TagList?: TagListResolvers<ContextType>;
