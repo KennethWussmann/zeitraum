@@ -5,6 +5,7 @@ import { OpenAPI, useSofa } from 'sofa-api';
 import { tokenBasedAuthMiddleware } from '../tokenBasedAuthMiddleware';
 import { GraphQLServer } from '../graphql/graphqlServer';
 import { findTokenFromGlobalRequest } from '../utils';
+import { applicationName } from '../../configuration';
 
 export class SofaRouter {
   router: Router;
@@ -15,12 +16,13 @@ export class SofaRouter {
     schema: GraphQLSchema,
     private graphqlServer: GraphQLServer,
     private apiTokens: string[],
+    version: string,
   ) {
     this.openApi = OpenAPI({
       schema,
       info: {
-        title: 'Zeitraum',
-        version: '1.0.0',
+        title: applicationName,
+        version,
       },
       components: {
         securitySchemes: {

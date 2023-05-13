@@ -5,6 +5,7 @@ import { TimeSpan } from './timeSpan';
 import { CreateTimeSpan, TimeSpanSearch, UpdateTimeSpan } from '../api/graphql/resolverTypes';
 import { NotFoundError } from '../api/graphql/graphqlErrors';
 import ical from 'ical-generator';
+import { applicationName } from '../configuration';
 
 export class TimeSpanService {
   constructor(private prisma: PrismaClient, private tagService: TagService) {}
@@ -228,7 +229,7 @@ export class TimeSpanService {
 
   public createICal = async (userId: string) => {
     const calendar = ical({
-      name: 'Zeitraum',
+      name: applicationName,
     });
 
     const timeSpans = await this.prisma.timeSpan.findMany({
