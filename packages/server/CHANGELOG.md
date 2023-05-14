@@ -1,5 +1,11 @@
 # @zeitraum/server
 
+## 0.5.5
+
+### Patch Changes
+
+- 2f09284: Add operation to create tags
+
 ## 0.5.4
 
 ### Patch Changes
