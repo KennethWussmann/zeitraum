@@ -91,14 +91,29 @@ export type PresetList = {
   total: Scalars['Int'];
 };
 
+export type PresetSearch = {
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+};
+
 export type Query = {
   __typename?: 'Query';
   me: User;
+  preset: Preset;
+  presets: PresetList;
   tags: TagList;
   timeSpan: TimeSpan;
   timeSpans: TimeSpanList;
   /** Software version of the server. */
   version: Scalars['String'];
+};
+
+export type QueryPresetArgs = {
+  id: Scalars['ID'];
+};
+
+export type QueryPresetsArgs = {
+  input?: InputMaybe<PresetSearch>;
 };
 
 export type QueryTagsArgs = {
@@ -267,6 +282,7 @@ export type ResolversTypes = ResolversObject<{
   Mutation: ResolverTypeWrapper<{}>;
   Preset: ResolverTypeWrapper<any>;
   PresetList: ResolverTypeWrapper<any>;
+  PresetSearch: ResolverTypeWrapper<any>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<any>;
   Tag: ResolverTypeWrapper<TagModel>;
@@ -291,6 +307,7 @@ export type ResolversParentTypes = ResolversObject<{
   Mutation: {};
   Preset: any;
   PresetList: any;
+  PresetSearch: any;
   Query: {};
   String: any;
   Tag: TagModel;
@@ -376,6 +393,8 @@ export type QueryResolvers<
   ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query'],
 > = ResolversObject<{
   me?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  preset?: Resolver<ResolversTypes['Preset'], ParentType, ContextType, RequireFields<QueryPresetArgs, 'id'>>;
+  presets?: Resolver<ResolversTypes['PresetList'], ParentType, ContextType, Partial<QueryPresetsArgs>>;
   tags?: Resolver<ResolversTypes['TagList'], ParentType, ContextType, Partial<QueryTagsArgs>>;
   timeSpan?: Resolver<ResolversTypes['TimeSpan'], ParentType, ContextType, RequireFields<QueryTimeSpanArgs, 'id'>>;
   timeSpans?: Resolver<ResolversTypes['TimeSpanList'], ParentType, ContextType, Partial<QueryTimeSpansArgs>>;

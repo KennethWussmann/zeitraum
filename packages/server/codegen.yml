@@ -9,6 +9,7 @@ generates:
         User: ./modelTypes#UserModel
         TimeSpan: ./modelTypes#TimeSpanModel
         Tag: ./modelTypes#TagModel
+        Preset: ./modelTypes#PresetModel
 
       scalars:
         DateTime: Date

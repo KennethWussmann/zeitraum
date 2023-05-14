@@ -6,9 +6,14 @@ type Query {
   """
   version: String!
   me: User!
+
   tags(input: TagSearch): TagList!
+
   timeSpans(input: TimeSpanSearch): TimeSpanList!
   timeSpan(id: ID!): TimeSpan!
+
+  presets(input: PresetSearch): PresetList!
+  preset(id: ID!): Preset!
 }
 
 type Mutation {
@@ -40,6 +45,11 @@ input UpdatePreset {
   Setting the note to null will remove it
   """
   note: String
+}
+
+input PresetSearch {
+  limit: Int = 100
+  offset: Int = 0
 }
 
 input TimeSpanSearch {

@@ -9,6 +9,7 @@ import { TagService } from './tag/tagService';
 import { MetricsRouter } from './api/rest/metricsRouter';
 import { TimeSpanMetricService } from './timeSpan/timeSpanMetricService';
 import { ICalRouter } from './api/rest/icalRouter';
+import { PresetService } from './preset/presetService';
 
 export class ApplicationContext {
   public readonly configuration = loadConfiguration();
@@ -18,6 +19,7 @@ export class ApplicationContext {
   public readonly tagService = new TagService(this.prismaClient);
   public readonly timeSpanService = new TimeSpanService(this.prismaClient, this.tagService);
   public readonly timeSpanMetricService = new TimeSpanMetricService(this.prismaClient);
+  public readonly presetService = new PresetService(this.prismaClient, this.tagService);
   public readonly graphqlServer = new GraphQLServer(
     this.rootLogger.child({ name: 'graphqlServer' }),
     this,

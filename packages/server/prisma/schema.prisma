@@ -9,12 +9,14 @@ datasource db {
 }
 
 model User {
-  id        String     @id
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  username  String     @unique
-  TimeSpan  TimeSpan[]
-  Tag       Tag[]
+  id            String          @id
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  username      String          @unique
+  TimeSpan      TimeSpan[]
+  Tag           Tag[]
+  TagsOnPresets TagsOnPresets[]
+  Preset        Preset[]
 }
 
 model TimeSpan {
@@ -53,15 +55,20 @@ model Preset {
   id            String          @id
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
-  name          String          @unique
+  name          String
+  note          String?
+  user          User            @relation(fields: [userId], references: [id])
+  userId        String
   TagsOnPresets TagsOnPresets[]
 }
 
 model TagsOnPresets {
-  preset   Preset @relation(fields: [presetId], references: [id])
+  preset   Preset  @relation(fields: [presetId], references: [id])
   presetId String
-  tag      Tag    @relation(fields: [tagId], references: [id])
+  tag      Tag     @relation(fields: [tagId], references: [id])
   tagId    String
+  User     User?   @relation(fields: [userId], references: [id])
+  userId   String?
 
   @@id([presetId, tagId])
 }
