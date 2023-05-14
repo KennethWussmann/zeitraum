@@ -7,20 +7,20 @@ import { Logger } from '@zeitraum/commons';
 import { ApplicationContext } from '../../applicationContext';
 import { Resolvers } from './resolverTypes';
 import { GraphQLContext, UserContext } from './graphqlContext';
-import { createTimeSpanMutation } from './resolvers/timeSpan/createTimeSpan.mutation';
-import { timeSpanResolver } from './resolvers/timeSpan/timeSpan.resolver';
-import { tagResolver } from './resolvers/tag/tag.resolver';
-import { userResolver } from './resolvers/user/user.resolver';
-import { updateTimeSpanMutation } from './resolvers/timeSpan/updateTimeSpan.mutation';
-import { deleteTimeSpanMutation } from './resolvers/timeSpan/deleteTimeSpan.mutation';
 import { mergeResolvers } from '@graphql-tools/merge';
-import { tagsQuery } from './resolvers/tag/tags.query';
-import { timeSpansQuery } from './resolvers/timeSpan/timeSpans.query';
 import { UnauthenticatedError } from './graphqlErrors';
-import { timeSpanQuery } from './resolvers/timeSpan/timeSpan.query';
-import { meQuery } from './resolvers/user/me.query';
-import { closeTimeSpanMutation } from './resolvers/timeSpan/closeTimeSpan.mutation';
 import { versionQuery } from './resolvers/misc/version.query';
+import { timeSpanResolver } from '../../timeSpan/graphql/timeSpan.resolver';
+import { timeSpanQuery } from '../../timeSpan/graphql/timeSpan.query';
+import { timeSpansQuery } from '../../timeSpan/graphql/timeSpans.query';
+import { createTimeSpanMutation } from '../../timeSpan/graphql/createTimeSpan.mutation';
+import { deleteTimeSpanMutation } from '../../timeSpan/graphql/deleteTimeSpan.mutation';
+import { updateTimeSpanMutation } from '../../timeSpan/graphql/updateTimeSpan.mutation';
+import { closeTimeSpanMutation } from '../../timeSpan/graphql/closeTimeSpan.mutation';
+import { tagResolver } from '../../tag/graphql/tag.resolver';
+import { tagsQuery } from '../../tag/graphql/tags.query';
+import { userResolver } from './resolvers/user/user.resolver';
+import { meQuery } from './resolvers/user/me.query';
 
 export class GraphQLServer {
   private readonly resolverBuilders: Resolvers = [

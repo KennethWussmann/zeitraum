@@ -1,5 +1,5 @@
-import { TimeSpan } from '../../../../timeSpan/timeSpan';
-import { Resolvers } from '../../resolverTypes';
+import { Resolvers } from '../../api/graphql/resolverTypes';
+import { TimeSpan } from '../timeSpan';
 
 export const timeSpanResolver: Resolvers = {
   TimeSpan: {
