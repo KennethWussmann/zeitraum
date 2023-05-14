@@ -1,5 +1,11 @@
 # @zeitraum/client
 
+## 0.5.4
+
+### Patch Changes
+
+- 4d780c2: Allow stopping previous time span when creating
+
 ## 0.5.3
 
 ### Patch Changes
