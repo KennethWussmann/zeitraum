@@ -25,6 +25,8 @@ export type CreateTimeSpan = {
   end?: InputMaybe<Scalars['DateTime']>;
   note?: InputMaybe<Scalars['String']>;
   start: Scalars['DateTime'];
+  /** Stop the longest running time span before creating the new one. */
+  stopPreviousRunning?: InputMaybe<Scalars['Boolean']>;
   tags: Array<Scalars['String']>;
 };
 
@@ -32,6 +34,8 @@ export type CreateTimeSpanFromPreset = {
   end?: InputMaybe<Scalars['DateTime']>;
   presetId: Scalars['ID'];
   start: Scalars['DateTime'];
+  /** Stop the longest running time span before creating the new one. */
+  stopPreviousRunning?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type Mutation = {

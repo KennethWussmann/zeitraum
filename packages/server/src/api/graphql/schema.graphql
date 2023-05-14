@@ -88,6 +88,10 @@ input CreateTimeSpanFromPreset {
   presetId: ID!
   start: DateTime!
   end: DateTime
+  """
+  Stop the longest running time span before creating the new one.
+  """
+  stopPreviousRunning: Boolean
 }
 
 input UpdatePresetSorting {
@@ -136,6 +140,10 @@ input CreateTimeSpan {
   end: DateTime
   note: String
   tags: [String!]!
+  """
+  Stop the longest running time span before creating the new one.
+  """
+  stopPreviousRunning: Boolean
 }
 
 """
