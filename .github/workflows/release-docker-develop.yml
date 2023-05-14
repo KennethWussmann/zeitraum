@@ -24,5 +24,5 @@ jobs:
       - uses: ./.github/actions/docker-publish
         with:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
-          tags: ghcr.io/kennethwussmann/zeitraum/server:develop,ghcr.io/kennethwussmann/zeitraum/server:${{ steps.agit-commit.outputs.SHORT_SHA }}
-          build-args: VERSION=${{ steps.agit-commit.outputs.SHORT_SHA }}
+          tags: ghcr.io/kennethwussmann/zeitraum/server:develop,ghcr.io/kennethwussmann/zeitraum/server:${{ steps.git-commit.outputs.SHORT_SHA }}
+          build-args: VERSION=${{ steps.git-commit.outputs.SHORT_SHA }}
