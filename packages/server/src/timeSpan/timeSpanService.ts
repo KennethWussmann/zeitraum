@@ -51,6 +51,10 @@ export class TimeSpanService {
     });
 
   public create = async (userId: string, data: CreateTimeSpan): Promise<TimeSpan> => {
+    if (data.stopPreviousRunning === true) {
+      await this.close(userId);
+    }
+
     const timeSpan = await this.prisma.timeSpan.create({
       data: {
         id: randomUUID(),
@@ -70,6 +74,10 @@ export class TimeSpanService {
   };
 
   public createFromPreset = async (userId: string, data: CreateTimeSpanFromPreset): Promise<TimeSpan> => {
+    if (data.stopPreviousRunning === true) {
+      await this.close(userId);
+    }
+
     const preset = await this.presetService.findById(userId, data.presetId);
     if (!preset) {
       throw new NotFoundError(`Preset with id ${data.presetId} not found.`);
@@ -150,7 +158,11 @@ export class TimeSpanService {
     };
   };
 
-  public close = async (userId: string, timeSpanId: string | undefined, end: Date = new Date()): Promise<TimeSpan> => {
+  public close = async (
+    userId: string,
+    timeSpanId: string | undefined = undefined,
+    end: Date = new Date(),
+  ): Promise<TimeSpan> => {
     const oldTimeSpan = timeSpanId
       ? await this.findById(userId, timeSpanId)
       : await this.findLongestRunningTimeSpan(userId);

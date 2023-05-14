@@ -30,6 +30,8 @@ type CreateTimeSpan struct {
 	End   *time.Time `json:"end"`
 	Note  *string    `json:"note"`
 	Tags  []string   `json:"tags"`
+	// Stop the longest running time span before creating the new one.
+	StopPreviousRunning *bool `json:"stopPreviousRunning"`
 }
 
 // GetStart returns CreateTimeSpan.Start, and is useful for accessing the field via an interface.
@@ -44,10 +46,15 @@ func (v *CreateTimeSpan) GetNote() *string { return v.Note }
 // GetTags returns CreateTimeSpan.Tags, and is useful for accessing the field via an interface.
 func (v *CreateTimeSpan) GetTags() []string { return v.Tags }
 
+// GetStopPreviousRunning returns CreateTimeSpan.StopPreviousRunning, and is useful for accessing the field via an interface.
+func (v *CreateTimeSpan) GetStopPreviousRunning() *bool { return v.StopPreviousRunning }
+
 type CreateTimeSpanFromPreset struct {
 	PresetId string     `json:"presetId"`
 	Start    time.Time  `json:"start"`
 	End      *time.Time `json:"end"`
+	// Stop the longest running time span before creating the new one.
+	StopPreviousRunning *bool `json:"stopPreviousRunning"`
 }
 
 // GetPresetId returns CreateTimeSpanFromPreset.PresetId, and is useful for accessing the field via an interface.
@@ -58,6 +65,9 @@ func (v *CreateTimeSpanFromPreset) GetStart() time.Time { return v.Start }
 
 // GetEnd returns CreateTimeSpanFromPreset.End, and is useful for accessing the field via an interface.
 func (v *CreateTimeSpanFromPreset) GetEnd() *time.Time { return v.End }
+
+// GetStopPreviousRunning returns CreateTimeSpanFromPreset.StopPreviousRunning, and is useful for accessing the field via an interface.
+func (v *CreateTimeSpanFromPreset) GetStopPreviousRunning() *bool { return v.StopPreviousRunning }
 
 // import "../tag/tag.fragment.graphql"
 type PresetFragment struct {
