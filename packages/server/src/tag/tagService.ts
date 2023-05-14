@@ -54,7 +54,7 @@ export class TagService {
           user: true,
         },
         orderBy: {
-          createdAt: 'desc',
+          name: 'asc',
         },
       }),
     ]);

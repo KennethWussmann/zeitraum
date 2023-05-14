@@ -12,11 +12,12 @@ export class SofaRouter {
   private openApi: ReturnType<typeof OpenAPI>;
 
   constructor(
-    private logger: Logger,
+    logger: Logger,
     schema: GraphQLSchema,
-    private graphqlServer: GraphQLServer,
-    private apiTokens: string[],
+    graphqlServer: GraphQLServer,
+    apiTokens: string[],
     version: string,
+    baseUrl: string | undefined,
   ) {
     this.openApi = OpenAPI({
       schema,
@@ -38,10 +39,11 @@ export class SofaRouter {
           bearerAuth: [],
         },
       ],
+      servers: baseUrl ? [{ url: baseUrl }] : undefined,
     });
 
     this.router = Router();
-    this.router.use(tokenBasedAuthMiddleware(this.logger, ...this.apiTokens));
+    this.router.use(tokenBasedAuthMiddleware(logger, ...apiTokens));
     this.router.use(
       '/api',
       useSofa({
@@ -60,7 +62,7 @@ export class SofaRouter {
           },
           'Mutation.closeTimeSpan': {
             method: 'PATCH',
-            path: '/time-spans/:id',
+            path: '/time-spans/:id/close',
             tags: ['TimeSpan'],
           },
           'Mutation.updateTimeSpan': {
@@ -77,6 +79,36 @@ export class SofaRouter {
             method: 'GET',
             path: '/time-spans',
             tags: ['TimeSpan'],
+          },
+          'Mutation.createPreset': {
+            method: 'POST',
+            path: '/presets',
+            tags: ['Preset'],
+          },
+          'Mutation.deletePreset': {
+            method: 'DELETE',
+            path: '/presets/:id',
+            tags: ['Preset'],
+          },
+          'Mutation.updatePreset': {
+            method: 'PUT',
+            path: '/presets/:id',
+            tags: ['Preset'],
+          },
+          'Mutation.updatePresetSorting': {
+            method: 'PATCH',
+            path: '/presets/sort',
+            tags: ['Preset'],
+          },
+          'Query.preset': {
+            method: 'GET',
+            path: '/presets/:id',
+            tags: ['Preset'],
+          },
+          'Query.presets': {
+            method: 'GET',
+            path: '/presets',
+            tags: ['Preset'],
           },
           'Query.tags': {
             method: 'GET',
@@ -99,7 +131,7 @@ export class SofaRouter {
             tags: ['Misc'],
           },
         },
-        context: async ({ request }) => await this.graphqlServer.buildContext(findTokenFromGlobalRequest(request)),
+        context: async ({ request }) => await graphqlServer.buildContext(findTokenFromGlobalRequest(request)),
         onRoute: (info) => {
           this.openApi.addRoute(info, {
             basePath: '/api',

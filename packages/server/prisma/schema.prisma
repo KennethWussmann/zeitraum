@@ -55,6 +55,7 @@ model Preset {
   id            String          @id
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
+  sortIndex     Int             @default(autoincrement())
   name          String
   note          String?
   user          User            @relation(fields: [userId], references: [id])

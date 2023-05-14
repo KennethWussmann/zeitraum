@@ -3,6 +3,7 @@ CREATE TABLE "Preset" (
     "id" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
+    "sortIndex" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "note" TEXT,
     "userId" TEXT NOT NULL,

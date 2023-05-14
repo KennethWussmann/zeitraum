@@ -205,7 +205,7 @@ export class TimeSpanService {
         take: limit ?? undefined,
         skip: offset ?? undefined,
         orderBy: {
-          createdAt: 'desc',
+          start: 'desc',
         },
         include: {
           user: true,

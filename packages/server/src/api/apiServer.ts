@@ -8,6 +8,7 @@ import { GraphQLSchema } from 'graphql';
 import { findTokenFromExpressRequest } from './utils';
 import { SofaRouter } from './rest/sofaRouter';
 import { Lightship } from 'lightship';
+import cors from 'cors';
 
 export class ApiServer {
   private httpServer: Server | undefined = undefined;
@@ -16,6 +17,12 @@ export class ApiServer {
   private createApp = (apolloServer: ApolloServer, schema: GraphQLSchema): Application => {
     const app = express();
     app.use(express.json());
+
+    if (this.applicationContext.configuration.CORS_ENABLE) {
+      this.logger.debug('CORS is enabled, to disable it set CORS_ENABLE=false');
+      app.use(cors());
+    }
+
     app.use(this.applicationContext.metricsRouter.router);
     app.use(this.applicationContext.icalRouter.router);
     app.use(
@@ -25,6 +32,7 @@ export class ApiServer {
         this.applicationContext.graphqlServer,
         this.applicationContext.configuration.API_TOKENS,
         this.applicationContext.configuration.VERSION,
+        this.applicationContext.configuration.BASE_URL,
       ).router,
     );
     app.use(

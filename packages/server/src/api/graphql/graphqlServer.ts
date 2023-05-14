@@ -21,6 +21,13 @@ import { tagResolver } from '../../tag/graphql/tag.resolver';
 import { tagsQuery } from '../../tag/graphql/tags.query';
 import { userResolver } from './resolvers/user/user.resolver';
 import { meQuery } from './resolvers/user/me.query';
+import { presetResolver } from '../../preset/graphql/preset.resolver';
+import { presetQuery } from '../../preset/graphql/preset.query';
+import { presetsQuery } from '../../preset/graphql/presets.query';
+import { createPresetMutation } from '../../preset/graphql/createPreset.mutation';
+import { deletePresetMutation } from '../../preset/graphql/deletePreset.mutation';
+import { updatePresetMutation } from '../../preset/graphql/updatePreset.mutation';
+import { updatePresetSortingMutation } from '../../preset/graphql/updatePresetSorting.mutation';
 
 export class GraphQLServer {
   private readonly resolverBuilders: Resolvers = [
@@ -36,6 +43,14 @@ export class GraphQLServer {
 
     tagResolver,
     tagsQuery,
+
+    presetResolver,
+    presetQuery,
+    presetsQuery,
+    createPresetMutation,
+    deletePresetMutation,
+    updatePresetMutation,
+    updatePresetSortingMutation,
 
     userResolver,
     meQuery,

@@ -1,6 +1,6 @@
 /* eslint-disable */
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
-import { UserModel, TimeSpanModel, TagModel } from './modelTypes';
+import { UserModel, TimeSpanModel, TagModel, PresetModel } from './modelTypes';
 import { GraphQLContext } from './graphqlContext';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -44,6 +44,7 @@ export type Mutation = {
   deletePreset: Scalars['Boolean'];
   deleteTimeSpan: Scalars['Boolean'];
   updatePreset: Preset;
+  updatePresetSorting: Array<Preset>;
   updateTimeSpan: TimeSpan;
 };
 
@@ -69,7 +70,12 @@ export type MutationDeleteTimeSpanArgs = {
 };
 
 export type MutationUpdatePresetArgs = {
+  id: Scalars['ID'];
   input: UpdatePreset;
+};
+
+export type MutationUpdatePresetSortingArgs = {
+  input: Array<UpdatePresetSorting>;
 };
 
 export type MutationUpdateTimeSpanArgs = {
@@ -79,10 +85,13 @@ export type MutationUpdateTimeSpanArgs = {
 
 export type Preset = {
   __typename?: 'Preset';
+  createdAt: Scalars['DateTime'];
   id: Scalars['ID'];
   name: Scalars['String'];
   note?: Maybe<Scalars['String']>;
+  sortIndex: Scalars['Int'];
   tags: Array<Tag>;
+  updatedAt: Scalars['DateTime'];
 };
 
 export type PresetList = {
@@ -179,7 +188,13 @@ export type UpdatePreset = {
   name: Scalars['String'];
   /** Setting the note to null will remove it */
   note?: InputMaybe<Scalars['String']>;
+  sortIndex: Scalars['Int'];
   tags: Array<Scalars['String']>;
+};
+
+export type UpdatePresetSorting = {
+  id: Scalars['ID'];
+  sortIndex: Scalars['Int'];
 };
 
 /** Only non-null fields will be updated. */
@@ -280,7 +295,7 @@ export type ResolversTypes = ResolversObject<{
   ID: ResolverTypeWrapper<any>;
   Int: ResolverTypeWrapper<any>;
   Mutation: ResolverTypeWrapper<{}>;
-  Preset: ResolverTypeWrapper<any>;
+  Preset: ResolverTypeWrapper<PresetModel>;
   PresetList: ResolverTypeWrapper<any>;
   PresetSearch: ResolverTypeWrapper<any>;
   Query: ResolverTypeWrapper<{}>;
@@ -292,6 +307,7 @@ export type ResolversTypes = ResolversObject<{
   TimeSpanList: ResolverTypeWrapper<any>;
   TimeSpanSearch: ResolverTypeWrapper<any>;
   UpdatePreset: ResolverTypeWrapper<any>;
+  UpdatePresetSorting: ResolverTypeWrapper<any>;
   UpdateTimeSpan: ResolverTypeWrapper<any>;
   User: ResolverTypeWrapper<UserModel>;
 }>;
@@ -305,7 +321,7 @@ export type ResolversParentTypes = ResolversObject<{
   ID: any;
   Int: any;
   Mutation: {};
-  Preset: any;
+  Preset: PresetModel;
   PresetList: any;
   PresetSearch: any;
   Query: {};
@@ -317,6 +333,7 @@ export type ResolversParentTypes = ResolversObject<{
   TimeSpanList: any;
   TimeSpanSearch: any;
   UpdatePreset: any;
+  UpdatePresetSorting: any;
   UpdateTimeSpan: any;
   User: UserModel;
 }>;
@@ -358,7 +375,13 @@ export type MutationResolvers<
     ResolversTypes['Preset'],
     ParentType,
     ContextType,
-    RequireFields<MutationUpdatePresetArgs, 'input'>
+    RequireFields<MutationUpdatePresetArgs, 'id' | 'input'>
+  >;
+  updatePresetSorting?: Resolver<
+    Array<ResolversTypes['Preset']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationUpdatePresetSortingArgs, 'input'>
   >;
   updateTimeSpan?: Resolver<
     ResolversTypes['TimeSpan'],
@@ -372,10 +395,13 @@ export type PresetResolvers<
   ContextType = GraphQLContext,
   ParentType extends ResolversParentTypes['Preset'] = ResolversParentTypes['Preset'],
 > = ResolversObject<{
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   note?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  sortIndex?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   tags?: Resolver<Array<ResolversTypes['Tag']>, ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
