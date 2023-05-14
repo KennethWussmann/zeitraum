@@ -1,0 +1,12 @@
+#import "../tag/tag.fragment.graphql"
+fragment PresetFragment on Preset {
+  id
+  createdAt
+  updatedAt
+  sortIndex
+  name
+  note
+  tags {
+    ...TagFragment
+  }
+}
