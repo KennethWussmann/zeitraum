@@ -1,0 +1,6 @@
+# import "./preset.fragment.graphql"
+mutation updatePreset($id: ID!, $input: UpdatePreset!) {
+  updatePreset(id: $id, input: $input) {
+    ...PresetFragment
+  }
+}

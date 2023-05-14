@@ -1,0 +1,6 @@
+# import "./preset.fragment.graphql"
+mutation updatePresetSorting($input: [UpdatePresetSorting!]!) {
+  updatePresetSorting(input: $input) {
+    ...PresetFragment
+  }
+}

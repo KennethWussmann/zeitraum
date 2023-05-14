@@ -1,0 +1,3 @@
+mutation deletePreset($id: ID!) {
+  deletePreset(id: $id)
+}

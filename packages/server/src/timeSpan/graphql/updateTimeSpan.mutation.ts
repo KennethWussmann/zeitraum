@@ -1,5 +1,5 @@
-import { UnauthenticatedError } from '../../graphqlErrors';
-import { MutationUpdateTimeSpanArgs, Resolvers } from '../../resolverTypes';
+import { UnauthenticatedError } from '../../api/graphql/graphqlErrors';
+import { MutationUpdateTimeSpanArgs, Resolvers } from '../../api/graphql/resolverTypes';
 
 export const updateTimeSpanMutation: Resolvers = {
   Mutation: {

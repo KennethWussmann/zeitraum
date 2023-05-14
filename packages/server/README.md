@@ -77,6 +77,16 @@ Read more about the [health check](#health-check).
     <td>No (default: 9000)</td>
     <td>Health check webserver port</td>
   </tr>
+  <tr>
+    <td><code>BASE_URL</code></td>
+    <td>No (default: unset)</td>
+    <td>Base URL where the backend is accessible. Used in OpenAPI Spec generation.</td>
+  </tr>
+  <tr>
+    <td><code>CORS_ENABLE</code></td>
+    <td>No (default: false)</td>
+    <td>Allow <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS">CORS</a></td>
+  </tr>
 </table>
 
 ## API

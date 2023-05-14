@@ -1,5 +1,5 @@
-import { NotFoundError, UnauthenticatedError } from '../../graphqlErrors';
-import { QueryTimeSpanArgs, Resolvers } from '../../resolverTypes';
+import { NotFoundError, UnauthenticatedError } from '../../api/graphql/graphqlErrors';
+import { QueryTimeSpanArgs, Resolvers } from '../../api/graphql/resolverTypes';
 
 export const timeSpanQuery: Resolvers = {
   Query: {

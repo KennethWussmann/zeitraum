@@ -10,6 +10,21 @@ import (
 	"github.com/Khan/genqlient/graphql"
 )
 
+type CreatePreset struct {
+	Name string   `json:"name"`
+	Tags []string `json:"tags"`
+	Note *string  `json:"note"`
+}
+
+// GetName returns CreatePreset.Name, and is useful for accessing the field via an interface.
+func (v *CreatePreset) GetName() string { return v.Name }
+
+// GetTags returns CreatePreset.Tags, and is useful for accessing the field via an interface.
+func (v *CreatePreset) GetTags() []string { return v.Tags }
+
+// GetNote returns CreatePreset.Note, and is useful for accessing the field via an interface.
+func (v *CreatePreset) GetNote() *string { return v.Note }
+
 type CreateTimeSpan struct {
 	Start time.Time  `json:"start"`
 	End   *time.Time `json:"end"`
@@ -29,7 +44,143 @@ func (v *CreateTimeSpan) GetNote() *string { return v.Note }
 // GetTags returns CreateTimeSpan.Tags, and is useful for accessing the field via an interface.
 func (v *CreateTimeSpan) GetTags() []string { return v.Tags }
 
+type CreateTimeSpanFromPreset struct {
+	PresetId string     `json:"presetId"`
+	Start    time.Time  `json:"start"`
+	End      *time.Time `json:"end"`
+}
+
+// GetPresetId returns CreateTimeSpanFromPreset.PresetId, and is useful for accessing the field via an interface.
+func (v *CreateTimeSpanFromPreset) GetPresetId() string { return v.PresetId }
+
+// GetStart returns CreateTimeSpanFromPreset.Start, and is useful for accessing the field via an interface.
+func (v *CreateTimeSpanFromPreset) GetStart() time.Time { return v.Start }
+
+// GetEnd returns CreateTimeSpanFromPreset.End, and is useful for accessing the field via an interface.
+func (v *CreateTimeSpanFromPreset) GetEnd() *time.Time { return v.End }
+
+// import "../tag/tag.fragment.graphql"
+type PresetFragment struct {
+	Id        string                   `json:"id"`
+	CreatedAt time.Time                `json:"createdAt"`
+	UpdatedAt time.Time                `json:"updatedAt"`
+	SortIndex int                      `json:"sortIndex"`
+	Name      string                   `json:"name"`
+	Note      *string                  `json:"note"`
+	Tags      []*PresetFragmentTagsTag `json:"tags"`
+}
+
+// GetId returns PresetFragment.Id, and is useful for accessing the field via an interface.
+func (v *PresetFragment) GetId() string { return v.Id }
+
+// GetCreatedAt returns PresetFragment.CreatedAt, and is useful for accessing the field via an interface.
+func (v *PresetFragment) GetCreatedAt() time.Time { return v.CreatedAt }
+
+// GetUpdatedAt returns PresetFragment.UpdatedAt, and is useful for accessing the field via an interface.
+func (v *PresetFragment) GetUpdatedAt() time.Time { return v.UpdatedAt }
+
+// GetSortIndex returns PresetFragment.SortIndex, and is useful for accessing the field via an interface.
+func (v *PresetFragment) GetSortIndex() int { return v.SortIndex }
+
+// GetName returns PresetFragment.Name, and is useful for accessing the field via an interface.
+func (v *PresetFragment) GetName() string { return v.Name }
+
+// GetNote returns PresetFragment.Note, and is useful for accessing the field via an interface.
+func (v *PresetFragment) GetNote() *string { return v.Note }
+
+// GetTags returns PresetFragment.Tags, and is useful for accessing the field via an interface.
+func (v *PresetFragment) GetTags() []*PresetFragmentTagsTag { return v.Tags }
+
+// PresetFragmentTagsTag includes the requested fields of the GraphQL type Tag.
+// The GraphQL type's documentation follows.
+//
+// A tag is a label that can be attached to time spans and presets.
+// They can be structured in any shape or form to categorize time tracking.
+type PresetFragmentTagsTag struct {
+	TagFragment `json:"-"`
+}
+
+// GetId returns PresetFragmentTagsTag.Id, and is useful for accessing the field via an interface.
+func (v *PresetFragmentTagsTag) GetId() string { return v.TagFragment.Id }
+
+// GetCreatedAt returns PresetFragmentTagsTag.CreatedAt, and is useful for accessing the field via an interface.
+func (v *PresetFragmentTagsTag) GetCreatedAt() time.Time { return v.TagFragment.CreatedAt }
+
+// GetUpdatedAt returns PresetFragmentTagsTag.UpdatedAt, and is useful for accessing the field via an interface.
+func (v *PresetFragmentTagsTag) GetUpdatedAt() time.Time { return v.TagFragment.UpdatedAt }
+
+// GetName returns PresetFragmentTagsTag.Name, and is useful for accessing the field via an interface.
+func (v *PresetFragmentTagsTag) GetName() string { return v.TagFragment.Name }
+
+func (v *PresetFragmentTagsTag) UnmarshalJSON(b []byte) error {
+
+	if string(b) == "null" {
+		return nil
+	}
+
+	var firstPass struct {
+		*PresetFragmentTagsTag
+		graphql.NoUnmarshalJSON
+	}
+	firstPass.PresetFragmentTagsTag = v
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(
+		b, &v.TagFragment)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+type __premarshalPresetFragmentTagsTag struct {
+	Id string `json:"id"`
+
+	CreatedAt time.Time `json:"createdAt"`
+
+	UpdatedAt time.Time `json:"updatedAt"`
+
+	Name string `json:"name"`
+}
+
+func (v *PresetFragmentTagsTag) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *PresetFragmentTagsTag) __premarshalJSON() (*__premarshalPresetFragmentTagsTag, error) {
+	var retval __premarshalPresetFragmentTagsTag
+
+	retval.Id = v.TagFragment.Id
+	retval.CreatedAt = v.TagFragment.CreatedAt
+	retval.UpdatedAt = v.TagFragment.UpdatedAt
+	retval.Name = v.TagFragment.Name
+	return &retval, nil
+}
+
+type PresetSearch struct {
+	Limit  *int `json:"limit"`
+	Offset *int `json:"offset"`
+}
+
+// GetLimit returns PresetSearch.Limit, and is useful for accessing the field via an interface.
+func (v *PresetSearch) GetLimit() *int { return v.Limit }
+
+// GetOffset returns PresetSearch.Offset, and is useful for accessing the field via an interface.
+func (v *PresetSearch) GetOffset() *int { return v.Offset }
+
 // TagFragment includes the GraphQL fields of Tag requested by the fragment TagFragment.
+// The GraphQL type's documentation follows.
+//
+// A tag is a label that can be attached to time spans and presets.
+// They can be structured in any shape or form to categorize time tracking.
 type TagFragment struct {
 	Id        string    `json:"id"`
 	CreatedAt time.Time `json:"createdAt"`
@@ -101,6 +252,10 @@ func (v *TimeSpanFragment) GetRunning() bool { return v.Running }
 func (v *TimeSpanFragment) GetTags() []*TimeSpanFragmentTagsTag { return v.Tags }
 
 // TimeSpanFragmentTagsTag includes the requested fields of the GraphQL type Tag.
+// The GraphQL type's documentation follows.
+//
+// A tag is a label that can be attached to time spans and presets.
+// They can be structured in any shape or form to categorize time tracking.
 type TimeSpanFragmentTagsTag struct {
 	TagFragment `json:"-"`
 }
@@ -197,6 +352,37 @@ func (v *TimeSpanSearch) GetLimit() *int { return v.Limit }
 // GetOffset returns TimeSpanSearch.Offset, and is useful for accessing the field via an interface.
 func (v *TimeSpanSearch) GetOffset() *int { return v.Offset }
 
+type UpdatePreset struct {
+	SortIndex int      `json:"sortIndex"`
+	Name      string   `json:"name"`
+	Tags      []string `json:"tags"`
+	// Setting the note to null will remove it
+	Note *string `json:"note"`
+}
+
+// GetSortIndex returns UpdatePreset.SortIndex, and is useful for accessing the field via an interface.
+func (v *UpdatePreset) GetSortIndex() int { return v.SortIndex }
+
+// GetName returns UpdatePreset.Name, and is useful for accessing the field via an interface.
+func (v *UpdatePreset) GetName() string { return v.Name }
+
+// GetTags returns UpdatePreset.Tags, and is useful for accessing the field via an interface.
+func (v *UpdatePreset) GetTags() []string { return v.Tags }
+
+// GetNote returns UpdatePreset.Note, and is useful for accessing the field via an interface.
+func (v *UpdatePreset) GetNote() *string { return v.Note }
+
+type UpdatePresetSorting struct {
+	Id        string `json:"id"`
+	SortIndex int    `json:"sortIndex"`
+}
+
+// GetId returns UpdatePresetSorting.Id, and is useful for accessing the field via an interface.
+func (v *UpdatePresetSorting) GetId() string { return v.Id }
+
+// GetSortIndex returns UpdatePresetSorting.SortIndex, and is useful for accessing the field via an interface.
+func (v *UpdatePresetSorting) GetSortIndex() int { return v.SortIndex }
+
 // Only non-null fields will be updated.
 type UpdateTimeSpan struct {
 	Start *time.Time `json:"start"`
@@ -229,6 +415,22 @@ func (v *__closeTimeSpanInput) GetId() *string { return v.Id }
 // GetEnd returns __closeTimeSpanInput.End, and is useful for accessing the field via an interface.
 func (v *__closeTimeSpanInput) GetEnd() *time.Time { return v.End }
 
+// __createPresetInput is used internally by genqlient
+type __createPresetInput struct {
+	Input *CreatePreset `json:"input,omitempty"`
+}
+
+// GetInput returns __createPresetInput.Input, and is useful for accessing the field via an interface.
+func (v *__createPresetInput) GetInput() *CreatePreset { return v.Input }
+
+// __createTimeSpanFromPresetInput is used internally by genqlient
+type __createTimeSpanFromPresetInput struct {
+	Input *CreateTimeSpanFromPreset `json:"input,omitempty"`
+}
+
+// GetInput returns __createTimeSpanFromPresetInput.Input, and is useful for accessing the field via an interface.
+func (v *__createTimeSpanFromPresetInput) GetInput() *CreateTimeSpanFromPreset { return v.Input }
+
 // __createTimeSpanInput is used internally by genqlient
 type __createTimeSpanInput struct {
 	Input *CreateTimeSpan `json:"input,omitempty"`
@@ -237,6 +439,14 @@ type __createTimeSpanInput struct {
 // GetInput returns __createTimeSpanInput.Input, and is useful for accessing the field via an interface.
 func (v *__createTimeSpanInput) GetInput() *CreateTimeSpan { return v.Input }
 
+// __deletePresetInput is used internally by genqlient
+type __deletePresetInput struct {
+	Id string `json:"id"`
+}
+
+// GetId returns __deletePresetInput.Id, and is useful for accessing the field via an interface.
+func (v *__deletePresetInput) GetId() string { return v.Id }
+
 // __deleteTimeSpanInput is used internally by genqlient
 type __deleteTimeSpanInput struct {
 	Id string `json:"id"`
@@ -244,6 +454,22 @@ type __deleteTimeSpanInput struct {
 
 // GetId returns __deleteTimeSpanInput.Id, and is useful for accessing the field via an interface.
 func (v *__deleteTimeSpanInput) GetId() string { return v.Id }
+
+// __presetInput is used internally by genqlient
+type __presetInput struct {
+	Id string `json:"id"`
+}
+
+// GetId returns __presetInput.Id, and is useful for accessing the field via an interface.
+func (v *__presetInput) GetId() string { return v.Id }
+
+// __presetsInput is used internally by genqlient
+type __presetsInput struct {
+	Search *PresetSearch `json:"search,omitempty"`
+}
+
+// GetSearch returns __presetsInput.Search, and is useful for accessing the field via an interface.
+func (v *__presetsInput) GetSearch() *PresetSearch { return v.Search }
 
 // __tagsInput is used internally by genqlient
 type __tagsInput struct {
@@ -269,6 +495,26 @@ type __timeSpansInput struct {
 // GetSearch returns __timeSpansInput.Search, and is useful for accessing the field via an interface.
 func (v *__timeSpansInput) GetSearch() *TimeSpanSearch { return v.Search }
 
+// __updatePresetInput is used internally by genqlient
+type __updatePresetInput struct {
+	Id    string        `json:"id"`
+	Input *UpdatePreset `json:"input,omitempty"`
+}
+
+// GetId returns __updatePresetInput.Id, and is useful for accessing the field via an interface.
+func (v *__updatePresetInput) GetId() string { return v.Id }
+
+// GetInput returns __updatePresetInput.Input, and is useful for accessing the field via an interface.
+func (v *__updatePresetInput) GetInput() *UpdatePreset { return v.Input }
+
+// __updatePresetSortingInput is used internally by genqlient
+type __updatePresetSortingInput struct {
+	Input []*UpdatePresetSorting `json:"input,omitempty"`
+}
+
+// GetInput returns __updatePresetSortingInput.Input, and is useful for accessing the field via an interface.
+func (v *__updatePresetSortingInput) GetInput() []*UpdatePresetSorting { return v.Input }
+
 // __updateTimeSpanInput is used internally by genqlient
 type __updateTimeSpanInput struct {
 	Id    string          `json:"id"`
@@ -282,6 +528,10 @@ func (v *__updateTimeSpanInput) GetId() string { return v.Id }
 func (v *__updateTimeSpanInput) GetInput() *UpdateTimeSpan { return v.Input }
 
 // closeTimeSpanCloseTimeSpan includes the requested fields of the GraphQL type TimeSpan.
+// The GraphQL type's documentation follows.
+//
+// A time span is a period of time between a start and an end time.
+// Time spans can be tagged to categorize time tracking.
 type closeTimeSpanCloseTimeSpan struct {
 	TimeSpanFragment `json:"-"`
 }
@@ -390,7 +640,112 @@ func (v *closeTimeSpanResponse) GetCloseTimeSpan() *closeTimeSpanCloseTimeSpan {
 	return v.CloseTimeSpan
 }
 
+// createPresetCreatePreset includes the requested fields of the GraphQL type Preset.
+// The GraphQL type's documentation follows.
+//
+// A preset is a template for time spans.
+type createPresetCreatePreset struct {
+	PresetFragment `json:"-"`
+}
+
+// GetId returns createPresetCreatePreset.Id, and is useful for accessing the field via an interface.
+func (v *createPresetCreatePreset) GetId() string { return v.PresetFragment.Id }
+
+// GetCreatedAt returns createPresetCreatePreset.CreatedAt, and is useful for accessing the field via an interface.
+func (v *createPresetCreatePreset) GetCreatedAt() time.Time { return v.PresetFragment.CreatedAt }
+
+// GetUpdatedAt returns createPresetCreatePreset.UpdatedAt, and is useful for accessing the field via an interface.
+func (v *createPresetCreatePreset) GetUpdatedAt() time.Time { return v.PresetFragment.UpdatedAt }
+
+// GetSortIndex returns createPresetCreatePreset.SortIndex, and is useful for accessing the field via an interface.
+func (v *createPresetCreatePreset) GetSortIndex() int { return v.PresetFragment.SortIndex }
+
+// GetName returns createPresetCreatePreset.Name, and is useful for accessing the field via an interface.
+func (v *createPresetCreatePreset) GetName() string { return v.PresetFragment.Name }
+
+// GetNote returns createPresetCreatePreset.Note, and is useful for accessing the field via an interface.
+func (v *createPresetCreatePreset) GetNote() *string { return v.PresetFragment.Note }
+
+// GetTags returns createPresetCreatePreset.Tags, and is useful for accessing the field via an interface.
+func (v *createPresetCreatePreset) GetTags() []*PresetFragmentTagsTag { return v.PresetFragment.Tags }
+
+func (v *createPresetCreatePreset) UnmarshalJSON(b []byte) error {
+
+	if string(b) == "null" {
+		return nil
+	}
+
+	var firstPass struct {
+		*createPresetCreatePreset
+		graphql.NoUnmarshalJSON
+	}
+	firstPass.createPresetCreatePreset = v
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(
+		b, &v.PresetFragment)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+type __premarshalcreatePresetCreatePreset struct {
+	Id string `json:"id"`
+
+	CreatedAt time.Time `json:"createdAt"`
+
+	UpdatedAt time.Time `json:"updatedAt"`
+
+	SortIndex int `json:"sortIndex"`
+
+	Name string `json:"name"`
+
+	Note *string `json:"note"`
+
+	Tags []*PresetFragmentTagsTag `json:"tags"`
+}
+
+func (v *createPresetCreatePreset) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *createPresetCreatePreset) __premarshalJSON() (*__premarshalcreatePresetCreatePreset, error) {
+	var retval __premarshalcreatePresetCreatePreset
+
+	retval.Id = v.PresetFragment.Id
+	retval.CreatedAt = v.PresetFragment.CreatedAt
+	retval.UpdatedAt = v.PresetFragment.UpdatedAt
+	retval.SortIndex = v.PresetFragment.SortIndex
+	retval.Name = v.PresetFragment.Name
+	retval.Note = v.PresetFragment.Note
+	retval.Tags = v.PresetFragment.Tags
+	return &retval, nil
+}
+
+// createPresetResponse is returned by createPreset on success.
+type createPresetResponse struct {
+	// Create a new preset.
+	// Presets are templates for time spans.
+	CreatePreset *createPresetCreatePreset `json:"createPreset"`
+}
+
+// GetCreatePreset returns createPresetResponse.CreatePreset, and is useful for accessing the field via an interface.
+func (v *createPresetResponse) GetCreatePreset() *createPresetCreatePreset { return v.CreatePreset }
+
 // createTimeSpanCreateTimeSpan includes the requested fields of the GraphQL type TimeSpan.
+// The GraphQL type's documentation follows.
+//
+// A time span is a period of time between a start and an end time.
+// Time spans can be tagged to categorize time tracking.
 type createTimeSpanCreateTimeSpan struct {
 	TimeSpanFragment `json:"-"`
 }
@@ -486,8 +841,134 @@ func (v *createTimeSpanCreateTimeSpan) __premarshalJSON() (*__premarshalcreateTi
 	return &retval, nil
 }
 
+// createTimeSpanFromPresetCreateTimeSpanFromPresetTimeSpan includes the requested fields of the GraphQL type TimeSpan.
+// The GraphQL type's documentation follows.
+//
+// A time span is a period of time between a start and an end time.
+// Time spans can be tagged to categorize time tracking.
+type createTimeSpanFromPresetCreateTimeSpanFromPresetTimeSpan struct {
+	TimeSpanFragment `json:"-"`
+}
+
+// GetId returns createTimeSpanFromPresetCreateTimeSpanFromPresetTimeSpan.Id, and is useful for accessing the field via an interface.
+func (v *createTimeSpanFromPresetCreateTimeSpanFromPresetTimeSpan) GetId() string {
+	return v.TimeSpanFragment.Id
+}
+
+// GetCreatedAt returns createTimeSpanFromPresetCreateTimeSpanFromPresetTimeSpan.CreatedAt, and is useful for accessing the field via an interface.
+func (v *createTimeSpanFromPresetCreateTimeSpanFromPresetTimeSpan) GetCreatedAt() time.Time {
+	return v.TimeSpanFragment.CreatedAt
+}
+
+// GetUpdatedAt returns createTimeSpanFromPresetCreateTimeSpanFromPresetTimeSpan.UpdatedAt, and is useful for accessing the field via an interface.
+func (v *createTimeSpanFromPresetCreateTimeSpanFromPresetTimeSpan) GetUpdatedAt() time.Time {
+	return v.TimeSpanFragment.UpdatedAt
+}
+
+// GetStart returns createTimeSpanFromPresetCreateTimeSpanFromPresetTimeSpan.Start, and is useful for accessing the field via an interface.
+func (v *createTimeSpanFromPresetCreateTimeSpanFromPresetTimeSpan) GetStart() time.Time {
+	return v.TimeSpanFragment.Start
+}
+
+// GetEnd returns createTimeSpanFromPresetCreateTimeSpanFromPresetTimeSpan.End, and is useful for accessing the field via an interface.
+func (v *createTimeSpanFromPresetCreateTimeSpanFromPresetTimeSpan) GetEnd() *time.Time {
+	return v.TimeSpanFragment.End
+}
+
+// GetNote returns createTimeSpanFromPresetCreateTimeSpanFromPresetTimeSpan.Note, and is useful for accessing the field via an interface.
+func (v *createTimeSpanFromPresetCreateTimeSpanFromPresetTimeSpan) GetNote() *string {
+	return v.TimeSpanFragment.Note
+}
+
+// GetRunning returns createTimeSpanFromPresetCreateTimeSpanFromPresetTimeSpan.Running, and is useful for accessing the field via an interface.
+func (v *createTimeSpanFromPresetCreateTimeSpanFromPresetTimeSpan) GetRunning() bool {
+	return v.TimeSpanFragment.Running
+}
+
+// GetTags returns createTimeSpanFromPresetCreateTimeSpanFromPresetTimeSpan.Tags, and is useful for accessing the field via an interface.
+func (v *createTimeSpanFromPresetCreateTimeSpanFromPresetTimeSpan) GetTags() []*TimeSpanFragmentTagsTag {
+	return v.TimeSpanFragment.Tags
+}
+
+func (v *createTimeSpanFromPresetCreateTimeSpanFromPresetTimeSpan) UnmarshalJSON(b []byte) error {
+
+	if string(b) == "null" {
+		return nil
+	}
+
+	var firstPass struct {
+		*createTimeSpanFromPresetCreateTimeSpanFromPresetTimeSpan
+		graphql.NoUnmarshalJSON
+	}
+	firstPass.createTimeSpanFromPresetCreateTimeSpanFromPresetTimeSpan = v
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(
+		b, &v.TimeSpanFragment)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+type __premarshalcreateTimeSpanFromPresetCreateTimeSpanFromPresetTimeSpan struct {
+	Id string `json:"id"`
+
+	CreatedAt time.Time `json:"createdAt"`
+
+	UpdatedAt time.Time `json:"updatedAt"`
+
+	Start time.Time `json:"start"`
+
+	End *time.Time `json:"end"`
+
+	Note *string `json:"note"`
+
+	Running bool `json:"running"`
+
+	Tags []*TimeSpanFragmentTagsTag `json:"tags"`
+}
+
+func (v *createTimeSpanFromPresetCreateTimeSpanFromPresetTimeSpan) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *createTimeSpanFromPresetCreateTimeSpanFromPresetTimeSpan) __premarshalJSON() (*__premarshalcreateTimeSpanFromPresetCreateTimeSpanFromPresetTimeSpan, error) {
+	var retval __premarshalcreateTimeSpanFromPresetCreateTimeSpanFromPresetTimeSpan
+
+	retval.Id = v.TimeSpanFragment.Id
+	retval.CreatedAt = v.TimeSpanFragment.CreatedAt
+	retval.UpdatedAt = v.TimeSpanFragment.UpdatedAt
+	retval.Start = v.TimeSpanFragment.Start
+	retval.End = v.TimeSpanFragment.End
+	retval.Note = v.TimeSpanFragment.Note
+	retval.Running = v.TimeSpanFragment.Running
+	retval.Tags = v.TimeSpanFragment.Tags
+	return &retval, nil
+}
+
+// createTimeSpanFromPresetResponse is returned by createTimeSpanFromPreset on success.
+type createTimeSpanFromPresetResponse struct {
+	// Create a new time span from a preset
+	CreateTimeSpanFromPreset *createTimeSpanFromPresetCreateTimeSpanFromPresetTimeSpan `json:"createTimeSpanFromPreset"`
+}
+
+// GetCreateTimeSpanFromPreset returns createTimeSpanFromPresetResponse.CreateTimeSpanFromPreset, and is useful for accessing the field via an interface.
+func (v *createTimeSpanFromPresetResponse) GetCreateTimeSpanFromPreset() *createTimeSpanFromPresetCreateTimeSpanFromPresetTimeSpan {
+	return v.CreateTimeSpanFromPreset
+}
+
 // createTimeSpanResponse is returned by createTimeSpan on success.
 type createTimeSpanResponse struct {
+	// Create a new time span
 	CreateTimeSpan *createTimeSpanCreateTimeSpan `json:"createTimeSpan"`
 }
 
@@ -496,8 +977,19 @@ func (v *createTimeSpanResponse) GetCreateTimeSpan() *createTimeSpanCreateTimeSp
 	return v.CreateTimeSpan
 }
 
+// deletePresetResponse is returned by deletePreset on success.
+type deletePresetResponse struct {
+	// Delete a preset by id.
+	// Time spans that were created from this preset will not be deleted.
+	DeletePreset bool `json:"deletePreset"`
+}
+
+// GetDeletePreset returns deletePresetResponse.DeletePreset, and is useful for accessing the field via an interface.
+func (v *deletePresetResponse) GetDeletePreset() bool { return v.DeletePreset }
+
 // deleteTimeSpanResponse is returned by deleteTimeSpan on success.
 type deleteTimeSpanResponse struct {
+	// Delete a time span by id
 	DeleteTimeSpan bool `json:"deleteTimeSpan"`
 }
 
@@ -505,6 +997,9 @@ type deleteTimeSpanResponse struct {
 func (v *deleteTimeSpanResponse) GetDeleteTimeSpan() bool { return v.DeleteTimeSpan }
 
 // meMeUser includes the requested fields of the GraphQL type User.
+// The GraphQL type's documentation follows.
+//
+// A user is a person that has full access to Zeitraum.
 type meMeUser struct {
 	Id        string    `json:"id"`
 	CreatedAt time.Time `json:"createdAt"`
@@ -526,14 +1021,238 @@ func (v *meMeUser) GetUsername() string { return v.Username }
 
 // meResponse is returned by me on success.
 type meResponse struct {
+	// Get the currently authenticated user.
+	// Currently Zeitraum supports single-user only.
 	Me *meMeUser `json:"me"`
 }
 
 // GetMe returns meResponse.Me, and is useful for accessing the field via an interface.
 func (v *meResponse) GetMe() *meMeUser { return v.Me }
 
+// presetPreset includes the requested fields of the GraphQL type Preset.
+// The GraphQL type's documentation follows.
+//
+// A preset is a template for time spans.
+type presetPreset struct {
+	PresetFragment `json:"-"`
+}
+
+// GetId returns presetPreset.Id, and is useful for accessing the field via an interface.
+func (v *presetPreset) GetId() string { return v.PresetFragment.Id }
+
+// GetCreatedAt returns presetPreset.CreatedAt, and is useful for accessing the field via an interface.
+func (v *presetPreset) GetCreatedAt() time.Time { return v.PresetFragment.CreatedAt }
+
+// GetUpdatedAt returns presetPreset.UpdatedAt, and is useful for accessing the field via an interface.
+func (v *presetPreset) GetUpdatedAt() time.Time { return v.PresetFragment.UpdatedAt }
+
+// GetSortIndex returns presetPreset.SortIndex, and is useful for accessing the field via an interface.
+func (v *presetPreset) GetSortIndex() int { return v.PresetFragment.SortIndex }
+
+// GetName returns presetPreset.Name, and is useful for accessing the field via an interface.
+func (v *presetPreset) GetName() string { return v.PresetFragment.Name }
+
+// GetNote returns presetPreset.Note, and is useful for accessing the field via an interface.
+func (v *presetPreset) GetNote() *string { return v.PresetFragment.Note }
+
+// GetTags returns presetPreset.Tags, and is useful for accessing the field via an interface.
+func (v *presetPreset) GetTags() []*PresetFragmentTagsTag { return v.PresetFragment.Tags }
+
+func (v *presetPreset) UnmarshalJSON(b []byte) error {
+
+	if string(b) == "null" {
+		return nil
+	}
+
+	var firstPass struct {
+		*presetPreset
+		graphql.NoUnmarshalJSON
+	}
+	firstPass.presetPreset = v
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(
+		b, &v.PresetFragment)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+type __premarshalpresetPreset struct {
+	Id string `json:"id"`
+
+	CreatedAt time.Time `json:"createdAt"`
+
+	UpdatedAt time.Time `json:"updatedAt"`
+
+	SortIndex int `json:"sortIndex"`
+
+	Name string `json:"name"`
+
+	Note *string `json:"note"`
+
+	Tags []*PresetFragmentTagsTag `json:"tags"`
+}
+
+func (v *presetPreset) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *presetPreset) __premarshalJSON() (*__premarshalpresetPreset, error) {
+	var retval __premarshalpresetPreset
+
+	retval.Id = v.PresetFragment.Id
+	retval.CreatedAt = v.PresetFragment.CreatedAt
+	retval.UpdatedAt = v.PresetFragment.UpdatedAt
+	retval.SortIndex = v.PresetFragment.SortIndex
+	retval.Name = v.PresetFragment.Name
+	retval.Note = v.PresetFragment.Note
+	retval.Tags = v.PresetFragment.Tags
+	return &retval, nil
+}
+
+// presetResponse is returned by preset on success.
+type presetResponse struct {
+	// Get a preset by id
+	Preset *presetPreset `json:"preset"`
+}
+
+// GetPreset returns presetResponse.Preset, and is useful for accessing the field via an interface.
+func (v *presetResponse) GetPreset() *presetPreset { return v.Preset }
+
+// presetsPresetsPresetList includes the requested fields of the GraphQL type PresetList.
+type presetsPresetsPresetList struct {
+	Total int                                    `json:"total"`
+	Items []*presetsPresetsPresetListItemsPreset `json:"items"`
+}
+
+// GetTotal returns presetsPresetsPresetList.Total, and is useful for accessing the field via an interface.
+func (v *presetsPresetsPresetList) GetTotal() int { return v.Total }
+
+// GetItems returns presetsPresetsPresetList.Items, and is useful for accessing the field via an interface.
+func (v *presetsPresetsPresetList) GetItems() []*presetsPresetsPresetListItemsPreset { return v.Items }
+
+// presetsPresetsPresetListItemsPreset includes the requested fields of the GraphQL type Preset.
+// The GraphQL type's documentation follows.
+//
+// A preset is a template for time spans.
+type presetsPresetsPresetListItemsPreset struct {
+	PresetFragment `json:"-"`
+}
+
+// GetId returns presetsPresetsPresetListItemsPreset.Id, and is useful for accessing the field via an interface.
+func (v *presetsPresetsPresetListItemsPreset) GetId() string { return v.PresetFragment.Id }
+
+// GetCreatedAt returns presetsPresetsPresetListItemsPreset.CreatedAt, and is useful for accessing the field via an interface.
+func (v *presetsPresetsPresetListItemsPreset) GetCreatedAt() time.Time {
+	return v.PresetFragment.CreatedAt
+}
+
+// GetUpdatedAt returns presetsPresetsPresetListItemsPreset.UpdatedAt, and is useful for accessing the field via an interface.
+func (v *presetsPresetsPresetListItemsPreset) GetUpdatedAt() time.Time {
+	return v.PresetFragment.UpdatedAt
+}
+
+// GetSortIndex returns presetsPresetsPresetListItemsPreset.SortIndex, and is useful for accessing the field via an interface.
+func (v *presetsPresetsPresetListItemsPreset) GetSortIndex() int { return v.PresetFragment.SortIndex }
+
+// GetName returns presetsPresetsPresetListItemsPreset.Name, and is useful for accessing the field via an interface.
+func (v *presetsPresetsPresetListItemsPreset) GetName() string { return v.PresetFragment.Name }
+
+// GetNote returns presetsPresetsPresetListItemsPreset.Note, and is useful for accessing the field via an interface.
+func (v *presetsPresetsPresetListItemsPreset) GetNote() *string { return v.PresetFragment.Note }
+
+// GetTags returns presetsPresetsPresetListItemsPreset.Tags, and is useful for accessing the field via an interface.
+func (v *presetsPresetsPresetListItemsPreset) GetTags() []*PresetFragmentTagsTag {
+	return v.PresetFragment.Tags
+}
+
+func (v *presetsPresetsPresetListItemsPreset) UnmarshalJSON(b []byte) error {
+
+	if string(b) == "null" {
+		return nil
+	}
+
+	var firstPass struct {
+		*presetsPresetsPresetListItemsPreset
+		graphql.NoUnmarshalJSON
+	}
+	firstPass.presetsPresetsPresetListItemsPreset = v
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(
+		b, &v.PresetFragment)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+type __premarshalpresetsPresetsPresetListItemsPreset struct {
+	Id string `json:"id"`
+
+	CreatedAt time.Time `json:"createdAt"`
+
+	UpdatedAt time.Time `json:"updatedAt"`
+
+	SortIndex int `json:"sortIndex"`
+
+	Name string `json:"name"`
+
+	Note *string `json:"note"`
+
+	Tags []*PresetFragmentTagsTag `json:"tags"`
+}
+
+func (v *presetsPresetsPresetListItemsPreset) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *presetsPresetsPresetListItemsPreset) __premarshalJSON() (*__premarshalpresetsPresetsPresetListItemsPreset, error) {
+	var retval __premarshalpresetsPresetsPresetListItemsPreset
+
+	retval.Id = v.PresetFragment.Id
+	retval.CreatedAt = v.PresetFragment.CreatedAt
+	retval.UpdatedAt = v.PresetFragment.UpdatedAt
+	retval.SortIndex = v.PresetFragment.SortIndex
+	retval.Name = v.PresetFragment.Name
+	retval.Note = v.PresetFragment.Note
+	retval.Tags = v.PresetFragment.Tags
+	return &retval, nil
+}
+
+// presetsResponse is returned by presets on success.
+type presetsResponse struct {
+	// Get all presets.
+	// Presets are sorted by sortIndex in descending order.
+	// Use the sortIndex to change the order of presets.
+	Presets *presetsPresetsPresetList `json:"presets"`
+}
+
+// GetPresets returns presetsResponse.Presets, and is useful for accessing the field via an interface.
+func (v *presetsResponse) GetPresets() *presetsPresetsPresetList { return v.Presets }
+
 // tagsResponse is returned by tags on success.
 type tagsResponse struct {
+	// Get all tags.
+	// Tags are sorted by name in ascending order.
 	Tags *tagsTagsTagList `json:"tags"`
 }
 
@@ -553,6 +1272,10 @@ func (v *tagsTagsTagList) GetTotal() int { return v.Total }
 func (v *tagsTagsTagList) GetItems() []*tagsTagsTagListItemsTag { return v.Items }
 
 // tagsTagsTagListItemsTag includes the requested fields of the GraphQL type Tag.
+// The GraphQL type's documentation follows.
+//
+// A tag is a label that can be attached to time spans and presets.
+// They can be structured in any shape or form to categorize time tracking.
 type tagsTagsTagListItemsTag struct {
 	TagFragment `json:"-"`
 }
@@ -624,6 +1347,7 @@ func (v *tagsTagsTagListItemsTag) __premarshalJSON() (*__premarshaltagsTagsTagLi
 
 // timeSpanResponse is returned by timeSpan on success.
 type timeSpanResponse struct {
+	// Get a time span by id
 	TimeSpan *timeSpanTimeSpan `json:"timeSpan"`
 }
 
@@ -631,6 +1355,10 @@ type timeSpanResponse struct {
 func (v *timeSpanResponse) GetTimeSpan() *timeSpanTimeSpan { return v.TimeSpan }
 
 // timeSpanTimeSpan includes the requested fields of the GraphQL type TimeSpan.
+// The GraphQL type's documentation follows.
+//
+// A time span is a period of time between a start and an end time.
+// Time spans can be tagged to categorize time tracking.
 type timeSpanTimeSpan struct {
 	TimeSpanFragment `json:"-"`
 }
@@ -726,6 +1454,8 @@ func (v *timeSpanTimeSpan) __premarshalJSON() (*__premarshaltimeSpanTimeSpan, er
 
 // timeSpansResponse is returned by timeSpans on success.
 type timeSpansResponse struct {
+	// Get all time spans.
+	// Time spans are sorted by start time in descending order.
 	TimeSpans *timeSpansTimeSpansTimeSpanList `json:"timeSpans"`
 }
 
@@ -747,6 +1477,10 @@ func (v *timeSpansTimeSpansTimeSpanList) GetItems() []*timeSpansTimeSpansTimeSpa
 }
 
 // timeSpansTimeSpansTimeSpanListItemsTimeSpan includes the requested fields of the GraphQL type TimeSpan.
+// The GraphQL type's documentation follows.
+//
+// A time span is a period of time between a start and an end time.
+// Time spans can be tagged to categorize time tracking.
 type timeSpansTimeSpansTimeSpanListItemsTimeSpan struct {
 	TimeSpanFragment `json:"-"`
 }
@@ -854,8 +1588,221 @@ func (v *timeSpansTimeSpansTimeSpanListItemsTimeSpan) __premarshalJSON() (*__pre
 	return &retval, nil
 }
 
+// updatePresetResponse is returned by updatePreset on success.
+type updatePresetResponse struct {
+	// Update a preset by id
+	UpdatePreset *updatePresetUpdatePreset `json:"updatePreset"`
+}
+
+// GetUpdatePreset returns updatePresetResponse.UpdatePreset, and is useful for accessing the field via an interface.
+func (v *updatePresetResponse) GetUpdatePreset() *updatePresetUpdatePreset { return v.UpdatePreset }
+
+// updatePresetSortingResponse is returned by updatePresetSorting on success.
+type updatePresetSortingResponse struct {
+	// Update the sort order of multiple presets at once
+	UpdatePresetSorting []*updatePresetSortingUpdatePresetSortingPreset `json:"updatePresetSorting"`
+}
+
+// GetUpdatePresetSorting returns updatePresetSortingResponse.UpdatePresetSorting, and is useful for accessing the field via an interface.
+func (v *updatePresetSortingResponse) GetUpdatePresetSorting() []*updatePresetSortingUpdatePresetSortingPreset {
+	return v.UpdatePresetSorting
+}
+
+// updatePresetSortingUpdatePresetSortingPreset includes the requested fields of the GraphQL type Preset.
+// The GraphQL type's documentation follows.
+//
+// A preset is a template for time spans.
+type updatePresetSortingUpdatePresetSortingPreset struct {
+	PresetFragment `json:"-"`
+}
+
+// GetId returns updatePresetSortingUpdatePresetSortingPreset.Id, and is useful for accessing the field via an interface.
+func (v *updatePresetSortingUpdatePresetSortingPreset) GetId() string { return v.PresetFragment.Id }
+
+// GetCreatedAt returns updatePresetSortingUpdatePresetSortingPreset.CreatedAt, and is useful for accessing the field via an interface.
+func (v *updatePresetSortingUpdatePresetSortingPreset) GetCreatedAt() time.Time {
+	return v.PresetFragment.CreatedAt
+}
+
+// GetUpdatedAt returns updatePresetSortingUpdatePresetSortingPreset.UpdatedAt, and is useful for accessing the field via an interface.
+func (v *updatePresetSortingUpdatePresetSortingPreset) GetUpdatedAt() time.Time {
+	return v.PresetFragment.UpdatedAt
+}
+
+// GetSortIndex returns updatePresetSortingUpdatePresetSortingPreset.SortIndex, and is useful for accessing the field via an interface.
+func (v *updatePresetSortingUpdatePresetSortingPreset) GetSortIndex() int {
+	return v.PresetFragment.SortIndex
+}
+
+// GetName returns updatePresetSortingUpdatePresetSortingPreset.Name, and is useful for accessing the field via an interface.
+func (v *updatePresetSortingUpdatePresetSortingPreset) GetName() string { return v.PresetFragment.Name }
+
+// GetNote returns updatePresetSortingUpdatePresetSortingPreset.Note, and is useful for accessing the field via an interface.
+func (v *updatePresetSortingUpdatePresetSortingPreset) GetNote() *string {
+	return v.PresetFragment.Note
+}
+
+// GetTags returns updatePresetSortingUpdatePresetSortingPreset.Tags, and is useful for accessing the field via an interface.
+func (v *updatePresetSortingUpdatePresetSortingPreset) GetTags() []*PresetFragmentTagsTag {
+	return v.PresetFragment.Tags
+}
+
+func (v *updatePresetSortingUpdatePresetSortingPreset) UnmarshalJSON(b []byte) error {
+
+	if string(b) == "null" {
+		return nil
+	}
+
+	var firstPass struct {
+		*updatePresetSortingUpdatePresetSortingPreset
+		graphql.NoUnmarshalJSON
+	}
+	firstPass.updatePresetSortingUpdatePresetSortingPreset = v
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(
+		b, &v.PresetFragment)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+type __premarshalupdatePresetSortingUpdatePresetSortingPreset struct {
+	Id string `json:"id"`
+
+	CreatedAt time.Time `json:"createdAt"`
+
+	UpdatedAt time.Time `json:"updatedAt"`
+
+	SortIndex int `json:"sortIndex"`
+
+	Name string `json:"name"`
+
+	Note *string `json:"note"`
+
+	Tags []*PresetFragmentTagsTag `json:"tags"`
+}
+
+func (v *updatePresetSortingUpdatePresetSortingPreset) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *updatePresetSortingUpdatePresetSortingPreset) __premarshalJSON() (*__premarshalupdatePresetSortingUpdatePresetSortingPreset, error) {
+	var retval __premarshalupdatePresetSortingUpdatePresetSortingPreset
+
+	retval.Id = v.PresetFragment.Id
+	retval.CreatedAt = v.PresetFragment.CreatedAt
+	retval.UpdatedAt = v.PresetFragment.UpdatedAt
+	retval.SortIndex = v.PresetFragment.SortIndex
+	retval.Name = v.PresetFragment.Name
+	retval.Note = v.PresetFragment.Note
+	retval.Tags = v.PresetFragment.Tags
+	return &retval, nil
+}
+
+// updatePresetUpdatePreset includes the requested fields of the GraphQL type Preset.
+// The GraphQL type's documentation follows.
+//
+// A preset is a template for time spans.
+type updatePresetUpdatePreset struct {
+	PresetFragment `json:"-"`
+}
+
+// GetId returns updatePresetUpdatePreset.Id, and is useful for accessing the field via an interface.
+func (v *updatePresetUpdatePreset) GetId() string { return v.PresetFragment.Id }
+
+// GetCreatedAt returns updatePresetUpdatePreset.CreatedAt, and is useful for accessing the field via an interface.
+func (v *updatePresetUpdatePreset) GetCreatedAt() time.Time { return v.PresetFragment.CreatedAt }
+
+// GetUpdatedAt returns updatePresetUpdatePreset.UpdatedAt, and is useful for accessing the field via an interface.
+func (v *updatePresetUpdatePreset) GetUpdatedAt() time.Time { return v.PresetFragment.UpdatedAt }
+
+// GetSortIndex returns updatePresetUpdatePreset.SortIndex, and is useful for accessing the field via an interface.
+func (v *updatePresetUpdatePreset) GetSortIndex() int { return v.PresetFragment.SortIndex }
+
+// GetName returns updatePresetUpdatePreset.Name, and is useful for accessing the field via an interface.
+func (v *updatePresetUpdatePreset) GetName() string { return v.PresetFragment.Name }
+
+// GetNote returns updatePresetUpdatePreset.Note, and is useful for accessing the field via an interface.
+func (v *updatePresetUpdatePreset) GetNote() *string { return v.PresetFragment.Note }
+
+// GetTags returns updatePresetUpdatePreset.Tags, and is useful for accessing the field via an interface.
+func (v *updatePresetUpdatePreset) GetTags() []*PresetFragmentTagsTag { return v.PresetFragment.Tags }
+
+func (v *updatePresetUpdatePreset) UnmarshalJSON(b []byte) error {
+
+	if string(b) == "null" {
+		return nil
+	}
+
+	var firstPass struct {
+		*updatePresetUpdatePreset
+		graphql.NoUnmarshalJSON
+	}
+	firstPass.updatePresetUpdatePreset = v
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(
+		b, &v.PresetFragment)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+type __premarshalupdatePresetUpdatePreset struct {
+	Id string `json:"id"`
+
+	CreatedAt time.Time `json:"createdAt"`
+
+	UpdatedAt time.Time `json:"updatedAt"`
+
+	SortIndex int `json:"sortIndex"`
+
+	Name string `json:"name"`
+
+	Note *string `json:"note"`
+
+	Tags []*PresetFragmentTagsTag `json:"tags"`
+}
+
+func (v *updatePresetUpdatePreset) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *updatePresetUpdatePreset) __premarshalJSON() (*__premarshalupdatePresetUpdatePreset, error) {
+	var retval __premarshalupdatePresetUpdatePreset
+
+	retval.Id = v.PresetFragment.Id
+	retval.CreatedAt = v.PresetFragment.CreatedAt
+	retval.UpdatedAt = v.PresetFragment.UpdatedAt
+	retval.SortIndex = v.PresetFragment.SortIndex
+	retval.Name = v.PresetFragment.Name
+	retval.Note = v.PresetFragment.Note
+	retval.Tags = v.PresetFragment.Tags
+	return &retval, nil
+}
+
 // updateTimeSpanResponse is returned by updateTimeSpan on success.
 type updateTimeSpanResponse struct {
+	// Update a time span by id
 	UpdateTimeSpan *updateTimeSpanUpdateTimeSpan `json:"updateTimeSpan"`
 }
 
@@ -865,6 +1812,10 @@ func (v *updateTimeSpanResponse) GetUpdateTimeSpan() *updateTimeSpanUpdateTimeSp
 }
 
 // updateTimeSpanUpdateTimeSpan includes the requested fields of the GraphQL type TimeSpan.
+// The GraphQL type's documentation follows.
+//
+// A time span is a period of time between a start and an end time.
+// Time spans can be tagged to categorize time tracking.
 type updateTimeSpanUpdateTimeSpan struct {
 	TimeSpanFragment `json:"-"`
 }
@@ -1025,6 +1976,59 @@ func closeTimeSpan(
 	return &data, err
 }
 
+// The query or mutation executed by createPreset.
+const createPreset_Operation = `
+mutation createPreset ($input: CreatePreset!) {
+	createPreset(input: $input) {
+		... PresetFragment
+	}
+}
+fragment PresetFragment on Preset {
+	id
+	createdAt
+	updatedAt
+	sortIndex
+	name
+	note
+	tags {
+		... TagFragment
+	}
+}
+fragment TagFragment on Tag {
+	id
+	createdAt
+	updatedAt
+	name
+}
+`
+
+// import "./preset.fragment.graphql"
+func createPreset(
+	ctx context.Context,
+	client graphql.Client,
+	input *CreatePreset,
+) (*createPresetResponse, error) {
+	req := &graphql.Request{
+		OpName: "createPreset",
+		Query:  createPreset_Operation,
+		Variables: &__createPresetInput{
+			Input: input,
+		},
+	}
+	var err error
+
+	var data createPresetResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
+	)
+
+	return &data, err
+}
+
 // The query or mutation executed by createTimeSpan.
 const createTimeSpan_Operation = `
 mutation createTimeSpan ($input: CreateTimeSpan!) {
@@ -1068,6 +2072,93 @@ func createTimeSpan(
 	var err error
 
 	var data createTimeSpanResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
+	)
+
+	return &data, err
+}
+
+// The query or mutation executed by createTimeSpanFromPreset.
+const createTimeSpanFromPreset_Operation = `
+mutation createTimeSpanFromPreset ($input: CreateTimeSpanFromPreset!) {
+	createTimeSpanFromPreset(input: $input) {
+		... TimeSpanFragment
+	}
+}
+fragment TimeSpanFragment on TimeSpan {
+	id
+	createdAt
+	updatedAt
+	start
+	end
+	note
+	running
+	tags {
+		... TagFragment
+	}
+}
+fragment TagFragment on Tag {
+	id
+	createdAt
+	updatedAt
+	name
+}
+`
+
+// import "./timeSpan.fragment.graphql"
+func createTimeSpanFromPreset(
+	ctx context.Context,
+	client graphql.Client,
+	input *CreateTimeSpanFromPreset,
+) (*createTimeSpanFromPresetResponse, error) {
+	req := &graphql.Request{
+		OpName: "createTimeSpanFromPreset",
+		Query:  createTimeSpanFromPreset_Operation,
+		Variables: &__createTimeSpanFromPresetInput{
+			Input: input,
+		},
+	}
+	var err error
+
+	var data createTimeSpanFromPresetResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
+	)
+
+	return &data, err
+}
+
+// The query or mutation executed by deletePreset.
+const deletePreset_Operation = `
+mutation deletePreset ($id: ID!) {
+	deletePreset(id: $id)
+}
+`
+
+func deletePreset(
+	ctx context.Context,
+	client graphql.Client,
+	id string,
+) (*deletePresetResponse, error) {
+	req := &graphql.Request{
+		OpName: "deletePreset",
+		Query:  deletePreset_Operation,
+		Variables: &__deletePresetInput{
+			Id: id,
+		},
+	}
+	var err error
+
+	var data deletePresetResponse
 	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
@@ -1135,6 +2226,115 @@ func me(
 	var err error
 
 	var data meResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
+	)
+
+	return &data, err
+}
+
+// The query or mutation executed by preset.
+const preset_Operation = `
+query preset ($id: ID!) {
+	preset(id: $id) {
+		... PresetFragment
+	}
+}
+fragment PresetFragment on Preset {
+	id
+	createdAt
+	updatedAt
+	sortIndex
+	name
+	note
+	tags {
+		... TagFragment
+	}
+}
+fragment TagFragment on Tag {
+	id
+	createdAt
+	updatedAt
+	name
+}
+`
+
+// import "./preset.fragment.graphql"
+func preset(
+	ctx context.Context,
+	client graphql.Client,
+	id string,
+) (*presetResponse, error) {
+	req := &graphql.Request{
+		OpName: "preset",
+		Query:  preset_Operation,
+		Variables: &__presetInput{
+			Id: id,
+		},
+	}
+	var err error
+
+	var data presetResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
+	)
+
+	return &data, err
+}
+
+// The query or mutation executed by presets.
+const presets_Operation = `
+query presets ($search: PresetSearch) {
+	presets(input: $search) {
+		total
+		items {
+			... PresetFragment
+		}
+	}
+}
+fragment PresetFragment on Preset {
+	id
+	createdAt
+	updatedAt
+	sortIndex
+	name
+	note
+	tags {
+		... TagFragment
+	}
+}
+fragment TagFragment on Tag {
+	id
+	createdAt
+	updatedAt
+	name
+}
+`
+
+// import "./preset.fragment.graphql"
+func presets(
+	ctx context.Context,
+	client graphql.Client,
+	search *PresetSearch,
+) (*presetsResponse, error) {
+	req := &graphql.Request{
+		OpName: "presets",
+		Query:  presets_Operation,
+		Variables: &__presetsInput{
+			Search: search,
+		},
+	}
+	var err error
+
+	var data presetsResponse
 	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
@@ -1291,6 +2491,114 @@ func timeSpans(
 	var err error
 
 	var data timeSpansResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
+	)
+
+	return &data, err
+}
+
+// The query or mutation executed by updatePreset.
+const updatePreset_Operation = `
+mutation updatePreset ($id: ID!, $input: UpdatePreset!) {
+	updatePreset(id: $id, input: $input) {
+		... PresetFragment
+	}
+}
+fragment PresetFragment on Preset {
+	id
+	createdAt
+	updatedAt
+	sortIndex
+	name
+	note
+	tags {
+		... TagFragment
+	}
+}
+fragment TagFragment on Tag {
+	id
+	createdAt
+	updatedAt
+	name
+}
+`
+
+// import "./preset.fragment.graphql"
+func updatePreset(
+	ctx context.Context,
+	client graphql.Client,
+	id string,
+	input *UpdatePreset,
+) (*updatePresetResponse, error) {
+	req := &graphql.Request{
+		OpName: "updatePreset",
+		Query:  updatePreset_Operation,
+		Variables: &__updatePresetInput{
+			Id:    id,
+			Input: input,
+		},
+	}
+	var err error
+
+	var data updatePresetResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
+	)
+
+	return &data, err
+}
+
+// The query or mutation executed by updatePresetSorting.
+const updatePresetSorting_Operation = `
+mutation updatePresetSorting ($input: [UpdatePresetSorting!]!) {
+	updatePresetSorting(input: $input) {
+		... PresetFragment
+	}
+}
+fragment PresetFragment on Preset {
+	id
+	createdAt
+	updatedAt
+	sortIndex
+	name
+	note
+	tags {
+		... TagFragment
+	}
+}
+fragment TagFragment on Tag {
+	id
+	createdAt
+	updatedAt
+	name
+}
+`
+
+// import "./preset.fragment.graphql"
+func updatePresetSorting(
+	ctx context.Context,
+	client graphql.Client,
+	input []*UpdatePresetSorting,
+) (*updatePresetSortingResponse, error) {
+	req := &graphql.Request{
+		OpName: "updatePresetSorting",
+		Query:  updatePresetSorting_Operation,
+		Variables: &__updatePresetSortingInput{
+			Input: input,
+		},
+	}
+	var err error
+
+	var data updatePresetSortingResponse
 	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(

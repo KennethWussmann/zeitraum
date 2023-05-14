@@ -1,5 +1,5 @@
-import { UnauthenticatedError } from '../../graphqlErrors';
-import { QueryTagsArgs, Resolvers } from '../../resolverTypes';
+import { UnauthenticatedError } from '../../api/graphql/graphqlErrors';
+import { QueryTagsArgs, Resolvers } from '../../api/graphql/resolverTypes';
 
 export const tagsQuery: Resolvers = {
   Query: {

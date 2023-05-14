@@ -12,6 +12,7 @@ const activities = [
   {
     tags: ['work', 'development', 'frontend'],
     notes: [
+      'Refactoring code',
       'Working on the seed',
       'Implementing new feature',
       'Bug fixing',
@@ -19,7 +20,6 @@ const activities = [
       'Writing unit tests',
       'Setting up CI/CD',
       'Optimizing performance',
-      'Refactoring code',
       'Writing documentation',
       'Merging pull requests',
       'Designing a new component',
@@ -178,17 +178,11 @@ const activities = [
 
 const getRandomActivity = () => activities[Math.floor(rng() * activities.length)];
 
-const getRandomDuration = () => 1 + Math.floor(rng() * 10);
+const getRandomDuration = () => 1 + Math.floor(rng() * 120);
 
 const getRandomNote = (activity: any) => activity.notes[Math.floor(rng() * activity.notes.length)];
 
-const seed = async () => {
-  const rootUser = await applicationContext.userService.getRoot();
-
-  if (!rootUser) {
-    throw new Error('Root user not found');
-  }
-
+const createTimeSpans = async (userId: string) => {
   const days = 7;
   const now = new Date();
   let start = subDays(now, days);
@@ -201,7 +195,7 @@ const seed = async () => {
       const duration = getRandomDuration();
       const end = addMinutes(start, duration);
 
-      await applicationContext.timeSpanService.create(rootUser.id, {
+      await applicationContext.timeSpanService.create(userId, {
         start,
         end,
         tags: activity.tags,
@@ -214,6 +208,34 @@ const seed = async () => {
       console.log(`Day ${day + 1}, Daily minutes: ${dailyMinutes}`);
     }
   }
+};
+
+const createPresets = async (userId: string) =>
+  Promise.all(
+    activities.map((activity) =>
+      applicationContext.presetService.create(userId, {
+        name: activity.notes[0],
+        note: activity.notes[0],
+        tags: activity.tags,
+      }),
+    ),
+  );
+
+const createTags = (userId: string) =>
+  applicationContext.tagService.create(userId, ...new Set(activities.flatMap((activity) => activity.tags)));
+
+const seed = async () => {
+  const rootUser = await applicationContext.userService.getRoot();
+
+  if (!rootUser) {
+    throw new Error('Root user not found');
+  }
+  console.log('Creating tags');
+  await createTags(rootUser.id);
+  console.log('Creating presets');
+  await createPresets(rootUser.id);
+  console.log('Creating time spans');
+  await createTimeSpans(rootUser.id);
 };
 
 seed()

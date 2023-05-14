@@ -5,15 +5,57 @@ type Query {
   Software version of the server.
   """
   version: String!
+
+  """
+  Get the currently authenticated user.
+  Currently Zeitraum supports single-user only.
+  """
   me: User!
+
+  """
+  Get all tags.
+  Tags are sorted by name in ascending order.
+  """
   tags(input: TagSearch): TagList!
+
+  """
+  Get all time spans.
+  Time spans are sorted by start time in descending order.
+  """
   timeSpans(input: TimeSpanSearch): TimeSpanList!
+  """
+  Get a time span by id
+  """
   timeSpan(id: ID!): TimeSpan!
+
+  """
+  Get all presets.
+  Presets are sorted by sortIndex in descending order.
+  Use the sortIndex to change the order of presets.
+  """
+  presets(input: PresetSearch): PresetList!
+  """
+  Get a preset by id
+  """
+  preset(id: ID!): Preset!
 }
 
 type Mutation {
+  """
+  Create a new time span
+  """
   createTimeSpan(input: CreateTimeSpan!): TimeSpan!
+  """
+  Create a new time span from a preset
+  """
+  createTimeSpanFromPreset(input: CreateTimeSpanFromPreset!): TimeSpan!
+  """
+  Update a time span by id
+  """
   updateTimeSpan(id: ID!, input: UpdateTimeSpan!): TimeSpan!
+  """
+  Delete a time span by id
+  """
   deleteTimeSpan(id: ID!): Boolean!
   """
   Close a time span that does not have an end time yet.
@@ -21,6 +63,57 @@ type Mutation {
   Optionally you can provide an end time to close the time span at a specific time.
   """
   closeTimeSpan(id: ID, end: DateTime): TimeSpan!
+
+  """
+  Create a new preset.
+  Presets are templates for time spans.
+  """
+  createPreset(input: CreatePreset!): Preset!
+  """
+  Update a preset by id
+  """
+  updatePreset(id: ID!, input: UpdatePreset!): Preset!
+  """
+  Delete a preset by id.
+  Time spans that were created from this preset will not be deleted.
+  """
+  deletePreset(id: ID!): Boolean!
+  """
+  Update the sort order of multiple presets at once
+  """
+  updatePresetSorting(input: [UpdatePresetSorting!]!): [Preset!]!
+}
+
+input CreateTimeSpanFromPreset {
+  presetId: ID!
+  start: DateTime!
+  end: DateTime
+}
+
+input UpdatePresetSorting {
+  id: ID!
+  sortIndex: Int!
+}
+
+input CreatePreset {
+  name: String!
+  tags: [String!]!
+  note: String
+}
+
+input UpdatePreset {
+  sortIndex: Int!
+  name: String!
+  tags: [String!]!
+  """
+  Setting the note to null will remove it
+  """
+  note: String
+}
+
+input PresetSearch {
+  limit: Int = 100
+  offset: Int = 0
 }
 
 input TimeSpanSearch {
@@ -65,6 +158,9 @@ type TagList {
   total: Int!
 }
 
+"""
+A user is a person that has full access to Zeitraum.
+"""
 type User {
   id: ID!
   createdAt: DateTime!
@@ -72,6 +168,10 @@ type User {
   username: String!
 }
 
+"""
+A tag is a label that can be attached to time spans and presets.
+They can be structured in any shape or form to categorize time tracking.
+"""
 type Tag {
   id: ID!
   createdAt: DateTime!
@@ -79,6 +179,10 @@ type Tag {
   name: String!
 }
 
+"""
+A time span is a period of time between a start and an end time.
+Time spans can be tagged to categorize time tracking.
+"""
 type TimeSpan {
   id: ID!
   createdAt: DateTime!
@@ -88,4 +192,22 @@ type TimeSpan {
   note: String
   running: Boolean!
   tags: [Tag!]!
+}
+
+type PresetList {
+  items: [Preset!]!
+  total: Int!
+}
+
+"""
+A preset is a template for time spans.
+"""
+type Preset {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  sortIndex: Int!
+  name: String!
+  tags: [Tag!]!
+  note: String
 }

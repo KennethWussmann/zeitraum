@@ -1,0 +1,9 @@
+# import "./preset.fragment.graphql"
+query presets($search: PresetSearch) {
+  presets(input: $search) {
+    total
+    items {
+      ...PresetFragment
+    }
+  }
+}

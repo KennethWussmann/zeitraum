@@ -20,6 +20,12 @@ const configurationSchema = z.object({
     .optional()
     .default(randomUUID())
     .transform((value) => value.split(',')),
+  BASE_URL: z.string().optional(),
+  CORS_ENABLE: z
+    .string()
+    .optional()
+    .default('false')
+    .transform((value) => value.toLowerCase() === 'true' || value.toLowerCase() === 'yes' || value === '1'),
 });
 
 export type Configuration = z.infer<typeof configurationSchema>;

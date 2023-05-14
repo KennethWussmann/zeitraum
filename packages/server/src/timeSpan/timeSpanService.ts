@@ -2,13 +2,14 @@ import { Prisma, PrismaClient } from '@prisma/client';
 import { TagService } from '../tag/tagService';
 import { randomUUID } from 'crypto';
 import { TimeSpan } from './timeSpan';
-import { CreateTimeSpan, TimeSpanSearch, UpdateTimeSpan } from '../api/graphql/resolverTypes';
+import { CreateTimeSpan, CreateTimeSpanFromPreset, TimeSpanSearch, UpdateTimeSpan } from '../api/graphql/resolverTypes';
 import { NotFoundError } from '../api/graphql/graphqlErrors';
 import ical from 'ical-generator';
 import { applicationName } from '../configuration';
+import { PresetService } from '../preset/presetService';
 
 export class TimeSpanService {
-  constructor(private prisma: PrismaClient, private tagService: TagService) {}
+  constructor(private prisma: PrismaClient, private tagService: TagService, private presetService: PresetService) {}
 
   public findById = async (userId: string, id: string): Promise<TimeSpan | null> =>
     this.prisma.timeSpan.findFirst({
@@ -66,6 +67,20 @@ export class TimeSpanService {
       ...timeSpan,
       TagsOnTimeSpans: tagsOnTimeSpans,
     };
+  };
+
+  public createFromPreset = async (userId: string, data: CreateTimeSpanFromPreset): Promise<TimeSpan> => {
+    const preset = await this.presetService.findById(userId, data.presetId);
+    if (!preset) {
+      throw new NotFoundError(`Preset with id ${data.presetId} not found.`);
+    }
+
+    return await this.create(userId, {
+      start: data.start,
+      end: data.end,
+      note: preset.note,
+      tags: preset.TagsOnPresets.map((rel) => rel.tag.name),
+    });
   };
 
   private createTagAssignments = async (userId: string, timeSpanId: string, tagNames: string[]) => {
@@ -205,7 +220,7 @@ export class TimeSpanService {
         take: limit ?? undefined,
         skip: offset ?? undefined,
         orderBy: {
-          createdAt: 'desc',
+          start: 'desc',
         },
         include: {
           user: true,

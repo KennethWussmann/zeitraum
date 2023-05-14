@@ -1,0 +1,6 @@
+# import "./preset.fragment.graphql"
+query preset($id: ID!) {
+  preset(id: $id) {
+    ...PresetFragment
+  }
+}

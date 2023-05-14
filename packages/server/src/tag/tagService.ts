@@ -1,7 +1,7 @@
 import { Prisma, PrismaClient } from '@prisma/client';
 import { randomUUID } from 'crypto';
-import { Tag } from '../timeSpan/timeSpan';
 import { TagList, TagSearch } from '../api/graphql/resolverTypes';
+import { Tag } from './tag';
 
 export class TagService {
   constructor(private prisma: PrismaClient) {}
@@ -54,7 +54,7 @@ export class TagService {
           user: true,
         },
         orderBy: {
-          createdAt: 'desc',
+          name: 'asc',
         },
       }),
     ]);

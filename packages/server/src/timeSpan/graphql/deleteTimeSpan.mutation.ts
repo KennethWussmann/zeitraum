@@ -1,5 +1,5 @@
-import { UnauthenticatedError } from '../../graphqlErrors';
-import { MutationDeleteTimeSpanArgs, Resolvers } from '../../resolverTypes';
+import { UnauthenticatedError } from '../../api/graphql/graphqlErrors';
+import { MutationDeleteTimeSpanArgs, Resolvers } from '../../api/graphql/resolverTypes';
 
 export const deleteTimeSpanMutation: Resolvers = {
   Mutation: {

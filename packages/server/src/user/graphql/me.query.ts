@@ -1,6 +1,6 @@
-import { GraphQLContext } from '../../graphqlContext';
-import { Resolvers } from '../../resolverTypes';
-import { InternalServerError, UnauthenticatedError } from '../../graphqlErrors';
+import { GraphQLContext } from '../../api/graphql/graphqlContext';
+import { Resolvers } from '../../api/graphql/resolverTypes';
+import { InternalServerError, UnauthenticatedError } from '../../api/graphql/graphqlErrors';
 
 export const meQuery: Resolvers = {
   Query: {

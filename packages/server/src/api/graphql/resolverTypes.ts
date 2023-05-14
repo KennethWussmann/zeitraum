@@ -1,6 +1,6 @@
 /* eslint-disable */
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
-import { UserModel, TimeSpanModel, TagModel } from './modelTypes';
+import { UserModel, TimeSpanModel, TagModel, PresetModel } from './modelTypes';
 import { GraphQLContext } from './graphqlContext';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -18,11 +18,23 @@ export type Scalars = {
   DateTime: Date;
 };
 
+export type CreatePreset = {
+  name: Scalars['String'];
+  note?: InputMaybe<Scalars['String']>;
+  tags: Array<Scalars['String']>;
+};
+
 export type CreateTimeSpan = {
   end?: InputMaybe<Scalars['DateTime']>;
   note?: InputMaybe<Scalars['String']>;
   start: Scalars['DateTime'];
   tags: Array<Scalars['String']>;
+};
+
+export type CreateTimeSpanFromPreset = {
+  end?: InputMaybe<Scalars['DateTime']>;
+  presetId: Scalars['ID'];
+  start: Scalars['DateTime'];
 };
 
 export type Mutation = {
@@ -33,8 +45,27 @@ export type Mutation = {
    * Optionally you can provide an end time to close the time span at a specific time.
    */
   closeTimeSpan: TimeSpan;
+  /**
+   * Create a new preset.
+   * Presets are templates for time spans.
+   */
+  createPreset: Preset;
+  /** Create a new time span */
   createTimeSpan: TimeSpan;
+  /** Create a new time span from a preset */
+  createTimeSpanFromPreset: TimeSpan;
+  /**
+   * Delete a preset by id.
+   * Time spans that were created from this preset will not be deleted.
+   */
+  deletePreset: Scalars['Boolean'];
+  /** Delete a time span by id */
   deleteTimeSpan: Scalars['Boolean'];
+  /** Update a preset by id */
+  updatePreset: Preset;
+  /** Update the sort order of multiple presets at once */
+  updatePresetSorting: Array<Preset>;
+  /** Update a time span by id */
   updateTimeSpan: TimeSpan;
 };
 
@@ -43,12 +74,33 @@ export type MutationCloseTimeSpanArgs = {
   id?: InputMaybe<Scalars['ID']>;
 };
 
+export type MutationCreatePresetArgs = {
+  input: CreatePreset;
+};
+
 export type MutationCreateTimeSpanArgs = {
   input: CreateTimeSpan;
 };
 
+export type MutationCreateTimeSpanFromPresetArgs = {
+  input: CreateTimeSpanFromPreset;
+};
+
+export type MutationDeletePresetArgs = {
+  id: Scalars['ID'];
+};
+
 export type MutationDeleteTimeSpanArgs = {
   id: Scalars['ID'];
+};
+
+export type MutationUpdatePresetArgs = {
+  id: Scalars['ID'];
+  input: UpdatePreset;
+};
+
+export type MutationUpdatePresetSortingArgs = {
+  input: Array<UpdatePresetSorting>;
 };
 
 export type MutationUpdateTimeSpanArgs = {
@@ -56,14 +108,66 @@ export type MutationUpdateTimeSpanArgs = {
   input: UpdateTimeSpan;
 };
 
+/** A preset is a template for time spans. */
+export type Preset = {
+  __typename?: 'Preset';
+  createdAt: Scalars['DateTime'];
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  note?: Maybe<Scalars['String']>;
+  sortIndex: Scalars['Int'];
+  tags: Array<Tag>;
+  updatedAt: Scalars['DateTime'];
+};
+
+export type PresetList = {
+  __typename?: 'PresetList';
+  items: Array<Preset>;
+  total: Scalars['Int'];
+};
+
+export type PresetSearch = {
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+};
+
 export type Query = {
   __typename?: 'Query';
+  /**
+   * Get the currently authenticated user.
+   * Currently Zeitraum supports single-user only.
+   */
   me: User;
+  /** Get a preset by id */
+  preset: Preset;
+  /**
+   * Get all presets.
+   * Presets are sorted by sortIndex in descending order.
+   * Use the sortIndex to change the order of presets.
+   */
+  presets: PresetList;
+  /**
+   * Get all tags.
+   * Tags are sorted by name in ascending order.
+   */
   tags: TagList;
+  /** Get a time span by id */
   timeSpan: TimeSpan;
+  /**
+   * Get all time spans.
+   * Time spans are sorted by start time in descending order.
+   */
   timeSpans: TimeSpanList;
   /** Software version of the server. */
   version: Scalars['String'];
+};
+
+export type QueryPresetArgs = {
+  id: Scalars['ID'];
+};
+
+export type QueryPresetsArgs = {
+  input?: InputMaybe<PresetSearch>;
 };
 
 export type QueryTagsArgs = {
@@ -78,6 +182,10 @@ export type QueryTimeSpansArgs = {
   input?: InputMaybe<TimeSpanSearch>;
 };
 
+/**
+ * A tag is a label that can be attached to time spans and presets.
+ * They can be structured in any shape or form to categorize time tracking.
+ */
 export type Tag = {
   __typename?: 'Tag';
   createdAt: Scalars['DateTime'];
@@ -98,6 +206,10 @@ export type TagSearch = {
   query?: InputMaybe<Scalars['String']>;
 };
 
+/**
+ * A time span is a period of time between a start and an end time.
+ * Time spans can be tagged to categorize time tracking.
+ */
 export type TimeSpan = {
   __typename?: 'TimeSpan';
   createdAt: Scalars['DateTime'];
@@ -125,6 +237,19 @@ export type TimeSpanSearch = {
   toInclusive?: InputMaybe<Scalars['DateTime']>;
 };
 
+export type UpdatePreset = {
+  name: Scalars['String'];
+  /** Setting the note to null will remove it */
+  note?: InputMaybe<Scalars['String']>;
+  sortIndex: Scalars['Int'];
+  tags: Array<Scalars['String']>;
+};
+
+export type UpdatePresetSorting = {
+  id: Scalars['ID'];
+  sortIndex: Scalars['Int'];
+};
+
 /** Only non-null fields will be updated. */
 export type UpdateTimeSpan = {
   end?: InputMaybe<Scalars['DateTime']>;
@@ -133,6 +258,7 @@ export type UpdateTimeSpan = {
   tags?: InputMaybe<Array<Scalars['String']>>;
 };
 
+/** A user is a person that has full access to Zeitraum. */
 export type User = {
   __typename?: 'User';
   createdAt: Scalars['DateTime'];
@@ -217,11 +343,16 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
   Boolean: ResolverTypeWrapper<any>;
+  CreatePreset: ResolverTypeWrapper<any>;
   CreateTimeSpan: ResolverTypeWrapper<any>;
+  CreateTimeSpanFromPreset: ResolverTypeWrapper<any>;
   DateTime: ResolverTypeWrapper<any>;
   ID: ResolverTypeWrapper<any>;
   Int: ResolverTypeWrapper<any>;
   Mutation: ResolverTypeWrapper<{}>;
+  Preset: ResolverTypeWrapper<PresetModel>;
+  PresetList: ResolverTypeWrapper<any>;
+  PresetSearch: ResolverTypeWrapper<any>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<any>;
   Tag: ResolverTypeWrapper<TagModel>;
@@ -230,6 +361,8 @@ export type ResolversTypes = ResolversObject<{
   TimeSpan: ResolverTypeWrapper<TimeSpanModel>;
   TimeSpanList: ResolverTypeWrapper<any>;
   TimeSpanSearch: ResolverTypeWrapper<any>;
+  UpdatePreset: ResolverTypeWrapper<any>;
+  UpdatePresetSorting: ResolverTypeWrapper<any>;
   UpdateTimeSpan: ResolverTypeWrapper<any>;
   User: ResolverTypeWrapper<UserModel>;
 }>;
@@ -237,11 +370,16 @@ export type ResolversTypes = ResolversObject<{
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
   Boolean: any;
+  CreatePreset: any;
   CreateTimeSpan: any;
+  CreateTimeSpanFromPreset: any;
   DateTime: any;
   ID: any;
   Int: any;
   Mutation: {};
+  Preset: PresetModel;
+  PresetList: any;
+  PresetSearch: any;
   Query: {};
   String: any;
   Tag: TagModel;
@@ -250,6 +388,8 @@ export type ResolversParentTypes = ResolversObject<{
   TimeSpan: TimeSpanModel;
   TimeSpanList: any;
   TimeSpanSearch: any;
+  UpdatePreset: any;
+  UpdatePresetSorting: any;
   UpdateTimeSpan: any;
   User: UserModel;
 }>;
@@ -263,17 +403,47 @@ export type MutationResolvers<
   ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation'],
 > = ResolversObject<{
   closeTimeSpan?: Resolver<ResolversTypes['TimeSpan'], ParentType, ContextType, Partial<MutationCloseTimeSpanArgs>>;
+  createPreset?: Resolver<
+    ResolversTypes['Preset'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationCreatePresetArgs, 'input'>
+  >;
   createTimeSpan?: Resolver<
     ResolversTypes['TimeSpan'],
     ParentType,
     ContextType,
     RequireFields<MutationCreateTimeSpanArgs, 'input'>
   >;
+  createTimeSpanFromPreset?: Resolver<
+    ResolversTypes['TimeSpan'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationCreateTimeSpanFromPresetArgs, 'input'>
+  >;
+  deletePreset?: Resolver<
+    ResolversTypes['Boolean'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationDeletePresetArgs, 'id'>
+  >;
   deleteTimeSpan?: Resolver<
     ResolversTypes['Boolean'],
     ParentType,
     ContextType,
     RequireFields<MutationDeleteTimeSpanArgs, 'id'>
+  >;
+  updatePreset?: Resolver<
+    ResolversTypes['Preset'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationUpdatePresetArgs, 'id' | 'input'>
+  >;
+  updatePresetSorting?: Resolver<
+    Array<ResolversTypes['Preset']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationUpdatePresetSortingArgs, 'input'>
   >;
   updateTimeSpan?: Resolver<
     ResolversTypes['TimeSpan'],
@@ -283,11 +453,36 @@ export type MutationResolvers<
   >;
 }>;
 
+export type PresetResolvers<
+  ContextType = GraphQLContext,
+  ParentType extends ResolversParentTypes['Preset'] = ResolversParentTypes['Preset'],
+> = ResolversObject<{
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  note?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  sortIndex?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  tags?: Resolver<Array<ResolversTypes['Tag']>, ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type PresetListResolvers<
+  ContextType = GraphQLContext,
+  ParentType extends ResolversParentTypes['PresetList'] = ResolversParentTypes['PresetList'],
+> = ResolversObject<{
+  items?: Resolver<Array<ResolversTypes['Preset']>, ParentType, ContextType>;
+  total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type QueryResolvers<
   ContextType = GraphQLContext,
   ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query'],
 > = ResolversObject<{
   me?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  preset?: Resolver<ResolversTypes['Preset'], ParentType, ContextType, RequireFields<QueryPresetArgs, 'id'>>;
+  presets?: Resolver<ResolversTypes['PresetList'], ParentType, ContextType, Partial<QueryPresetsArgs>>;
   tags?: Resolver<ResolversTypes['TagList'], ParentType, ContextType, Partial<QueryTagsArgs>>;
   timeSpan?: Resolver<ResolversTypes['TimeSpan'], ParentType, ContextType, RequireFields<QueryTimeSpanArgs, 'id'>>;
   timeSpans?: Resolver<ResolversTypes['TimeSpanList'], ParentType, ContextType, Partial<QueryTimeSpansArgs>>;
@@ -352,6 +547,8 @@ export type UserResolvers<
 export type Resolvers<ContextType = GraphQLContext> = ResolversObject<{
   DateTime?: GraphQLScalarType;
   Mutation?: MutationResolvers<ContextType>;
+  Preset?: PresetResolvers<ContextType>;
+  PresetList?: PresetListResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Tag?: TagResolvers<ContextType>;
   TagList?: TagListResolvers<ContextType>;
