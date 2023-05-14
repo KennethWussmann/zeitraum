@@ -52,7 +52,11 @@ export class TimeSpanService {
 
   public create = async (userId: string, data: CreateTimeSpan): Promise<TimeSpan> => {
     if (data.stopPreviousRunning === true) {
-      await this.close(userId);
+      try {
+        await this.close(userId);
+      } catch {
+        // ignore that no running time span was found
+      }
     }
 
     const timeSpan = await this.prisma.timeSpan.create({
@@ -75,7 +79,11 @@ export class TimeSpanService {
 
   public createFromPreset = async (userId: string, data: CreateTimeSpanFromPreset): Promise<TimeSpan> => {
     if (data.stopPreviousRunning === true) {
-      await this.close(userId);
+      try {
+        await this.close(userId);
+      } catch {
+        // ignore that no running time span was found
+      }
     }
 
     const preset = await this.presetService.findById(userId, data.presetId);
