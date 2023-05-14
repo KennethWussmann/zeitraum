@@ -40,6 +40,7 @@ export class Server {
   };
 
   start = async () => {
+    this.logger.info(`Starting Zeitraum server v${this.applicationContext.configuration.VERSION}`);
     const lightship = await createLightship({
       detectKubernetes: false,
       port: this.applicationContext.configuration.HEALTH_PORT,
