@@ -1,0 +1,21 @@
+schema: ../server/src/api/graphql/schema.graphql
+documents: ../client/operations/**/*.graphql
+generates:
+  ./src/lib/graphql/operations.ts:
+    config:
+      withHooks: true
+      withComponent: false
+      withHOC: false
+    plugins:
+      - add:
+          content: '/* eslint-disable */'
+      - typescript
+      - typescript-operations
+      - typescript-react-apollo
+
+config:
+  apolloClientVersion: 3
+  reactApolloVersion: 3
+  gqlImport: '@apollo/client#gql'
+  scalars:
+    DateTime: string
