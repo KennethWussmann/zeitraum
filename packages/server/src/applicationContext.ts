@@ -17,9 +17,9 @@ export class ApplicationContext {
   public readonly prismaClient = new PrismaClient();
   public readonly userService = new UserService(this.prismaClient);
   public readonly tagService = new TagService(this.prismaClient);
-  public readonly timeSpanService = new TimeSpanService(this.prismaClient, this.tagService);
-  public readonly timeSpanMetricService = new TimeSpanMetricService(this.prismaClient);
   public readonly presetService = new PresetService(this.prismaClient, this.tagService);
+  public readonly timeSpanService = new TimeSpanService(this.prismaClient, this.tagService, this.presetService);
+  public readonly timeSpanMetricService = new TimeSpanMetricService(this.prismaClient);
   public readonly graphqlServer = new GraphQLServer(
     this.rootLogger.child({ name: 'graphqlServer' }),
     this,

@@ -31,6 +31,12 @@ export type CreateTimeSpan = {
   tags: Array<Scalars['String']>;
 };
 
+export type CreateTimeSpanFromPreset = {
+  end?: InputMaybe<Scalars['DateTime']>;
+  presetId: Scalars['ID'];
+  start: Scalars['DateTime'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   /**
@@ -39,12 +45,27 @@ export type Mutation = {
    * Optionally you can provide an end time to close the time span at a specific time.
    */
   closeTimeSpan: TimeSpan;
+  /**
+   * Create a new preset.
+   * Presets are templates for time spans.
+   */
   createPreset: Preset;
+  /** Create a new time span */
   createTimeSpan: TimeSpan;
+  /** Create a new time span from a preset */
+  createTimeSpanFromPreset: TimeSpan;
+  /**
+   * Delete a preset by id.
+   * Time spans that were created from this preset will not be deleted.
+   */
   deletePreset: Scalars['Boolean'];
+  /** Delete a time span by id */
   deleteTimeSpan: Scalars['Boolean'];
+  /** Update a preset by id */
   updatePreset: Preset;
+  /** Update the sort order of multiple presets at once */
   updatePresetSorting: Array<Preset>;
+  /** Update a time span by id */
   updateTimeSpan: TimeSpan;
 };
 
@@ -59,6 +80,10 @@ export type MutationCreatePresetArgs = {
 
 export type MutationCreateTimeSpanArgs = {
   input: CreateTimeSpan;
+};
+
+export type MutationCreateTimeSpanFromPresetArgs = {
+  input: CreateTimeSpanFromPreset;
 };
 
 export type MutationDeletePresetArgs = {
@@ -83,6 +108,7 @@ export type MutationUpdateTimeSpanArgs = {
   input: UpdateTimeSpan;
 };
 
+/** A preset is a template for time spans. */
 export type Preset = {
   __typename?: 'Preset';
   createdAt: Scalars['DateTime'];
@@ -107,11 +133,30 @@ export type PresetSearch = {
 
 export type Query = {
   __typename?: 'Query';
+  /**
+   * Get the currently authenticated user.
+   * Currently Zeitraum supports single-user only.
+   */
   me: User;
+  /** Get a preset by id */
   preset: Preset;
+  /**
+   * Get all presets.
+   * Presets are sorted by sortIndex in descending order.
+   * Use the sortIndex to change the order of presets.
+   */
   presets: PresetList;
+  /**
+   * Get all tags.
+   * Tags are sorted by name in ascending order.
+   */
   tags: TagList;
+  /** Get a time span by id */
   timeSpan: TimeSpan;
+  /**
+   * Get all time spans.
+   * Time spans are sorted by start time in descending order.
+   */
   timeSpans: TimeSpanList;
   /** Software version of the server. */
   version: Scalars['String'];
@@ -137,6 +182,10 @@ export type QueryTimeSpansArgs = {
   input?: InputMaybe<TimeSpanSearch>;
 };
 
+/**
+ * A tag is a label that can be attached to time spans and presets.
+ * They can be structured in any shape or form to categorize time tracking.
+ */
 export type Tag = {
   __typename?: 'Tag';
   createdAt: Scalars['DateTime'];
@@ -157,6 +206,10 @@ export type TagSearch = {
   query?: InputMaybe<Scalars['String']>;
 };
 
+/**
+ * A time span is a period of time between a start and an end time.
+ * Time spans can be tagged to categorize time tracking.
+ */
 export type TimeSpan = {
   __typename?: 'TimeSpan';
   createdAt: Scalars['DateTime'];
@@ -205,6 +258,7 @@ export type UpdateTimeSpan = {
   tags?: InputMaybe<Array<Scalars['String']>>;
 };
 
+/** A user is a person that has full access to Zeitraum. */
 export type User = {
   __typename?: 'User';
   createdAt: Scalars['DateTime'];
@@ -291,6 +345,7 @@ export type ResolversTypes = ResolversObject<{
   Boolean: ResolverTypeWrapper<any>;
   CreatePreset: ResolverTypeWrapper<any>;
   CreateTimeSpan: ResolverTypeWrapper<any>;
+  CreateTimeSpanFromPreset: ResolverTypeWrapper<any>;
   DateTime: ResolverTypeWrapper<any>;
   ID: ResolverTypeWrapper<any>;
   Int: ResolverTypeWrapper<any>;
@@ -317,6 +372,7 @@ export type ResolversParentTypes = ResolversObject<{
   Boolean: any;
   CreatePreset: any;
   CreateTimeSpan: any;
+  CreateTimeSpanFromPreset: any;
   DateTime: any;
   ID: any;
   Int: any;
@@ -358,6 +414,12 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     RequireFields<MutationCreateTimeSpanArgs, 'input'>
+  >;
+  createTimeSpanFromPreset?: Resolver<
+    ResolversTypes['TimeSpan'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationCreateTimeSpanFromPresetArgs, 'input'>
   >;
   deletePreset?: Resolver<
     ResolversTypes['Boolean'],

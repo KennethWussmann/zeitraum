@@ -14,13 +14,12 @@ import { timeSpanResolver } from '../../timeSpan/graphql/timeSpan.resolver';
 import { timeSpanQuery } from '../../timeSpan/graphql/timeSpan.query';
 import { timeSpansQuery } from '../../timeSpan/graphql/timeSpans.query';
 import { createTimeSpanMutation } from '../../timeSpan/graphql/createTimeSpan.mutation';
+import { createTimeSpanFromPresetMutation } from '../../timeSpan/graphql/createTimeSpanFromPreset.mutation';
 import { deleteTimeSpanMutation } from '../../timeSpan/graphql/deleteTimeSpan.mutation';
 import { updateTimeSpanMutation } from '../../timeSpan/graphql/updateTimeSpan.mutation';
 import { closeTimeSpanMutation } from '../../timeSpan/graphql/closeTimeSpan.mutation';
 import { tagResolver } from '../../tag/graphql/tag.resolver';
 import { tagsQuery } from '../../tag/graphql/tags.query';
-import { userResolver } from './resolvers/user/user.resolver';
-import { meQuery } from './resolvers/user/me.query';
 import { presetResolver } from '../../preset/graphql/preset.resolver';
 import { presetQuery } from '../../preset/graphql/preset.query';
 import { presetsQuery } from '../../preset/graphql/presets.query';
@@ -28,6 +27,8 @@ import { createPresetMutation } from '../../preset/graphql/createPreset.mutation
 import { deletePresetMutation } from '../../preset/graphql/deletePreset.mutation';
 import { updatePresetMutation } from '../../preset/graphql/updatePreset.mutation';
 import { updatePresetSortingMutation } from '../../preset/graphql/updatePresetSorting.mutation';
+import { userResolver } from '../../user/graphql/user.resolver';
+import { meQuery } from '../../user/graphql/me.query';
 
 export class GraphQLServer {
   private readonly resolverBuilders: Resolvers = [
@@ -37,6 +38,7 @@ export class GraphQLServer {
     timeSpanQuery,
     timeSpansQuery,
     createTimeSpanMutation,
+    createTimeSpanFromPresetMutation,
     deleteTimeSpanMutation,
     updateTimeSpanMutation,
     closeTimeSpanMutation,

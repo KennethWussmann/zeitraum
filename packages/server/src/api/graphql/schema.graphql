@@ -46,6 +46,10 @@ type Mutation {
   """
   createTimeSpan(input: CreateTimeSpan!): TimeSpan!
   """
+  Create a new time span from a preset
+  """
+  createTimeSpanFromPreset(input: CreateTimeSpanFromPreset!): TimeSpan!
+  """
   Update a time span by id
   """
   updateTimeSpan(id: ID!, input: UpdateTimeSpan!): TimeSpan!
@@ -78,6 +82,12 @@ type Mutation {
   Update the sort order of multiple presets at once
   """
   updatePresetSorting(input: [UpdatePresetSorting!]!): [Preset!]!
+}
+
+input CreateTimeSpanFromPreset {
+  presetId: ID!
+  start: DateTime!
+  end: DateTime
 }
 
 input UpdatePresetSorting {
