@@ -21,6 +21,10 @@ export type CreatePreset = {
   tags: Array<Scalars['String']>;
 };
 
+export type CreateTag = {
+  name: Scalars['String'];
+};
+
 export type CreateTimeSpan = {
   end?: InputMaybe<Scalars['DateTime']>;
   note?: InputMaybe<Scalars['String']>;
@@ -51,6 +55,11 @@ export type Mutation = {
    * Presets are templates for time spans.
    */
   createPreset: Preset;
+  /**
+   * Tags are usually created implicitly when creating a time span or preset.
+   * This mutation can be used to create tags explicitly.
+   */
+  createTag: Tag;
   /** Create a new time span */
   createTimeSpan: TimeSpan;
   /** Create a new time span from a preset */
@@ -77,6 +86,10 @@ export type MutationCloseTimeSpanArgs = {
 
 export type MutationCreatePresetArgs = {
   input: CreatePreset;
+};
+
+export type MutationCreateTagArgs = {
+  input: CreateTag;
 };
 
 export type MutationCreateTimeSpanArgs = {
@@ -384,6 +397,15 @@ export type UpdatePresetSortingMutation = {
   }>;
 };
 
+export type CreateTagMutationVariables = Exact<{
+  input: CreateTag;
+}>;
+
+export type CreateTagMutation = {
+  __typename?: 'Mutation';
+  createTag: { __typename?: 'Tag'; id: string; createdAt: any; updatedAt: any; name: string };
+};
+
 export type TagFragmentFragment = { __typename?: 'Tag'; id: string; createdAt: any; updatedAt: any; name: string };
 
 export type TagsQueryVariables = Exact<{
@@ -627,6 +649,13 @@ export const UpdatePresetSortingDocument = `
   }
 }
     ${PresetFragmentFragmentDoc}`;
+export const CreateTagDocument = `
+    mutation createTag($input: CreateTag!) {
+  createTag(input: $input) {
+    ...TagFragment
+  }
+}
+    ${TagFragmentFragmentDoc}`;
 export const TagsDocument = `
     query tags($search: TagSearch) {
   tags(input: $search) {
@@ -758,6 +787,11 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
         variables,
         options,
       ) as Promise<ExecutionResult<UpdatePresetSortingMutation, E>>;
+    },
+    createTag(variables: CreateTagMutationVariables, options?: C): Promise<ExecutionResult<CreateTagMutation, E>> {
+      return requester<CreateTagMutation, CreateTagMutationVariables>(CreateTagDocument, variables, options) as Promise<
+        ExecutionResult<CreateTagMutation, E>
+      >;
     },
     tags(variables?: TagsQueryVariables, options?: C): Promise<ExecutionResult<TagsQuery, E>> {
       return requester<TagsQuery, TagsQueryVariables>(TagsDocument, variables, options) as Promise<

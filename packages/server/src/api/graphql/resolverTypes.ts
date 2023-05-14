@@ -24,6 +24,10 @@ export type CreatePreset = {
   tags: Array<Scalars['String']>;
 };
 
+export type CreateTag = {
+  name: Scalars['String'];
+};
+
 export type CreateTimeSpan = {
   end?: InputMaybe<Scalars['DateTime']>;
   note?: InputMaybe<Scalars['String']>;
@@ -54,6 +58,11 @@ export type Mutation = {
    * Presets are templates for time spans.
    */
   createPreset: Preset;
+  /**
+   * Tags are usually created implicitly when creating a time span or preset.
+   * This mutation can be used to create tags explicitly.
+   */
+  createTag: Tag;
   /** Create a new time span */
   createTimeSpan: TimeSpan;
   /** Create a new time span from a preset */
@@ -80,6 +89,10 @@ export type MutationCloseTimeSpanArgs = {
 
 export type MutationCreatePresetArgs = {
   input: CreatePreset;
+};
+
+export type MutationCreateTagArgs = {
+  input: CreateTag;
 };
 
 export type MutationCreateTimeSpanArgs = {
@@ -348,6 +361,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = ResolversObject<{
   Boolean: ResolverTypeWrapper<any>;
   CreatePreset: ResolverTypeWrapper<any>;
+  CreateTag: ResolverTypeWrapper<any>;
   CreateTimeSpan: ResolverTypeWrapper<any>;
   CreateTimeSpanFromPreset: ResolverTypeWrapper<any>;
   DateTime: ResolverTypeWrapper<any>;
@@ -375,6 +389,7 @@ export type ResolversTypes = ResolversObject<{
 export type ResolversParentTypes = ResolversObject<{
   Boolean: any;
   CreatePreset: any;
+  CreateTag: any;
   CreateTimeSpan: any;
   CreateTimeSpanFromPreset: any;
   DateTime: any;
@@ -413,6 +428,7 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationCreatePresetArgs, 'input'>
   >;
+  createTag?: Resolver<ResolversTypes['Tag'], ParentType, ContextType, RequireFields<MutationCreateTagArgs, 'input'>>;
   createTimeSpan?: Resolver<
     ResolversTypes['TimeSpan'],
     ParentType,

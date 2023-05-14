@@ -25,6 +25,13 @@ func (v *CreatePreset) GetTags() []string { return v.Tags }
 // GetNote returns CreatePreset.Note, and is useful for accessing the field via an interface.
 func (v *CreatePreset) GetNote() *string { return v.Note }
 
+type CreateTag struct {
+	Name string `json:"name"`
+}
+
+// GetName returns CreateTag.Name, and is useful for accessing the field via an interface.
+func (v *CreateTag) GetName() string { return v.Name }
+
 type CreateTimeSpan struct {
 	Start time.Time  `json:"start"`
 	End   *time.Time `json:"end"`
@@ -433,6 +440,14 @@ type __createPresetInput struct {
 // GetInput returns __createPresetInput.Input, and is useful for accessing the field via an interface.
 func (v *__createPresetInput) GetInput() *CreatePreset { return v.Input }
 
+// __createTagInput is used internally by genqlient
+type __createTagInput struct {
+	Input *CreateTag `json:"input,omitempty"`
+}
+
+// GetInput returns __createTagInput.Input, and is useful for accessing the field via an interface.
+func (v *__createTagInput) GetInput() *CreateTag { return v.Input }
+
 // __createTimeSpanFromPresetInput is used internally by genqlient
 type __createTimeSpanFromPresetInput struct {
 	Input *CreateTimeSpanFromPreset `json:"input,omitempty"`
@@ -750,6 +765,90 @@ type createPresetResponse struct {
 
 // GetCreatePreset returns createPresetResponse.CreatePreset, and is useful for accessing the field via an interface.
 func (v *createPresetResponse) GetCreatePreset() *createPresetCreatePreset { return v.CreatePreset }
+
+// createTagCreateTag includes the requested fields of the GraphQL type Tag.
+// The GraphQL type's documentation follows.
+//
+// A tag is a label that can be attached to time spans and presets.
+// They can be structured in any shape or form to categorize time tracking.
+type createTagCreateTag struct {
+	TagFragment `json:"-"`
+}
+
+// GetId returns createTagCreateTag.Id, and is useful for accessing the field via an interface.
+func (v *createTagCreateTag) GetId() string { return v.TagFragment.Id }
+
+// GetCreatedAt returns createTagCreateTag.CreatedAt, and is useful for accessing the field via an interface.
+func (v *createTagCreateTag) GetCreatedAt() time.Time { return v.TagFragment.CreatedAt }
+
+// GetUpdatedAt returns createTagCreateTag.UpdatedAt, and is useful for accessing the field via an interface.
+func (v *createTagCreateTag) GetUpdatedAt() time.Time { return v.TagFragment.UpdatedAt }
+
+// GetName returns createTagCreateTag.Name, and is useful for accessing the field via an interface.
+func (v *createTagCreateTag) GetName() string { return v.TagFragment.Name }
+
+func (v *createTagCreateTag) UnmarshalJSON(b []byte) error {
+
+	if string(b) == "null" {
+		return nil
+	}
+
+	var firstPass struct {
+		*createTagCreateTag
+		graphql.NoUnmarshalJSON
+	}
+	firstPass.createTagCreateTag = v
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(
+		b, &v.TagFragment)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+type __premarshalcreateTagCreateTag struct {
+	Id string `json:"id"`
+
+	CreatedAt time.Time `json:"createdAt"`
+
+	UpdatedAt time.Time `json:"updatedAt"`
+
+	Name string `json:"name"`
+}
+
+func (v *createTagCreateTag) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *createTagCreateTag) __premarshalJSON() (*__premarshalcreateTagCreateTag, error) {
+	var retval __premarshalcreateTagCreateTag
+
+	retval.Id = v.TagFragment.Id
+	retval.CreatedAt = v.TagFragment.CreatedAt
+	retval.UpdatedAt = v.TagFragment.UpdatedAt
+	retval.Name = v.TagFragment.Name
+	return &retval, nil
+}
+
+// createTagResponse is returned by createTag on success.
+type createTagResponse struct {
+	// Tags are usually created implicitly when creating a time span or preset.
+	// This mutation can be used to create tags explicitly.
+	CreateTag *createTagCreateTag `json:"createTag"`
+}
+
+// GetCreateTag returns createTagResponse.CreateTag, and is useful for accessing the field via an interface.
+func (v *createTagResponse) GetCreateTag() *createTagCreateTag { return v.CreateTag }
 
 // createTimeSpanCreateTimeSpan includes the requested fields of the GraphQL type TimeSpan.
 // The GraphQL type's documentation follows.
@@ -2028,6 +2127,48 @@ func createPreset(
 	var err error
 
 	var data createPresetResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
+	)
+
+	return &data, err
+}
+
+// The query or mutation executed by createTag.
+const createTag_Operation = `
+mutation createTag ($input: CreateTag!) {
+	createTag(input: $input) {
+		... TagFragment
+	}
+}
+fragment TagFragment on Tag {
+	id
+	createdAt
+	updatedAt
+	name
+}
+`
+
+// import "./tag.fragment.graphql"
+func createTag(
+	ctx context.Context,
+	client graphql.Client,
+	input *CreateTag,
+) (*createTagResponse, error) {
+	req := &graphql.Request{
+		OpName: "createTag",
+		Query:  createTag_Operation,
+		Variables: &__createTagInput{
+			Input: input,
+		},
+	}
+	var err error
+
+	var data createTagResponse
 	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(

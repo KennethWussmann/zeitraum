@@ -6,8 +6,11 @@ import { Tag } from './tag';
 export class TagService {
   constructor(private prisma: PrismaClient) {}
 
-  public findByNames = async (userId: string, ...names: string[]) =>
-    this.prisma.tag.findMany({ where: { name: { in: names.map((name) => name.toLowerCase()) }, userId } });
+  public findByNames = async (userId: string, ...names: string[]): Promise<Tag[]> =>
+    this.prisma.tag.findMany({
+      where: { name: { in: names.map((name) => name.toLowerCase()) }, userId },
+      include: { user: true },
+    });
 
   public create = async (userId: string, ...names: string[]): Promise<Tag[]> =>
     Promise.all(
@@ -25,7 +28,7 @@ export class TagService {
       ),
     );
 
-  public findByNamesAndCreateMissing = async (userId: string, ...names: string[]) => {
+  public findByNamesAndCreateMissing = async (userId: string, ...names: string[]): Promise<Tag[]> => {
     const existingTags = await this.findByNames(userId, ...names);
     const missingTags = names.filter((name) => !existingTags.some((tag) => tag.name === name.toLowerCase()));
     const createdTags = await this.create(userId, ...missingTags);
