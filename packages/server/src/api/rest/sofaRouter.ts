@@ -120,6 +120,11 @@ export class SofaRouter {
             path: '/tags/:id',
             tags: ['Tag'],
           },
+          'Mutation.createTag': {
+            method: 'POST',
+            path: '/tags',
+            tags: ['Tag'],
+          },
           'Query.me': {
             method: 'GET',
             path: '/me',
