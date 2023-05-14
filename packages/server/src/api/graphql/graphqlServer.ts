@@ -29,6 +29,7 @@ import { updatePresetMutation } from '../../preset/graphql/updatePreset.mutation
 import { updatePresetSortingMutation } from '../../preset/graphql/updatePresetSorting.mutation';
 import { userResolver } from '../../user/graphql/user.resolver';
 import { meQuery } from '../../user/graphql/me.query';
+import { createTagMutation } from '../../tag/graphql/createTag.mutation';
 
 export class GraphQLServer {
   private readonly resolverBuilders: Resolvers = [
@@ -44,6 +45,7 @@ export class GraphQLServer {
     closeTimeSpanMutation,
 
     tagResolver,
+    createTagMutation,
     tagsQuery,
 
     presetResolver,

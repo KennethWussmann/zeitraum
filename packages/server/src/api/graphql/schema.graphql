@@ -42,6 +42,12 @@ type Query {
 
 type Mutation {
   """
+  Tags are usually created implicitly when creating a time span or preset.
+  This mutation can be used to create tags explicitly.
+  """
+  createTag(input: CreateTag!): Tag!
+
+  """
   Create a new time span
   """
   createTimeSpan(input: CreateTimeSpan!): TimeSpan!
@@ -82,6 +88,10 @@ type Mutation {
   Update the sort order of multiple presets at once
   """
   updatePresetSorting(input: [UpdatePresetSorting!]!): [Preset!]!
+}
+
+input CreateTag {
+  name: String!
 }
 
 input CreateTimeSpanFromPreset {
