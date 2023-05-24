@@ -19,6 +19,8 @@ export type ZeitraumClientOptions = {
   fetch?: typeof fetch;
 };
 
+export type ZeitraumClient = ReturnType<typeof getSdk>;
+
 const buildGraphQLUrl = (input: string) => {
   if (!input.startsWith('http://') && !input.startsWith('https://')) {
     input = 'https://' + input;
@@ -31,7 +33,7 @@ const buildGraphQLUrl = (input: string) => {
 /**
  * Create a Zeitraum API client.
  */
-export const zeitraum = (options: ZeitraumClientOptions) => {
+export const zeitraum = (options: ZeitraumClientOptions): ZeitraumClient => {
   return getSdk(async (query: string, variables: unknown) => {
     const response = await (options.fetch ?? fetch)(buildGraphQLUrl(options.baseUrl), {
       method: 'POST',
