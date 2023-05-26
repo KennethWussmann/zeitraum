@@ -1,5 +1,11 @@
 # @zeitraum/client
 
+## 0.6.0
+
+### Patch Changes
+
+- 4de522b: Add type for client
+
 ## 0.5.5
 
 ### Patch Changes
