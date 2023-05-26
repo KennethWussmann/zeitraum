@@ -82,53 +82,43 @@ export type Mutation = {
   updateTimeSpan: TimeSpan;
 };
 
-
 export type MutationCloseTimeSpanArgs = {
   end?: InputMaybe<Scalars['DateTime']>;
   id?: InputMaybe<Scalars['ID']>;
 };
 
-
 export type MutationCreatePresetArgs = {
   input: CreatePreset;
 };
-
 
 export type MutationCreateTagArgs = {
   input: CreateTag;
 };
 
-
 export type MutationCreateTimeSpanArgs = {
   input: CreateTimeSpan;
 };
-
 
 export type MutationCreateTimeSpanFromPresetArgs = {
   input: CreateTimeSpanFromPreset;
 };
 
-
 export type MutationDeletePresetArgs = {
   id: Scalars['ID'];
 };
 
-
 export type MutationDeleteTimeSpanArgs = {
   id: Scalars['ID'];
 };
-
 
 export type MutationUpdatePresetArgs = {
   id: Scalars['ID'];
   input: UpdatePreset;
 };
 
-
 export type MutationUpdatePresetSortingArgs = {
   input: Array<UpdatePresetSorting>;
 };
-
 
 export type MutationUpdateTimeSpanArgs = {
   id: Scalars['ID'];
@@ -189,26 +179,21 @@ export type Query = {
   version: Scalars['String'];
 };
 
-
 export type QueryPresetArgs = {
   id: Scalars['ID'];
 };
-
 
 export type QueryPresetsArgs = {
   input?: InputMaybe<PresetSearch>;
 };
 
-
 export type QueryTagsArgs = {
   input?: InputMaybe<TagSearch>;
 };
 
-
 export type QueryTimeSpanArgs = {
   id: Scalars['ID'];
 };
-
 
 export type QueryTimeSpansArgs = {
   input?: InputMaybe<TimeSpanSearch>;
@@ -304,31 +289,32 @@ export type ResolversObject<TObject> = WithIndex<TObject>;
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
 
-
 export type ResolverWithResolve<TResult, TParent, TContext, TArgs> = {
   resolve: ResolverFn<TResult, TParent, TContext, TArgs>;
 };
-export type Resolver<TResult, TParent = {}, TContext = {}, TArgs = {}> = ResolverFn<TResult, TParent, TContext, TArgs> | ResolverWithResolve<TResult, TParent, TContext, TArgs>;
+export type Resolver<TResult, TParent = {}, TContext = {}, TArgs = {}> =
+  | ResolverFn<TResult, TParent, TContext, TArgs>
+  | ResolverWithResolve<TResult, TParent, TContext, TArgs>;
 
 export type ResolverFn<TResult, TParent, TContext, TArgs> = (
   parent: TParent,
   args: TArgs,
   context: TContext,
-  info: GraphQLResolveInfo
+  info: GraphQLResolveInfo,
 ) => Promise<TResult> | TResult;
 
 export type SubscriptionSubscribeFn<TResult, TParent, TContext, TArgs> = (
   parent: TParent,
   args: TArgs,
   context: TContext,
-  info: GraphQLResolveInfo
+  info: GraphQLResolveInfo,
 ) => AsyncIterable<TResult> | Promise<AsyncIterable<TResult>>;
 
 export type SubscriptionResolveFn<TResult, TParent, TContext, TArgs> = (
   parent: TParent,
   args: TArgs,
   context: TContext,
-  info: GraphQLResolveInfo
+  info: GraphQLResolveInfo,
 ) => TResult | Promise<TResult>;
 
 export interface SubscriptionSubscriberObject<TResult, TKey extends string, TParent, TContext, TArgs> {
@@ -352,10 +338,14 @@ export type SubscriptionResolver<TResult, TKey extends string, TParent = {}, TCo
 export type TypeResolveFn<TTypes, TParent = {}, TContext = {}> = (
   parent: TParent,
   context: TContext,
-  info: GraphQLResolveInfo
+  info: GraphQLResolveInfo,
 ) => Maybe<TTypes> | Promise<Maybe<TTypes>>;
 
-export type IsTypeOfResolverFn<T = {}, TContext = {}> = (obj: T, context: TContext, info: GraphQLResolveInfo) => boolean | Promise<boolean>;
+export type IsTypeOfResolverFn<T = {}, TContext = {}> = (
+  obj: T,
+  context: TContext,
+  info: GraphQLResolveInfo,
+) => boolean | Promise<boolean>;
 
 export type NextResolverFn<T> = () => Promise<T>;
 
@@ -364,10 +354,8 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
   parent: TParent,
   args: TArgs,
   context: TContext,
-  info: GraphQLResolveInfo
+  info: GraphQLResolveInfo,
 ) => TResult | Promise<TResult>;
-
-
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
@@ -429,20 +417,66 @@ export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversT
   name: 'DateTime';
 }
 
-export type MutationResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
+export type MutationResolvers<
+  ContextType = GraphQLContext,
+  ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation'],
+> = ResolversObject<{
   closeTimeSpan?: Resolver<ResolversTypes['TimeSpan'], ParentType, ContextType, Partial<MutationCloseTimeSpanArgs>>;
-  createPreset?: Resolver<ResolversTypes['Preset'], ParentType, ContextType, RequireFields<MutationCreatePresetArgs, 'input'>>;
+  createPreset?: Resolver<
+    ResolversTypes['Preset'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationCreatePresetArgs, 'input'>
+  >;
   createTag?: Resolver<ResolversTypes['Tag'], ParentType, ContextType, RequireFields<MutationCreateTagArgs, 'input'>>;
-  createTimeSpan?: Resolver<ResolversTypes['TimeSpan'], ParentType, ContextType, RequireFields<MutationCreateTimeSpanArgs, 'input'>>;
-  createTimeSpanFromPreset?: Resolver<ResolversTypes['TimeSpan'], ParentType, ContextType, RequireFields<MutationCreateTimeSpanFromPresetArgs, 'input'>>;
-  deletePreset?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeletePresetArgs, 'id'>>;
-  deleteTimeSpan?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteTimeSpanArgs, 'id'>>;
-  updatePreset?: Resolver<ResolversTypes['Preset'], ParentType, ContextType, RequireFields<MutationUpdatePresetArgs, 'id' | 'input'>>;
-  updatePresetSorting?: Resolver<Array<ResolversTypes['Preset']>, ParentType, ContextType, RequireFields<MutationUpdatePresetSortingArgs, 'input'>>;
-  updateTimeSpan?: Resolver<ResolversTypes['TimeSpan'], ParentType, ContextType, RequireFields<MutationUpdateTimeSpanArgs, 'id' | 'input'>>;
+  createTimeSpan?: Resolver<
+    ResolversTypes['TimeSpan'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationCreateTimeSpanArgs, 'input'>
+  >;
+  createTimeSpanFromPreset?: Resolver<
+    ResolversTypes['TimeSpan'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationCreateTimeSpanFromPresetArgs, 'input'>
+  >;
+  deletePreset?: Resolver<
+    ResolversTypes['Boolean'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationDeletePresetArgs, 'id'>
+  >;
+  deleteTimeSpan?: Resolver<
+    ResolversTypes['Boolean'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationDeleteTimeSpanArgs, 'id'>
+  >;
+  updatePreset?: Resolver<
+    ResolversTypes['Preset'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationUpdatePresetArgs, 'id' | 'input'>
+  >;
+  updatePresetSorting?: Resolver<
+    Array<ResolversTypes['Preset']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationUpdatePresetSortingArgs, 'input'>
+  >;
+  updateTimeSpan?: Resolver<
+    ResolversTypes['TimeSpan'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationUpdateTimeSpanArgs, 'id' | 'input'>
+  >;
 }>;
 
-export type PresetResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Preset'] = ResolversParentTypes['Preset']> = ResolversObject<{
+export type PresetResolvers<
+  ContextType = GraphQLContext,
+  ParentType extends ResolversParentTypes['Preset'] = ResolversParentTypes['Preset'],
+> = ResolversObject<{
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -453,13 +487,19 @@ export type PresetResolvers<ContextType = GraphQLContext, ParentType extends Res
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type PresetListResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['PresetList'] = ResolversParentTypes['PresetList']> = ResolversObject<{
+export type PresetListResolvers<
+  ContextType = GraphQLContext,
+  ParentType extends ResolversParentTypes['PresetList'] = ResolversParentTypes['PresetList'],
+> = ResolversObject<{
   items?: Resolver<Array<ResolversTypes['Preset']>, ParentType, ContextType>;
   total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type QueryResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
+export type QueryResolvers<
+  ContextType = GraphQLContext,
+  ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query'],
+> = ResolversObject<{
   me?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   preset?: Resolver<ResolversTypes['Preset'], ParentType, ContextType, RequireFields<QueryPresetArgs, 'id'>>;
   presets?: Resolver<ResolversTypes['PresetList'], ParentType, ContextType, Partial<QueryPresetsArgs>>;
@@ -469,7 +509,10 @@ export type QueryResolvers<ContextType = GraphQLContext, ParentType extends Reso
   version?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
 }>;
 
-export type TagResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Tag'] = ResolversParentTypes['Tag']> = ResolversObject<{
+export type TagResolvers<
+  ContextType = GraphQLContext,
+  ParentType extends ResolversParentTypes['Tag'] = ResolversParentTypes['Tag'],
+> = ResolversObject<{
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -477,13 +520,19 @@ export type TagResolvers<ContextType = GraphQLContext, ParentType extends Resolv
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type TagListResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['TagList'] = ResolversParentTypes['TagList']> = ResolversObject<{
+export type TagListResolvers<
+  ContextType = GraphQLContext,
+  ParentType extends ResolversParentTypes['TagList'] = ResolversParentTypes['TagList'],
+> = ResolversObject<{
   items?: Resolver<Array<ResolversTypes['Tag']>, ParentType, ContextType>;
   total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type TimeSpanResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['TimeSpan'] = ResolversParentTypes['TimeSpan']> = ResolversObject<{
+export type TimeSpanResolvers<
+  ContextType = GraphQLContext,
+  ParentType extends ResolversParentTypes['TimeSpan'] = ResolversParentTypes['TimeSpan'],
+> = ResolversObject<{
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   end?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
@@ -495,13 +544,19 @@ export type TimeSpanResolvers<ContextType = GraphQLContext, ParentType extends R
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type TimeSpanListResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['TimeSpanList'] = ResolversParentTypes['TimeSpanList']> = ResolversObject<{
+export type TimeSpanListResolvers<
+  ContextType = GraphQLContext,
+  ParentType extends ResolversParentTypes['TimeSpanList'] = ResolversParentTypes['TimeSpanList'],
+> = ResolversObject<{
   items?: Resolver<Array<ResolversTypes['TimeSpan']>, ParentType, ContextType>;
   total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type UserResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
+export type UserResolvers<
+  ContextType = GraphQLContext,
+  ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User'],
+> = ResolversObject<{
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
@@ -521,4 +576,3 @@ export type Resolvers<ContextType = GraphQLContext> = ResolversObject<{
   TimeSpanList?: TimeSpanListResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
 }>;
-
