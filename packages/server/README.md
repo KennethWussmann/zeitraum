@@ -1,6 +1,6 @@
 # 🚢 `@zeitraum/server`
 
-The heart of Zeitraum is the server. It's a dockerized GraphQL and REST API service that can be deployed even on lower-end devices like Raspberry Pis.
+The heart of Zeitraum is the server. It's a dockerized GraphQL API service that can be deployed even on lower-end devices like Raspberry Pis.
 
 ## Docker Compose
 
@@ -89,25 +89,11 @@ Read more about the [health check](#health-check).
   </tr>
 </table>
 
-## API
-
-### GraphQL
+## GraphQL API
 
 When the API client doesn't work for the implemention, GraphQL is the way to go. It's super easy to implement and [many languages have great tooling](https://graphql.org/code/) to make it simple.
 
 Check out the schema here: [Open Schema](./src/api/graphql/schema.graphql)
-
-### REST
-
-Less fun and more work, but of course Zeitraum has a REST API as well. This is handy for limited environments where one can do an HTTP request but does not have a great programming environment, for example iOS Shortcuts.
-
-To get the OpenAPI spec, open this URL on your Zeitraum instance:
-
-```
-https://your-zeitraum.com/openapi.json?token=<API-TOKEN>
-```
-
-> Replace `your-zeitraum.com` with your URL where your installation lives and `<API-TOKEN>` with an API token
 
 ## Prometheus
 

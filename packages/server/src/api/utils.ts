@@ -15,13 +15,3 @@ export const findTokenFromExpressRequest = (req: ExpressRequest): string | undef
   }
   return token;
 };
-
-export const findTokenFromGlobalRequest = (req: Request): string | undefined => {
-  const token =
-    req.headers.get('authorization')?.replace('Bearer ', '') ??
-    new URLSearchParams(new URL(req.url).search).get('token');
-  if (!token || typeof token !== 'string') {
-    return undefined;
-  }
-  return token;
-};
