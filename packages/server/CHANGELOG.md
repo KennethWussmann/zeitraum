@@ -1,5 +1,11 @@
 # @zeitraum/server
 
+## 0.6.0
+
+### Minor Changes
+
+- 38f79ca: Remove REST API
+
 ## 0.5.5
 
 ### Patch Changes
