@@ -1,15 +1,24 @@
 import { Logger } from '@zeitraum/commons';
-import { Response, Router } from 'express';
+import { Router } from 'express';
 import { GraphQLSchema } from 'graphql';
-import { OpenAPI, useSofa } from 'sofa-api';
+import { useSofa } from 'sofa-api';
 import { tokenBasedAuthMiddleware } from '../tokenBasedAuthMiddleware';
 import { GraphQLServer } from '../graphql/graphqlServer';
 import { findTokenFromGlobalRequest } from '../utils';
 import { applicationName } from '../../configuration';
 
+enum Tag {
+  TimeSpan = 'TimeSpan',
+  Preset = 'Preset',
+  Tag = 'Tag',
+  User = 'User',
+  Misc = 'Misc',
+}
+
+const restBasePath = '/api';
+
 export class SofaRouter {
   router: Router;
-  private openApi: ReturnType<typeof OpenAPI>;
 
   constructor(
     logger: Logger,
@@ -19,134 +28,129 @@ export class SofaRouter {
     version: string,
     baseUrl: string | undefined,
   ) {
-    this.openApi = OpenAPI({
-      schema,
-      info: {
-        title: applicationName,
-        version,
-      },
-      components: {
-        securitySchemes: {
-          bearerAuth: {
-            type: 'http',
-            scheme: 'bearer',
-            bearerFormat: 'JWT',
-          },
-        },
-      },
-      security: [
-        {
-          bearerAuth: [],
-        },
-      ],
-      servers: baseUrl ? [{ url: baseUrl }] : undefined,
-    });
-
     this.router = Router();
     this.router.use(tokenBasedAuthMiddleware(logger, ...apiTokens));
     this.router.use(
-      '/api',
+      restBasePath,
       useSofa({
-        basePath: '/api',
+        basePath: restBasePath,
         schema,
+        swaggerUI: {
+          endpoint: '/docs',
+        },
+        openAPI: {
+          endpoint: '/openapi.json',
+          info: {
+            title: applicationName,
+            description: `REST API for ${applicationName} Server version ${version}`,
+            version,
+          },
+          components: {
+            securitySchemes: {
+              bearerAuth: {
+                type: 'http',
+                scheme: 'bearer',
+                bearerFormat: 'JWT',
+              },
+            },
+          },
+          security: [
+            {
+              bearerAuth: [],
+            },
+          ],
+          tags: Object.values(Tag).map((name) => ({ name })),
+          servers: baseUrl ? [{ url: baseUrl }] : undefined,
+        },
         routes: {
           'Mutation.createTimeSpan': {
             method: 'POST',
-            path: '/time-spans',
-            tags: ['TimeSpan'],
+            path: `${restBasePath}/time-spans`,
+            tags: [Tag.TimeSpan],
           },
           'Mutation.deleteTimeSpan': {
             method: 'DELETE',
-            path: '/time-spans/:id',
-            tags: ['TimeSpan'],
+            path: `${restBasePath}/time-spans/:id`,
+            tags: [Tag.TimeSpan],
           },
           'Mutation.closeTimeSpan': {
             method: 'PATCH',
-            path: '/time-spans/:id/close',
-            tags: ['TimeSpan'],
+            path: `${restBasePath}/time-spans/:id/close`,
+            tags: [Tag.TimeSpan],
           },
           'Mutation.updateTimeSpan': {
             method: 'PUT',
-            path: '/time-spans/:id',
-            tags: ['TimeSpan'],
+            path: `${restBasePath}/time-spans/:id`,
+            tags: [Tag.TimeSpan],
           },
           'Query.timeSpan': {
             method: 'GET',
-            path: '/time-spans/:id',
-            tags: ['TimeSpan'],
+            path: `${restBasePath}/time-spans/:id`,
+            tags: [Tag.TimeSpan],
           },
           'Query.timeSpans': {
             method: 'GET',
-            path: '/time-spans',
-            tags: ['TimeSpan'],
+            path: `${restBasePath}/time-spans`,
+            tags: [Tag.TimeSpan],
           },
           'Mutation.createPreset': {
             method: 'POST',
-            path: '/presets',
-            tags: ['Preset'],
+            path: `${restBasePath}/presets`,
+            tags: [Tag.Preset],
           },
           'Mutation.deletePreset': {
             method: 'DELETE',
-            path: '/presets/:id',
-            tags: ['Preset'],
+            path: `${restBasePath}/presets/:id`,
+            tags: [Tag.Preset],
           },
           'Mutation.updatePreset': {
             method: 'PUT',
-            path: '/presets/:id',
-            tags: ['Preset'],
+            path: `${restBasePath}/presets/:id`,
+            tags: [Tag.Preset],
           },
           'Mutation.updatePresetSorting': {
             method: 'PATCH',
-            path: '/presets/sort',
-            tags: ['Preset'],
+            path: `${restBasePath}/presets/sort`,
+            tags: [Tag.Preset],
           },
           'Query.preset': {
             method: 'GET',
-            path: '/presets/:id',
-            tags: ['Preset'],
+            path: `${restBasePath}/presets/:id`,
+            tags: [Tag.Preset],
           },
           'Query.presets': {
             method: 'GET',
-            path: '/presets',
-            tags: ['Preset'],
+            path: `${restBasePath}/presets`,
+            tags: [Tag.Preset],
           },
           'Query.tags': {
             method: 'GET',
-            path: '/tags',
-            tags: ['Tag'],
+            path: `${restBasePath}/tags`,
+            tags: [Tag.Tag],
           },
           'Query.tag': {
             method: 'GET',
-            path: '/tags/:id',
-            tags: ['Tag'],
+            path: `${restBasePath}/tags/:id`,
+            tags: [Tag.Tag],
           },
           'Mutation.createTag': {
             method: 'POST',
-            path: '/tags',
-            tags: ['Tag'],
+            path: `${restBasePath}/tags`,
+            tags: [Tag.Tag],
           },
           'Query.me': {
             method: 'GET',
-            path: '/me',
-            tags: ['User'],
+            path: `${restBasePath}/me`,
+            tags: [Tag.User],
           },
           'Query.version': {
             method: 'GET',
-            path: '/version',
-            tags: ['Misc'],
+            path: `${restBasePath}/version`,
+            tags: [Tag.Misc],
           },
         },
         context: async ({ request }) => await graphqlServer.buildContext(findTokenFromGlobalRequest(request)),
-        onRoute: (info) => {
-          this.openApi.addRoute(info, {
-            basePath: '/api',
-          });
-        },
       }),
     );
-    this.router.use(['/swagger.json', '/openapi.json', '/docs'], (_, res: Response) => {
-      res.setHeader('Content-Type', 'application/json');
-      res.send(this.openApi.get());
-    });
   }
 }

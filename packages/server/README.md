@@ -104,7 +104,17 @@ Less fun and more work, but of course Zeitraum has a REST API as well. This is h
 To get the OpenAPI spec, open this URL on your Zeitraum instance:
 
 ```
-https://your-zeitraum.com/openapi.json?token=<API-TOKEN>
+https://your-zeitraum.com/api/openapi.json?token=<API-TOKEN>
+```
+
+> Replace `your-zeitraum.com` with your URL where your installation lives and `<API-TOKEN>` with an API token
+
+#### Swagger UI
+
+The Swagger UI is a great playground for the REST API and can be found at the following URL on your Zeitraum instance:
+
+```
+https://your-zeitraum.com/api/docs?token=<API-TOKEN>
 ```
 
 > Replace `your-zeitraum.com` with your URL where your installation lives and `<API-TOKEN>` with an API token
