@@ -1,7 +1,7 @@
 # 📦 `@zeitraum/client`
 
 The [`@zeitraum/client`](https://www.npmjs.com/package/@zeitraum/client) allows to start interface with the [Zeitraum](https://github.com/KennethWussmann/zeitraum) API.
-Build JavaScript and TypeScript based integrations without dealing with GraphQL or REST. The client abstracts the GraphQL API in an easy to use client:
+Build JavaScript and TypeScript based integrations without dealing with GraphQL. The client abstracts the GraphQL API in an easy to use client:
 
 ```shell
 npm install @zeitraum/client

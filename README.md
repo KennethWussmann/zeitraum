@@ -12,7 +12,6 @@ Zeitraum focuses on persisting time spans labeled with custom tags and offering 
 
 - [x] 💻 **Command-line Interface**: Streamline your scripts and workflow with ease by tracking time right from the terminal.
 - [x] 🔗 **GraphQL API**: The backbone of all integrations, empowering you to create a personalized experience.
-- [x] 🌐 **REST API**: For simple integrations, everywhere where HTTP works.
 - [x] ⚡ **[Raycast](https://www.raycast.com/) Extension**: Blazingly fast time tracking at your fingertips.
 - [x] 📈 **[Prometheus](https://prometheus.io/) Integration**: Export time spans for alerts, monitoring, and enhanced observability.
 - [x] 🎛️ **[Grafana](https://grafana.com/) Compatibility**: Design your own stunning dashboard to keep an eye on your time investments.
@@ -89,15 +88,15 @@ Learn more: [Getting started](./packages/cli/)
 
 ### 📦 `@zeitraum/client`
 
-The NPM package [`@zeitraum/client`](https://www.npmjs.com/package/@zeitraum/client) allows to start building JavaScript and TypeScript based integrations without dealing with GraphQL or REST.
+The NPM package [`@zeitraum/client`](https://www.npmjs.com/package/@zeitraum/client) allows to start building JavaScript and TypeScript based integrations without dealing with GraphQL.
 
 Get started using the client here: [Read more](./packages/client)
 
-### 🔗 GraphQL & REST API
+### 🔗 GraphQL API
 
 The API offers the most capabilities and is compatible with everything that can execute HTTP requests, even iOS Shortcuts!
 
-Get started using the API: [Read more](./packages/server/README.md#api)
+Get started using the API: [Read more](./packages/server/README.md#graphql-api)
 
 ## 📈 Observability
 
